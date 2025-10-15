@@ -119,6 +119,44 @@ class RegistrationModel {
     `;
     return await db.query(sql);
   }
+  // 在RegistrationModel类中添加以下方法：
+
+/**
+ * 获取所有注册记录（带分页和筛选）
+ */
+static async getAllRegistrations(options = {}) {
+  let sql = `
+    SELECT 
+      r.*, 
+      e.title as event_title, 
+      e.event_date,
+      c.name as category_name,
+      o.name as organization_name
+    FROM registrations r
+    JOIN events e ON r.event_id = e.id
+    LEFT JOIN categories c ON e.category_id = c.id
+    LEFT JOIN organizations o ON e.organization_id = o.id
+  `;
+  
+  const params = [];
+
+  // 事件筛选
+  if (options.event_id) {
+    sql += ' WHERE r.event_id = ?';
+    params.push(options.event_id);
+  }
+
+  sql += ' ORDER BY r.registration_date DESC';
+
+  // 分页
+  if (options.page && options.limit) {
+    const offset = (options.page - 1) * options.limit;
+    sql += ' LIMIT ? OFFSET ?';
+    params.push(options.limit, offset);
+  }
+
+  return await db.query(sql, params);
+}
 }
 
 module.exports = RegistrationModel;

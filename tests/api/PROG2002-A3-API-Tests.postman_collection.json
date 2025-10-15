@@ -1,0 +1,192 @@
+{
+  "info": {
+    "name": "PROG2002 A3 API Tests",
+    "description": "慈善活动平台API测试集合 - 包含所有A3要求的端点测试",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "健康检查",
+      "item": [
+        {
+          "name": "服务器健康状态",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "事件API",
+      "item": [
+        {
+          "name": "获取所有活动",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/events",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "events"]
+            }
+          }
+        },
+        {
+          "name": "获取单个活动详情（包含注册记录）",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/events/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "events", "1"]
+            }
+          }
+        },
+        {
+          "name": "创建新活动",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"新慈善活动\",\n  \"description\": \"活动描述\",\n  \"full_description\": \"完整的活动描述\",\n  \"category_id\": 1,\n  \"organization_id\": 1,\n  \"event_date\": \"2025-12-31 18:00:00\",\n  \"location\": \"悉尼\",\n  \"venue_details\": \"场地详情\",\n  \"ticket_price\": 100.00,\n  \"goal_amount\": 10000.00,\n  \"max_attendees\": 200,\n  \"latitude\": -33.87,\n  \"longitude\": 151.21\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/events",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "events"]
+            }
+          }
+        },
+        {
+          "name": "删除活动（有注册记录时应该失败）",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/events/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "events", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "注册API",
+      "item": [
+        {
+          "name": "创建注册记录",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": 2,\n  \"full_name\": \"测试用户\",\n  \"email\": \"new.user@example.com\",\n  \"phone\": \"0400000000\",\n  \"ticket_count\": 2\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/registrations",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "registrations"]
+            }
+          }
+        },
+        {
+          "name": "重复注册应该失败",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": 1,\n  \"full_name\": \"重复用户\",\n  \"email\": \"zhang.wei@email.com\",\n  \"ticket_count\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/registrations",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "registrations"]
+            }
+          }
+        },
+        {
+          "name": "获取活动注册记录（按时间倒序）",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/registrations/event/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "registrations", "event", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "天气API",
+      "item": [
+        {
+          "name": "获取天气信息",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/weather?latitude=-33.87&longitude=151.21",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "weather"],
+              "query": [
+                {
+                  "key": "latitude",
+                  "value": "-33.87"
+                },
+                {
+                  "key": "longitude",
+                  "value": "151.21"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
