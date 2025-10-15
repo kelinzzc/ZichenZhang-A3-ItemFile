@@ -1,0 +1,29 @@
+{
+  "name": "prog2002-a3-charity-events",
+  "version": "1.0.0",
+  "description": "PROG2002 Assessment 3 - Dynamic Charity Events Website with AngularJS",
+  "main": "api/app.js",
+  "scripts": {
+    "start": "node api/app.js",
+    "dev": "nodemon api/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "npm install && cd api && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/[username]/PROG2002-A3-Team[编号].git"
+  },
+  "keywords": [
+    "charity",
+    "events",
+    "angularjs",
+    "nodejs",
+    "mysql",
+    "prog2002"
+  ],
+  "author": "[Team Member Names]",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

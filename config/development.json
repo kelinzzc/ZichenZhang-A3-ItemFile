@@ -1,0 +1,18 @@
+{
+  "database": {
+    "host": "localhost",
+    "user": "dev_user",
+    "password": "dev_password",
+    "database": "charity_events_dev",
+    "waitForConnections": true,
+    "connectionLimit": 10,
+    "queueLimit": 0
+  },
+  "server": {
+    "port": 3000,
+    "corsOrigins": ["http://localhost:3001", "http://localhost:3002"]
+  },
+  "externalApis": {
+    "weather": "https://api.open-meteo.com/v1/forecast"
+  }
+}
