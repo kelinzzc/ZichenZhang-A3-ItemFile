@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh" ng-app="CharityEventsApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>慈善活动平台 - 让爱心传递</title>
+    <base href="/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    
+    <!-- AngularJS 核心 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-sanitize.min.js"></script>
+    
+    <!-- 字体图标 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- 样式文件 -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- AngularJS 应用脚本 -->
+    <script src="app/app.js"></script>
+    <script src="app/routes.js"></script>
+    
+    <!-- 控制器 -->
+    <script src="app/controllers/HomeController.js"></script>
+    <script src="app/controllers/EventsController.js"></script>
+    <script src="app/controllers/EventDetailController.js"></script>
+    <script src="app/controllers/RegistrationController.js"></script>
+    <script src="app/controllers/SearchController.js"></script>
+    
+    <!-- 服务 -->
+    <script src="app/services/EventService.js"></script>
+    <script src="app/services/RegistrationService.js"></script>
+    <script src="app/services/WeatherService.js"></script>
+    <script src="app/services/ApiService.js"></script>
+    
+    <!-- 指令 -->
+    <script src="app/directives/weatherWidget.js"></script>
+    <script src="app/directives/eventCard.js"></script>
+    <script src="app/directives/registrationList.js"></script>
+    
+    <!-- 过滤器 -->
+    <script src="app/filters/dateFormat.js"></script>
+    <script src="app/filters/currencyFormat.js"></script>
+</head>
+<body>
+    <!-- 页面加载指示器 -->
+    <div id="loading-indicator" class="loading-indicator" ng-show="isLoading">
+        <div class="spinner"></div>
+        <p>加载中...</p>
+    </div>
+
+    <!-- 导航栏 -->
+    <header class="header" ng-include="'views/partials/header.html'"></header>
+
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+        <div ng-view></div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer" ng-include="'views/partials/footer.html'"></footer>
+
+    <!-- 全局消息提示 -->
+    <div class="global-messages" ng-controller="MessageController">
+        <div ng-repeat="message in messages" 
+             class="message {{message.type}}"
+             ng-click="dismissMessage($index)">
+            <i class="fas" ng-class="{'fa-check-circle': message.type === 'success', 'fa-exclamation-triangle': message.type === 'warning', 'fa-times-circle': message.type === 'error'}"></i>
+            {{message.text}}
+        </div>
+    </div>
+
+    <!-- 初始化脚本 -->
+    <script src="js/main.js"></script>
+</body>
+</html>
