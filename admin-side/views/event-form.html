@@ -1,0 +1,225 @@
+<div class="event-form-page" ng-controller="EventFormController as vm">
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1>{{vm.isEdit ? '编辑活动' : '创建新活动'}}</h1>
+        <p>{{vm.isEdit ? '修改活动信息' : '添加新的慈善活动'}}</p>
+    </div>
+
+    <!-- 加载状态 -->
+    <div ng-if="vm.isLoading" class="loading-state">
+        <div class="spinner"></div>
+        <p>加载活动数据中...</p>
+    </div>
+
+    <!-- 表单内容 -->
+    <div ng-if="!vm.isLoading" class="content-section">
+        <div class="card">
+            <div class="card-body">
+                <!-- 验证错误 -->
+                <div ng-if="vm.validationErrors.length > 0" class="alert alert-error">
+                    <h4>请修正以下错误：</h4>
+                    <ul>
+                        <li ng-repeat="error in vm.validationErrors">{{error}}</li>
+                    </ul>
+                </div>
+
+                <form name="eventForm" ng-submit="vm.submitForm()" novalidate>
+                    <!-- 基础信息 -->
+                    <div class="form-section">
+                        <h3>基础信息</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">活动标题 *</label>
+                                    <input type="text" 
+                                           class="form-control"
+                                           ng-model="vm.event.title"
+                                           placeholder="输入活动标题"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">活动类别</label>
+                                    <select class="form-control" ng-model="vm.event.category_id">
+                                        <option value="1">慈善晚宴</option>
+                                        <option value="2">趣味跑</option>
+                                        <option value="3">艺术展览</option>
+                                        <option value="4">线上募捐</option>
+                                        <option value="5">社区服务</option>
+                                        <option value="6">教育讲座</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">活动描述 *</label>
+                            <textarea class="form-control"
+                                      ng-model="vm.event.description"
+                                      placeholder="输入活动简短描述"
+                                      rows="3"
+                                      required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">完整描述</label>
+                            <textarea class="form-control"
+                                      ng-model="vm.event.full_description"
+                                      placeholder="输入活动的完整详细介绍"
+                                      rows="5"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 时间地点 -->
+                    <div class="form-section">
+                        <h3>时间地点</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">活动日期 *</label>
+                                    <input type="datetime-local"
+                                           class="form-control"
+                                           ng-model="vm.event.event_date"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">活动地点 *</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="vm.event.location"
+                                           placeholder="输入活动地点"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">场地详情</label>
+                            <input type="text"
+                                   class="form-control"
+                                   ng-model="vm.event.venue_details"
+                                   placeholder="输入具体的场地信息（如房间号、楼层等）">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">纬度</label>
+                                    <input type="number"
+                                           class="form-control"
+                                           ng-model="vm.event.latitude"
+                                           placeholder="例如：-33.87"
+                                           step="any">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">经度</label>
+                                    <input type="number"
+                                           class="form-control"
+                                           ng-model="vm.event.longitude"
+                                           placeholder="例如：151.21"
+                                           step="any">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm" ng-click="vm.setCurrentLocation()">
+                            <i class="fas fa-map-marker-alt"></i>
+                            使用示例坐标
+                        </button>
+                    </div>
+
+                    <!-- 票务和筹款 -->
+                    <div class="form-section">
+                        <h3>票务和筹款</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">最大参与人数 *</label>
+                                    <input type="number"
+                                           class="form-control"
+                                           ng-model="vm.event.max_attendees"
+                                           min="1"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">票价 (¥)</label>
+                                    <input type="number"
+                                           class="form-control"
+                                           ng-model="vm.event.ticket_price"
+                                           min="0"
+                                           step="0.01">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">筹款目标 (¥)</label>
+                                    <input type="number"
+                                           class="form-control"
+                                           ng-model="vm.event.goal_amount"
+                                           min="0"
+                                           step="0.01">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 状态设置 -->
+                    <div class="form-section">
+                        <h3>状态设置</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           ng-model="vm.event.is_active"
+                                           id="isActive">
+                                    <label class="form-check-label" for="isActive">
+                                        活动激活
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           ng-model="vm.event.is_suspended"
+                                           id="isSuspended">
+                                    <label class="form-check-label" for="isSuspended">
+                                        暂停活动
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 表单操作 -->
+                    <div class="form-actions">
+                        <button type="submit"
+                                class="btn btn-primary btn-lg"
+                                ng-disabled="vm.isSubmitting">
+                            <span ng-if="!vm.isSubmitting">
+                                <i class="fas fa-check"></i>
+                                {{vm.isEdit ? '更新活动' : '创建活动'}}
+                            </span>
+                            <span ng-if="vm.isSubmitting">
+                                <div class="spinner-sm"></div>
+                                提交中...
+                            </span>
+                        </button>
+                        <button type="button"
+                                class="btn btn-outline btn-lg"
+                                ng-click="vm.cancel()">
+                            取消
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh" ng-app="CharityEventsAdminApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>慈善活动平台 - 管理后台</title>
+    <base href="/admin/">
+
+    <!-- AngularJS 核心 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+
+    <!-- 字体图标 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- 管理端样式 -->
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/forms.css">
+
+    <!-- AngularJS 应用脚本 -->
+    <script src="app/app.js"></script>
+    <script src="app/routes.js"></script>
+    
+    <!-- 控制器 -->
+    <script src="app/controllers/DashboardController.js"></script>
+    <script src="app/controllers/EventsController.js"></script>
+    <script src="app/controllers/EventFormController.js"></script>
+    <script src="app/controllers/EventDetailController.js"></script>
+    <script src="app/controllers/RegistrationsController.js"></script>
+    
+    <!-- 服务 -->
+    <script src="app/services/AdminEventService.js"></script>
+    <script src="app/services/AdminRegistrationService.js"></script>
+    <script src="app/services/AdminApiService.js"></script>
+    <script src="app/services/ModalService.js"></script>
+    
+    <!-- 指令 -->
+    <script src="app/directives/dataTable.js"></script>
+    <script src="app/directives/confirmModal.js"></script>
+    <script src="app/directives/statsCard.js"></script>
+</head>
+<body ng-controller="AdminLayoutController as layout">
+    <!-- 管理端布局 -->
+    <div class="admin-layout">
+        <!-- 侧边栏 -->
+        <aside class="sidebar" ng-class="{ 'collapsed': layout.isSidebarCollapsed }">
+            <div class="sidebar-header">
+                <h2>
+                    <i class="fas fa-heart"></i>
+                    <span ng-if="!layout.isSidebarCollapsed">管理后台</span>
+                </h2>
+                <button class="sidebar-toggle" ng-click="layout.toggleSidebar()">
+                    <i class="fas" ng-class="layout.isSidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="#/dashboard" ng-class="{ active: layout.isActive('/dashboard') }">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>仪表板</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/events" ng-class="{ active: layout.isActive('/events') }">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>活动管理</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/registrations" ng-class="{ active: layout.isActive('/registrations') }">
+                            <i class="fas fa-users"></i>
+                            <span>注册记录</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" ng-click="layout.toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title">{{ layout.getPageTitle() }}</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="admin-info">
+                        <span class="admin-name">管理员</span>
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="content-wrapper">
+                <div ng-view></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 确认模态框容器 -->
+    <confirm-modal></confirm-modal>
+</body>
+</html>
