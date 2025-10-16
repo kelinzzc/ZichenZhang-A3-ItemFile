@@ -1,0 +1,112 @@
+<div class="container">
+    <div class="page-header">
+        <h1>活动注册</h1>
+        <p>填写信息完成活动注册</p>
+    </div>
+
+    <div class="register-container" ng-if="!loading && event">
+        <div class="register-form-section">
+            <h2>注册信息</h2>
+            
+            <form name="registrationForm" novalidate>
+                <div class="form-group">
+                    <label for="fullName" class="form-label">姓名 *</label>
+                    <input type="text" id="fullName" class="form-control" 
+                           ng-model="registration.full_name" 
+                           required
+                           ng-class="{'error': registrationForm.fullName.$invalid && registrationForm.fullName.$touched}">
+                    <div class="form-error" ng-if="registrationForm.fullName.$invalid && registrationForm.fullName.$touched">
+                        请输入您的姓名
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">邮箱 *</label>
+                    <input type="email" id="email" class="form-control" 
+                           ng-model="registration.email" 
+                           required
+                           ng-class="{'error': registrationForm.email.$invalid && registrationForm.email.$touched}">
+                    <div class="form-error" ng-if="registrationForm.email.$invalid && registrationForm.email.$touched">
+                        请输入有效的邮箱地址
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone" class="form-label">电话</label>
+                    <input type="tel" id="phone" class="form-control" ng-model="registration.phone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ticketCount" class="form-label">票数 *</label>
+                    <select id="ticketCount" class="form-control" 
+                            ng-model="registration.ticket_count"
+                            ng-options="n for n in [] | range:1:event.available_tickets"
+                            required>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialRequirements" class="form-label">特殊要求</label>
+                    <textarea id="specialRequirements" class="form-control" 
+                              ng-model="registration.special_requirements"
+                              rows="3"
+                              placeholder="如有特殊需求（如饮食限制、无障碍需求等），请在此说明"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary btn-large" 
+                            ng-click="submitRegistration()"
+                            ng-disabled="registrationForm.$invalid || submitting || !hasAvailableTickets()">
+                        {{submitting ? '提交中...' : '确认注册'}}
+                    </button>
+                    <a href="#/events/{{event.id}}" class="btn btn-outline">取消</a>
+                </div>
+            </form>
+            
+            <div class="error-message" ng-if="error">
+                {{error}}
+            </div>
+            
+            <div class="success-message" ng-if="success">
+                <h3>注册成功！</h3>
+                <p>感谢您的注册，我们已收到您的报名信息。</p>
+                <p>3秒后自动跳转到活动详情页...</p>
+            </div>
+        </div>
+        
+        <div class="event-summary-section">
+            <h2>活动信息</h2>
+            <div class="event-summary-card">
+                <img ng-src="{{event.image_url || 'images/events/default.jpg'}}" alt="{{event.title}}">
+                <h3>{{event.title}}</h3>
+                <p class="event-date">{{event.event_date | dateFormat:'long'}}</p>
+                <p class="event-location">{{event.location}}</p>
+                
+                <div class="ticket-info">
+                    <div class="ticket-price">
+                        票价: {{event.ticket_price | currency:'$':2}}
+                    </div>
+                    <div class="ticket-total">
+                        总金额: {{calculateTotal() | currency:'$':2}}
+                    </div>
+                    <div class="available-tickets" ng-class="{'low': event.available_tickets < 10}">
+                        剩余票数: {{event.available_tickets}}
+                    </div>
+                </div>
+                
+                <div class="organization-info">
+                    <h4>主办方</h4>
+                    <p>{{event.organization_name}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="loading-spinner" ng-if="loading">
+        正在加载活动信息...
+    </div>
+    
+    <div class="error-message" ng-if="!loading && !event">
+        活动不存在或无法加载
+    </div>
+</div>

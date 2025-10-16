@@ -1,114 +1,126 @@
-/* 响应式设计 */
-
 /* 平板设备 */
 @media (max-width: 768px) {
-    .container {
-        padding: 0 var(--spacing-sm);
+    .navbar {
+        padding: 1rem;
     }
     
-    .section {
-        padding: var(--spacing-xl) 0;
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background-color: white;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0,0,0,0.05);
+        padding: 2rem 0;
     }
     
-    .section-title {
-        font-size: var(--font-size-xl);
-        margin-bottom: var(--spacing-xl);
+    .nav-menu.active {
+        left: 0;
     }
     
-    .btn {
-        padding: var(--spacing-sm) var(--spacing-md);
+    .nav-item {
+        margin: 1rem 0;
     }
     
-    .card-body,
-    .card-header,
-    .card-footer {
-        padding: var(--spacing-md);
+    .hamburger {
+        display: flex;
+    }
+    
+    .hero-section {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-actions {
+        justify-content: center;
+    }
+    
+    .events-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .event-detail-header {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .register-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .filters-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-group {
+        min-width: auto;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .categories-grid {
+        grid-template-columns: 1fr;
     }
 }
 
 /* 手机设备 */
 @media (max-width: 480px) {
-    html {
-        font-size: 14px;
-    }
-    
     .container {
-        padding: 0 var(--spacing-xs);
+        padding: 0 15px;
     }
     
-    .section {
-        padding: var(--spacing-lg) 0;
+    .hero-title {
+        font-size: 1.8rem;
     }
     
-    .section-title {
-        font-size: var(--font-size-lg);
-        margin-bottom: var(--spacing-lg);
+    .hero-actions {
+        flex-direction: column;
+        gap: 0.5rem;
     }
     
     .btn {
         width: 100%;
-        justify-content: center;
     }
     
-    .global-messages {
-        left: 10px;
-        right: 10px;
-        max-width: none;
+    .stats-grid {
+        grid-template-columns: 1fr;
     }
-}
-
-/* 网格系统 */
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 calc(-1 * var(--spacing-md));
-}
-
-.col {
-    flex: 1;
-    padding: 0 var(--spacing-md);
-}
-
-.col-1 { flex: 0 0 8.333333%; }
-.col-2 { flex: 0 0 16.666667%; }
-.col-3 { flex: 0 0 25%; }
-.col-4 { flex: 0 0 33.333333%; }
-.col-5 { flex: 0 0 41.666667%; }
-.col-6 { flex: 0 0 50%; }
-.col-7 { flex: 0 0 58.333333%; }
-.col-8 { flex: 0 0 66.666667%; }
-.col-9 { flex: 0 0 75%; }
-.col-10 { flex: 0 0 83.333333%; }
-.col-11 { flex: 0 0 91.666667%; }
-.col-12 { flex: 0 0 100%; }
-
-/* 响应式网格 */
-@media (max-width: 768px) {
-    .col-md-1 { flex: 0 0 8.333333%; }
-    .col-md-2 { flex: 0 0 16.666667%; }
-    .col-md-3 { flex: 0 0 25%; }
-    .col-md-4 { flex: 0 0 33.333333%; }
-    .col-md-5 { flex: 0 0 41.666667%; }
-    .col-md-6 { flex: 0 0 50%; }
-    .col-md-7 { flex: 0 0 58.333333%; }
-    .col-md-8 { flex: 0 0 66.666667%; }
-    .col-md-9 { flex: 0 0 75%; }
-    .col-md-10 { flex: 0 0 83.333333%; }
-    .col-md-11 { flex: 0 0 91.666667%; }
-    .col-md-12 { flex: 0 0 100%; }
-}
-
-@media (max-width: 480px) {
-    .col-sm-1 { flex: 0 0 8.333333%; }
-    .col-sm-2 { flex: 0 0 16.666667%; }
-    .col-sm-3 { flex: 0 0 25%; }
-    .col-sm-4 { flex: 0 0 33.333333%; }
-    .col-sm-5 { flex: 0 0 41.666667%; }
-    .col-sm-6 { flex: 0 0 50%; }
-    .col-sm-7 { flex: 0 0 58.333333%; }
-    .col-sm-8 { flex: 0 0 66.666667%; }
-    .col-sm-9 { flex: 0 0 75%; }
-    .col-sm-10 { flex: 0 0 83.333333%; }
-    .col-sm-11 { flex: 0 0 91.666667%; }
-    .col-sm-12 { flex: 0 0 100%; }
+    
+    .stat-number {
+        font-size: 2.5rem;
+    }
+    
+    .event-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .pagination {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .weather-main {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .weather-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
 }

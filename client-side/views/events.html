@@ -1,0 +1,104 @@
+<div class="container">
+    <div class="page-header">
+        <h1>所有活动</h1>
+        <p>发现并参与您感兴趣的慈善活动</p>
+    </div>
+
+    <!-- 筛选器 -->
+    <div class="filters-section">
+        <div class="filter-group">
+            <label for="category-filter">类别:</label>
+            <select id="category-filter" class="filter-select" ng-model="filters.category">
+                <option value="">所有类别</option>
+                <option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="location-filter">地点:</label>
+            <input type="text" id="location-filter" class="filter-input" placeholder="输入地点..." ng-model="filters.location">
+        </div>
+        <div class="filter-group">
+            <label for="date-filter">日期:</label>
+            <select id="date-filter" class="filter-select" ng-model="filters.date">
+                <option value="">所有日期</option>
+                <option value="upcoming">即将开始</option>
+                <option value="this-week">本周</option>
+                <option value="this-month">本月</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" ng-click="applyFilters()">应用筛选</button>
+        <button class="btn btn-outline" ng-click="clearFilters()">清除筛选</button>
+    </div>
+
+    <!-- 活动列表 -->
+    <div class="events-container">
+        <div class="events-grid">
+            <div ng-repeat="event in events" class="event-card">
+                <div class="event-image-container">
+                    <img ng-src="{{event.image_url || 'images/events/default.jpg'}}" alt="{{event.title}}" class="event-image">
+                    <div class="event-status" ng-class="{'upcoming': isUpcoming(event), 'past': isPast(event)}">
+                        {{isUpcoming(event) ? '即将开始' : (isPast(event) ? '已结束' : '进行中')}}
+                    </div>
+                </div>
+                <div class="event-content">
+                    <h3 class="event-title">{{event.title}}</h3>
+                    <p class="event-description">{{event.description | truncate:100}}</p>
+                    
+                    <div class="event-meta">
+                        <div class="event-date">
+                            <i class="icon-calendar"></i>
+                            {{event.event_date | dateFormat:'short'}}
+                        </div>
+                        <div class="event-location">
+                            <i class="icon-location"></i>
+                            {{event.location}}
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" ng-style="{'width': calculateProgress(event) + '%'}"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>已筹 {{event.current_amount | currency:'$':0}}</span>
+                            <span>目标 {{event.goal_amount | currency:'$':0}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="event-actions">
+                        <a href="#/events/{{event.id}}" class="btn btn-outline">查看详情</a>
+                        <a href="#/register/{{event.id}}" class="btn btn-primary" ng-if="isUpcoming(event) && event.available_tickets > 0">立即注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="loading-spinner" ng-if="loading">
+            正在加载活动...
+        </div>
+        
+        <div class="error-message" ng-if="error">
+            {{error}}
+        </div>
+        
+        <div class="no-results" ng-if="!loading && events.length === 0">
+            <p>没有找到匹配的活动</p>
+        </div>
+        
+        <!-- 分页控件 -->
+        <div class="pagination" ng-if="pagination.totalItems > pagination.itemsPerPage">
+            <button class="btn btn-outline" ng-disabled="pagination.currentPage === 1" 
+                    ng-click="pagination.currentPage = pagination.currentPage - 1; pageChanged()">
+                上一页
+            </button>
+            <span class="pagination-info">
+                第 {{pagination.currentPage}} 页，共 {{Math.ceil(pagination.totalItems / pagination.itemsPerPage)}} 页
+            </span>
+            <button class="btn btn-outline" 
+                    ng-disabled="pagination.currentPage * pagination.itemsPerPage >= pagination.totalItems"
+                    ng-click="pagination.currentPage = pagination.currentPage + 1; pageChanged()">
+                下一页
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,81 +1,110 @@
 <!DOCTYPE html>
-<html lang="zh" ng-app="CharityEventsApp">
+<html lang="zh-CN" ng-app="charityEventsApp">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>慈善活动平台 - 让爱心传递</title>
-    <base href="/">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-    
-    <!-- AngularJS 核心 -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-sanitize.min.js"></script>
-    
-    <!-- 字体图标 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>{{appName}} - 首页</title>
     
     <!-- 样式文件 -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components/header.css">
+    <link rel="stylesheet" href="css/components/footer.css">
+    <link rel="stylesheet" href="css/components/cards.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     
-    <!-- AngularJS 应用脚本 -->
-    <script src="app/app.js"></script>
-    <script src="app/routes.js"></script>
-    
-    <!-- 控制器 -->
-    <script src="app/controllers/HomeController.js"></script>
-    <script src="app/controllers/EventsController.js"></script>
-    <script src="app/controllers/EventDetailController.js"></script>
-    <script src="app/controllers/RegistrationController.js"></script>
-    <script src="app/controllers/SearchController.js"></script>
-    
-    <!-- 服务 -->
-    <script src="app/services/EventService.js"></script>
-    <script src="app/services/RegistrationService.js"></script>
-    <script src="app/services/WeatherService.js"></script>
-    <script src="app/services/ApiService.js"></script>
-    
-    <!-- 指令 -->
-    <script src="app/directives/weatherWidget.js"></script>
-    <script src="app/directives/eventCard.js"></script>
-    <script src="app/directives/registrationList.js"></script>
-    
-    <!-- 过滤器 -->
-    <script src="app/filters/dateFormat.js"></script>
-    <script src="app/filters/currencyFormat.js"></script>
+    <!-- 本地 AngularJS 库 -->
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/angular-route.min.js"></script>
 </head>
-<body>
-    <!-- 页面加载指示器 -->
-    <div id="loading-indicator" class="loading-indicator" ng-show="isLoading">
-        <div class="spinner"></div>
-        <p>加载中...</p>
-    </div>
+<body ng-controller="MainController">
+    <!-- 头部导航 -->
+    <header id="main-header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <img src="images/logo.png" alt="{{appName}}" class="logo">
+                <span class="brand-text">{{appName}}</span>
+            </div>
+            <ul class="nav-menu" ng-class="{active: menuOpen}">
+                <li class="nav-item">
+                    <a href="#/" class="nav-link" ng-class="{active: currentPath === '/'}">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#/events" class="nav-link" ng-class="{active: currentPath === '/events'}">活动列表</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#/search" class="nav-link" ng-class="{active: currentPath === '/search'}">搜索活动</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../admin-side/index.html" class="nav-link admin-link">管理端</a>
+                </li>
+            </ul>
+            <div class="hamburger" ng-click="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
 
-    <!-- 导航栏 -->
-    <header class="header" ng-include="'views/partials/header.html'"></header>
-
-    <!-- 主要内容区域 -->
+    <!-- 主内容区 -->
     <main class="main-content">
         <div ng-view></div>
     </main>
 
     <!-- 页脚 -->
-    <footer class="footer" ng-include="'views/partials/footer.html'"></footer>
-
-    <!-- 全局消息提示 -->
-    <div class="global-messages" ng-controller="MessageController">
-        <div ng-repeat="message in messages" 
-             class="message {{message.type}}"
-             ng-click="dismissMessage($index)">
-            <i class="fas" ng-class="{'fa-check-circle': message.type === 'success', 'fa-exclamation-triangle': message.type === 'warning', 'fa-times-circle': message.type === 'error'}"></i>
-            {{message.text}}
+    <footer id="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>关于我们</h3>
+                    <p>我们致力于连接慈善组织与爱心人士，共同创造更美好的世界。</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="#/">首页</a></li>
+                        <li><a href="#/events">活动列表</a></li>
+                        <li><a href="#/search">搜索活动</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <p>邮箱: info@charityevents.org</p>
+                    <p>电话: +61 2 1234 5678</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 {{appName}}. 保留所有权利.</p>
+            </div>
         </div>
-    </div>
+    </footer>
 
-    <!-- 初始化脚本 -->
-    <script src="js/main.js"></script>
+    <!-- AngularJS 应用文件 -->
+    <script src="js/app.js"></script>
+    
+    <!-- 控制器 -->
+    <script src="js/controllers/MainController.js"></script>
+    <script src="js/controllers/EventsController.js"></script>
+    <script src="js/controllers/EventDetailsController.js"></script>
+    <script src="js/controllers/RegisterController.js"></script>
+    <script src="js/controllers/SearchController.js"></script>
+    
+    <!-- 服务 -->
+    <script src="js/services/EventService.js"></script>
+    <script src="js/services/RegistrationService.js"></script>
+    <script src="js/services/CategoryService.js"></script>
+    <script src="js/services/OrganizationService.js"></script>
+    <script src="js/services/WeatherService.js"></script>
+    
+    <!-- 指令 -->
+    <script src="js/directives/eventCard.js"></script>
+    <script src="js/directives/weatherWidget.js"></script>
+    <script src="js/directives/pagination.js"></script>
+    
+    <!-- 过滤器 -->
+    <script src="js/filters/dateFormat.js"></script>
+    <script src="js/filters/currencyFormat.js"></script>
+    <script src="js/filters/truncate.js"></script>
 </body>
 </html>
