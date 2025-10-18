@@ -274,35 +274,35 @@ INSERT INTO events (
 
 -- Event 1: Hope Light Annual Charity Gala (3 registrations)
 INSERT INTO registrations (event_id, full_name, email, phone, ticket_count, special_requirements, registration_date) VALUES
-(1, '张伟', 'zhang.wei@email.com', '0412345678', 2, '素食要求', '2025-01-15 10:30:00'),
-(1, '李娜', 'li.na@email.com', '0423456789', 1, NULL, '2025-01-16 14:20:00'),
-(1, '王小明', 'wang.xiaoming@email.com', '0434567890', 2, '需要轮椅通道', '2025-01-17 09:15:00'),
+(1, 'Zhang Wei', 'zhang.wei@email.com', '0412345678', 2, 'Vegetarian meal required', '2025-01-15 10:30:00'),
+(1, 'Li Na', 'li.na@email.com', '0423456789', 1, NULL, '2025-01-16 14:20:00'),
+(1, 'Wang Xiaoming', 'wang.xiaoming@email.com', '0434567890', 2, 'Wheelchair access required', '2025-01-17 09:15:00'),
 
 -- Event 2: Urban Fun Run 2025 (2 registrations)
-(2, '陈大文', 'chen.dawen@email.com', '0456789012', 1, NULL, '2025-01-18 11:45:00'),
-(2, 'Sarah Johnson', 'sarah.j@email.com', '0467890123', 2, '初学者，需要指导', '2025-01-19 16:30:00'),
+(2, 'Chen Dawen', 'chen.dawen@email.com', '0456789012', 1, NULL, '2025-01-18 11:45:00'),
+(2, 'Sarah Johnson', 'sarah.j@email.com', '0467890123', 2, 'Beginner, needs guidance', '2025-01-19 16:30:00'),
 
 -- Event 3: Art Treasures Auction (2 registrations)
 (3, 'Robert Smith', 'robert.smith@email.com', '0478901234', 1, NULL, '2025-01-20 13:10:00'),
-(3, '黄美丽', 'huang.meili@email.com', '0489012345', 3, '团体票，需要连座', '2025-01-21 15:25:00'),
+(3, 'Huang Meili', 'huang.meili@email.com', '0489012345', 3, 'Group tickets, need adjacent seats', '2025-01-21 15:25:00'),
 
 -- Event 4: Care Concert (1 registration)
 (4, 'David Wilson', 'david.wilson@email.com', '0490123456', 2, NULL, '2025-01-22 10:05:00'),
 
 -- Event 5: Children Coding Education (1 registration)
-(5, '孙小美', 'sun.xiaomei@email.com', '0401234567', 1, '学生，需要学习材料', '2025-01-23 14:50:00'),
+(5, 'Sun Xiaomei', 'sun.xiaomei@email.com', '0401234567', 1, 'Student, needs learning materials', '2025-01-23 14:50:00'),
 
 -- Event 6: Autumn Community Fair (1 registration)
-(6, 'Michael Chen', 'michael.chen@email.com', '0411122233', 4, '家庭票，有2个小孩', '2025-01-24 12:15:00'),
+(6, 'Michael Chen', 'michael.chen@email.com', '0411122233', 4, 'Family ticket, 2 children', '2025-01-24 12:15:00'),
 
 -- Event 7: Healthy Living Seminar (1 registration)
-(7, '吴大志', 'wu.dazhi@email.com', '0422233344', 1, NULL, '2025-01-25 09:40:00'),
+(7, 'Wu Dazhi', 'wu.dazhi@email.com', '0422233344', 1, NULL, '2025-01-25 09:40:00'),
 
 -- Event 8: Winter Charity Ball (1 registration)
-(8, 'Emma Zhang', 'emma.zhang@email.com', '0433344455', 2, '素食要求', '2025-01-26 17:20:00'),
+(8, 'Emma Zhang', 'emma.zhang@email.com', '0433344455', 2, 'Vegetarian meal required', '2025-01-26 17:20:00'),
 
 -- Event 9: Beach Cleanup Day (1 registration)
-(9, '郑成功', 'zheng.chenggong@email.com', '0444455566', 1, '自带手套和垃圾袋', '2025-01-27 11:30:00'),
+(9, 'Zheng Chenggong', 'zheng.chenggong@email.com', '0444455566', 1, 'Bringing own gloves and trash bags', '2025-01-27 11:30:00'),
 
 -- Event 10: Photography Exhibition Fundraising (1 registration)
 (10, 'Olivia Wang', 'olivia.wang@email.com', '0455566677', 1, NULL, '2025-01-28 14:00:00');

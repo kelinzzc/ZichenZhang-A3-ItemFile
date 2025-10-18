@@ -6,6 +6,7 @@ const devConfig = {
   user: 'root', 
   password: '817817',
   database: 'charityevents_db',  // 使用A2的数据库名
+  port: 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,

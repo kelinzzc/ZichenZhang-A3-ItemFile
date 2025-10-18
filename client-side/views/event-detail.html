@@ -1,0 +1,233 @@
+<div class="event-detail-page" ng-controller="EventDetailController as vm">
+    <div class="container">
+        <!-- Loading -->
+        <div ng-if="vm.isLoading" class="text-center">
+            <div class="spinner"></div>
+            <p>Loading event details...</p>
+        </div>
+
+        <!-- Event Content -->
+        <div ng-if="!vm.isLoading && vm.event">
+
+            <div class="event-header">
+                <div class="breadcrumb">
+                    <a href="/events">Events List</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>{{vm.event.title}}</span>
+                </div>
+                
+                <h1 class="event-title">{{vm.event.title}}</h1>
+                
+                <div class="event-meta">
+                    <div class="meta-badges">
+                        <span class="badge category">{{vm.event.category_name}}</span>
+                        <span class="badge organization">{{vm.event.organization_name}}</span>
+                        <span class="badge status" ng-class="{'active': vm.event.is_active && !vm.event.is_suspended, 'inactive': !vm.event.is_active || vm.event.is_suspended}">
+                            {{vm.event.is_active && !vm.event.is_suspended ? 'Active' : 'Ended'}}
+                        </span>
+                    </div>
+                    
+                    <div class="meta-details">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar"></i>
+                            <strong>Event Time:</strong> {{$root.formatDate(vm.event.event_date)}}
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <strong>Event Location:</strong> {{vm.event.location}}
+                        </div>
+                        <div class="detail-item" ng-if="vm.event.venue_details">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Venue Details:</strong> {{vm.event.venue_details}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-8">
+                    <!-- Tab Navigation -->
+                    <div class="tabs">
+                        <button class="tab-button" 
+                                ng-class="{active: vm.activeTab === 'details'}"
+                                ng-click="vm.setActiveTab('details')">
+                            Event Details
+                        </button>
+                        <button class="tab-button" 
+                                ng-class="{active: vm.activeTab === 'registrations'}"
+                                ng-click="vm.setActiveTab('registrations')">
+                            Participation Records ({{vm.registrations.length}})
+                        </button>
+                    </div>
+
+
+                    <div class="tab-content" ng-show="vm.activeTab === 'details'">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- Image -->
+                                <div class="event-image-large">
+                                    <img ng-src="{{vm.event.image_url || 'assets/images/event-default.jpg'}}" 
+                                         alt="{{vm.event.title}}">
+                                </div>
+
+                                <!-- Event Description -->
+                                <div class="event-description">
+                                    <h3>Event Introduction</h3>
+                                    <p>{{vm.event.full_description || vm.event.description}}</p>
+                                </div>
+
+                                <!-- Weather -->
+                                <div class="weather-section" ng-if="vm.weather">
+                                    <h3>Weather Forecast for Event Day</h3>
+                                    <weather-widget weather="vm.weather"></weather-widget>
+                                </div>
+
+                                <!-- Progress -->
+                                <div class="funding-progress">
+                                    <h3>Fundraising Progress</h3>
+                                    <div class="progress-stats">
+                                        <div class="progress-numbers">
+                                            <span class="current">{{$root.formatCurrency(vm.event.current_amount)}}</span>
+                                            <span class="goal">Goal {{$root.formatCurrency(vm.event.goal_amount)}}</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" 
+                                                 ng-style="{width: $root.calculateProgress(vm.event.current_amount, vm.event.goal_amount) + '%'}"></div>
+                                        </div>
+                                        <div class="progress-percentage">
+                                            {{$root.calculateProgress(vm.event.current_amount, vm.event.goal_amount)}}%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" ng-show="vm.activeTab === 'registrations'">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Event Participation Records</h3>
+                                <p class="text-muted">Sorted by registration time in descending order</p>
+                            </div>
+                            <div class="card-body">
+                                <registration-list registrations="vm.registrations"></registration-list>
+                                
+                                <div ng-if="vm.registrations.length === 0" class="text-center">
+                                    <p>No participation records yet</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <div class="sidebar">
+                        <!-- Registration -->
+                        <div class="card registration-card" ng-if="vm.canRegister()">
+                            <div class="card-header">
+                                <h3>Participate Now</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="ticket-info">
+                                    <div class="ticket-price">
+                                        <span class="price" ng-if="vm.event.ticket_price > 0">
+                                            {{$root.formatCurrency(vm.event.ticket_price)}}
+                                        </span>
+                                        <span class="price free" ng-if="vm.event.ticket_price === 0">
+                                            Free Participation
+                                        </span>
+                                        <span class="per-ticket" ng-if="vm.event.ticket_price > 0">/ per person</span>
+                                    </div>
+                                    
+                                    <div class="available-tickets">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        {{vm.getAvailableTickets()}} tickets remaining
+                                    </div>
+                                </div>
+                                
+                                <a ng-href="/register/{{vm.event.id}}" class="btn btn-primary btn-lg btn-block">
+                                    <i class="fas fa-user-plus"></i>
+                                    Register Now
+                                </a>
+                                
+                                <div class="registration-stats">
+                                    <div class="stat">
+                                        <strong>{{vm.getRegistrationStats().totalRegistrations}}</strong>
+                                        <span>Registered People</span>
+                                    </div>
+                                    <div class="stat">
+                                        <strong>{{vm.getRegistrationStats().totalTickets}}</strong>
+                                        <span>Total Tickets</span>
+                                    </div>
+                                    <div class="stat">
+                                        <strong>{{vm.getRegistrationStats().averageTickets}}</strong>
+                                        <span>Average Tickets/Person</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event Information -->
+                        <div class="card info-card">
+                            <div class="card-header">
+                                <h3>Event Information</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-item">
+                                    <i class="fas fa-users"></i>
+                                    <div>
+                                        <strong>Participants</strong>
+                                        <p>Maximum {{vm.event.max_attendees}} people</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <div>
+                                        <strong>Fundraising Goal</strong>
+                                        <p>{{$root.formatCurrency(vm.event.goal_amount)}}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <i class="fas fa-building"></i>
+                                    <div>
+                                        <strong>Organizer</strong>
+                                        <p>{{vm.event.organization_name}}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-item" ng-if="vm.event.contact_email">
+                                    <i class="fas fa-envelope"></i>
+                                    <div>
+                                        <strong>Contact</strong>
+                                        <p>{{vm.event.contact_email}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Alert -->
+                        <div class="card alert-card" ng-if="!vm.canRegister()">
+                            <div class="card-body text-center">
+                                <i class="fas fa-info-circle"></i>
+                                <p>This event cannot be registered for at the moment</p>
+                                <p class="text-muted">Possible reasons: event has ended, suspended, or sold out</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div ng-if="!vm.isLoading && !vm.event" class="text-center error-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h2>Event Not Found</h2>
+            <p>Sorry, we couldn't find the event you're looking for.</p>
+            <a href="/events" class="btn btn-primary">Return to Events List</a>
+        </div>
+    </div>
+</div>

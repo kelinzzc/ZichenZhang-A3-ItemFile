@@ -151,6 +151,13 @@ class EventModel {
     `;
     const params = [];
 
+    // 关键词搜索（搜索标题、描述、地点）
+    if (searchParams.search) {
+      sql += ' AND (e.title LIKE ? OR e.description LIKE ? OR e.location LIKE ?)';
+      const searchTerm = `%${searchParams.search}%`;
+      params.push(searchTerm, searchTerm, searchTerm);
+    }
+
     if (searchParams.category) {
       sql += ' AND e.category_id = ?';
       params.push(searchParams.category);
@@ -191,85 +198,21 @@ class EventModel {
     const sql = 'SELECT * FROM categories ORDER BY name';
     return await db.query(sql);
   }
-  // 在EventModel类中添加以下方法：
 
-/**
- * 搜索活动
- */
-static async searchEvents(searchParams) {
-  let sql = `
-    SELECT 
-      e.*,
-      o.name as organization_name,
-      c.name as category_name,
-      COUNT(r.id) as registration_count,
-      SUM(r.ticket_count) as total_tickets_sold
-    FROM events e
-    LEFT JOIN organizations o ON e.organization_id = o.id
-    LEFT JOIN categories c ON e.category_id = c.id
-    LEFT JOIN registrations r ON e.id = r.event_id
-    WHERE e.is_active = TRUE AND e.is_suspended = FALSE
-  `;
-  
-  const params = [];
-
-  // 搜索条件
-  if (searchParams.search) {
-    sql += ' AND (e.title LIKE ? OR e.description LIKE ? OR e.location LIKE ?)';
-    const searchTerm = `%${searchParams.search}%`;
-    params.push(searchTerm, searchTerm, searchTerm);
+  // 获取活动统计（仪表盘使用）
+  static async getEventStats() {
+    const sql = `
+      SELECT 
+        COUNT(*) as total_events,
+        SUM(current_amount) as total_raised,
+        AVG(current_amount) as avg_raised,
+        COUNT(CASE WHEN is_active = TRUE AND is_suspended = FALSE THEN 1 END) as active_events,
+        COUNT(CASE WHEN event_date >= CURDATE() THEN 1 END) as upcoming_events,
+        COUNT(CASE WHEN event_date < CURDATE() THEN 1 END) as past_events
+      FROM events
+    `;
+    return await db.query(sql);
   }
-
-  if (searchParams.category) {
-    sql += ' AND e.category_id = ?';
-    params.push(searchParams.category);
-  }
-
-  if (searchParams.location) {
-    sql += ' AND e.location LIKE ?';
-    params.push(`%${searchParams.location}%`);
-  }
-
-  if (searchParams.date_from) {
-    sql += ' AND e.event_date >= ?';
-    params.push(searchParams.date_from);
-  }
-
-  if (searchParams.date_to) {
-    sql += ' AND e.event_date <= ?';
-    params.push(searchParams.date_to);
-  }
-
-  sql += ' GROUP BY e.id ORDER BY e.event_date ASC';
-
-  // 分页
-  if (searchParams.page && searchParams.limit) {
-    const offset = (searchParams.page - 1) * searchParams.limit;
-    sql += ' LIMIT ? OFFSET ?';
-    params.push(searchParams.limit, offset);
-  }
-
-  return await db.query(sql, params);
-}
-
-/**
- * 获取活动统计
- */
-static async getEventStats() {
-  const sql = `
-    SELECT 
-      COUNT(*) as total_events,
-      COUNT(CASE WHEN is_active = TRUE AND is_suspended = FALSE THEN 1 END) as active_events,
-      SUM(goal_amount) as total_goal,
-      SUM(current_amount) as total_raised,
-      AVG(current_amount / goal_amount * 100) as avg_funding_rate,
-      COUNT(r.id) as total_registrations,
-      SUM(r.ticket_count) as total_tickets
-    FROM events e
-    LEFT JOIN registrations r ON e.id = r.event_id
-  `;
-  return await db.query(sql);
-}
 }
 
 module.exports = EventModel;

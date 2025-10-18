@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台（原生版）</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <style>
+        .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+        .toolbar { display:flex; gap:8px; margin-bottom:12px; }
+        table { width:100%; border-collapse: collapse; }
+        th, td { border:1px solid #eee; padding:8px; }
+        .muted { color:#666; font-size:12px; }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <h1>活动管理（原生版）</h1>
+        <div class="toolbar">
+            <button id="reload">刷新</button>
+            <button id="create">快速创建示例活动</button>
+            <span id="msg" class="muted"></span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>标题</th>
+                    <th>日期</th>
+                    <th>地点</th>
+                    <th>目标/当前</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+
+

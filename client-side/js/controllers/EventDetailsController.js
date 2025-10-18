@@ -1,13 +1,13 @@
 charityEventsApp.controller('EventDetailsController', ['$scope', '$routeParams', 'EventService', 
     function($scope, $routeParams, EventService) {
     
-    // 初始化数据
+    // 初始化
     $scope.event = null;
     $scope.registrations = [];
     $scope.loading = true;
     $scope.error = '';
     
-    // 加载活动详情
+    // 加载详情
     function loadEventDetails() {
         $scope.loading = true;
         
@@ -19,13 +19,13 @@ charityEventsApp.controller('EventDetailsController', ['$scope', '$routeParams',
                 $scope.loading = false;
             })
             .catch(function(error) {
-                console.error('加载活动详情失败:', error);
-                $scope.error = '加载活动详情失败，请稍后重试';
+                console.error('Failed to load the activity details:', error);
+                $scope.error = 'Failed to load the activity details. Please try again later.';
                 $scope.loading = false;
             });
     }
     
-    // 检查活动状态
+    // 检查状态
     $scope.isUpcoming = function() {
         if (!$scope.event || !$scope.event.event_date) return false;
         var eventDate = new Date($scope.event.event_date);
@@ -39,7 +39,7 @@ charityEventsApp.controller('EventDetailsController', ['$scope', '$routeParams',
         return ($scope.event.current_amount / $scope.event.goal_amount) * 100;
     };
     
-    // 检查是否还有空位
+    // 检查空位
     $scope.hasAvailableTickets = function() {
         if (!$scope.event) return false;
         return $scope.event.available_tickets > 0;

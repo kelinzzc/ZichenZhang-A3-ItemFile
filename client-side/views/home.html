@@ -1,36 +1,35 @@
-<!-- 英雄区域 -->
 <section class="hero-section">
     <div class="hero-content">
-        <h1 class="hero-title">为爱行动，改变世界</h1>
-        <p class="hero-subtitle">加入我们的慈善活动，为需要帮助的人们带来希望与温暖</p>
+        <h1 class="hero-title">Act with Love, Change the World</h1>
+        <p class="hero-subtitle">Join our charity events to bring hope and warmth to those in need</p>
         <div class="hero-actions">
-            <a href="#/events" class="btn btn-primary">浏览活动</a>
-            <a href="#/search" class="btn btn-secondary">搜索活动</a>
+            <a href="#!/events" class="btn btn-primary">Browse Events</a>
+            <a href="#!/search" class="btn btn-secondary">Search Events</a>
         </div>
     </div>
     <div class="hero-image">
-        <img src="images/events/event1.jpg" alt="慈善活动">
+        <img src="images/events/event1.jpg" alt="Charity Event">
     </div>
 </section>
 
-<!-- 天气组件 -->
+<!-- Weather -->
 <section class="weather-section">
     <div class="container">
-        <h2>今日天气</h2>
+        <h2>Today's Weather</h2>
         <weather-widget></weather-widget>
     </div>
 </section>
 
-<!-- 特色活动 -->
+<!-- Featured Events -->
 <section class="featured-events">
     <div class="container">
-        <h2 class="section-title">精选活动</h2>
+        <h2 class="section-title">Featured Events</h2>
         <div class="events-grid">
             <div ng-repeat="event in featuredEvents" class="event-card">
                 <div class="event-image-container">
                     <img ng-src="{{event.image_url || 'images/events/default.jpg'}}" alt="{{event.title}}" class="event-image">
                     <div class="event-status" ng-class="{'upcoming': isUpcoming(event), 'past': isPast(event)}">
-                        {{isUpcoming(event) ? '即将开始' : (isPast(event) ? '已结束' : '进行中')}}
+                        {{isUpcoming(event) ? 'Upcoming' : (isPast(event) ? 'Ended' : 'In Progress')}}
                     </div>
                 </div>
                 <div class="event-content">
@@ -53,25 +52,25 @@
                             <div class="progress-fill" ng-style="{'width': calculateProgress(event) + '%'}"></div>
                         </div>
                         <div class="progress-text">
-                            <span>已筹 {{event.current_amount | currency:'$':0}}</span>
-                            <span>目标 {{event.goal_amount | currency:'$':0}}</span>
+                            <span>Raised {{event.current_amount | currency:'$':0}}</span>
+                            <span>Goal {{event.goal_amount | currency:'$':0}}</span>
                         </div>
                     </div>
                     
                     <div class="event-actions">
-                        <a href="#/events/{{event.id}}" class="btn btn-outline">查看详情</a>
-                        <a href="#/register/{{event.id}}" class="btn btn-primary" ng-if="isUpcoming(event) && event.available_tickets > 0">立即注册</a>
+                        <a href="#!/events/{{event.id}}" class="btn btn-outline">View Details</a>
+                        <a href="#!/register/{{event.id}}" class="btn btn-primary" ng-if="isUpcoming(event) && event.available_tickets > 0">Register Now</a>
                     </div>
                 </div>
             </div>
         </div>
         
         <div class="section-actions" ng-if="featuredEvents.length > 0">
-            <a href="#/events" class="btn btn-outline">查看所有活动</a>
+            <a href="#!/events" class="btn btn-outline">View All Events</a>
         </div>
         
         <div class="loading-spinner" ng-if="loadingFeatured">
-            正在加载活动...
+            Loading events...
         </div>
         
         <div class="error-message" ng-if="featuredError">
@@ -80,34 +79,34 @@
     </div>
 </section>
 
-<!-- 统计数据 -->
+<!-- Statistics -->
 <section class="stats-section">
     <div class="container">
         <div class="stats-grid">
             <div class="stat-item">
                 <div class="stat-number">{{stats.total_events || 0}}</div>
-                <div class="stat-label">总活动数</div>
+                <div class="stat-label">Total Events</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number">{{stats.total_raised | currency:'$':0 || '$0'}}</div>
-                <div class="stat-label">已筹金额</div>
+                <div class="stat-label">Total Raised</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number">{{stats.total_registrations || 0}}</div>
-                <div class="stat-label">注册人数</div>
+                <div class="stat-label">Total Registrations</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number">{{stats.active_events || 0}}</div>
-                <div class="stat-label">进行中活动</div>
+                <div class="stat-label">Active Events</div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- 类别浏览 -->
+<!-- Categories -->
 <section class="categories-section">
     <div class="container">
-        <h2 class="section-title">活动类别</h2>
+        <h2 class="section-title">Event Categories</h2>
         <div class="categories-grid">
             <div class="category-card" ng-repeat="category in categories" ng-click="filterByCategory(category.id)">
                 <div class="category-icon">

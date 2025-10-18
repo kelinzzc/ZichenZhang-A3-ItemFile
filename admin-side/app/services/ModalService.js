@@ -19,7 +19,7 @@ angular.module('CharityEventsAdminApp')
             modalState.message = message;
             modalState.type = 'confirm';
             modalState.onConfirm = onConfirm;
-            modalState.onConfirm = onCancel;
+            modalState.onCancel = onCancel;
             
             // 触发 AngularJS 更新
             if (!$rootScope.$$phase) {

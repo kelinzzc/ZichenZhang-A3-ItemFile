@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 活动管理（原生版）</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <style>
+        .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+        .toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+        .toolbar input, .toolbar select { padding: 6px 8px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #eee; padding: 8px; text-align: left; }
+        th { background: #f5f5f5; }
+        .muted { color: #666; font-size: 12px; }
+        .nav { margin-bottom: 16px; }
+        .nav a { margin-right: 12px; padding: 6px 12px; background: #f0f0f0; text-decoration: none; border-radius: 4px; }
+        .nav a.active { background: #007bff; color: white; }
+        .form { max-width: 600px; margin: 20px 0; }
+        .form .field { margin-bottom: 12px; }
+        .form .field label { display: block; margin-bottom: 6px; }
+        .form .field input, .form .field textarea, .form .field select { width: 100%; padding: 8px; }
+        .form .actions { margin-top: 16px; }
+        .btn { padding: 6px 12px; margin-right: 8px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; border: none; }
+        .btn-danger { background: #dc3545; color: white; border: none; }
+        .btn-secondary { background: #6c757d; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="dashboard.html">仪表板</a>
+            <a href="events.html" class="active">活动管理</a>
+            <a href="registrations.html">注册记录</a>
+        </div>
+        
+        <h1>活动管理</h1>
+        <div id="error" class="muted" style="color: #c0392b; display: none;"></div>
+        <div id="success" class="muted" style="color: #28a745; display: none;"></div>
+        
+        <div class="toolbar">
+            <input id="searchInput" placeholder="搜索活动标题">
+            <select id="categoryFilter">
+                <option value="">全部类别</option>
+            </select>
+            <button id="searchBtn" class="btn btn-primary">搜索</button>
+            <button id="addBtn" class="btn btn-primary">新建活动</button>
+            <button id="reloadBtn" class="btn btn-secondary">刷新</button>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>标题</th>
+                    <th>日期</th>
+                    <th>地点</th>
+                    <th>目标/当前</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="eventsTable"></tbody>
+        </table>
+        
+        <!-- 新建/编辑表单 -->
+        <div id="eventForm" class="form" style="display: none;">
+            <h3 id="formTitle">新建活动</h3>
+            <form id="form">
+                <div class="field">
+                    <label>活动标题 *</label>
+                    <input type="text" id="title" required>
+                </div>
+                <div class="field">
+                    <label>活动描述</label>
+                    <textarea id="description" rows="3"></textarea>
+                </div>
+                <div class="field">
+                    <label>详细描述</label>
+                    <textarea id="fullDescription" rows="4"></textarea>
+                </div>
+                <div class="field">
+                    <label>活动日期 *</label>
+                    <input type="datetime-local" id="eventDate" required>
+                </div>
+                <div class="field">
+                    <label>地点 *</label>
+                    <input type="text" id="location" required>
+                </div>
+                <div class="field">
+                    <label>场地详情</label>
+                    <input type="text" id="venueDetails">
+                </div>
+                <div class="field">
+                    <label>票价</label>
+                    <input type="number" id="ticketPrice" min="0" step="0.01">
+                </div>
+                <div class="field">
+                    <label>目标金额</label>
+                    <input type="number" id="goalAmount" min="0" step="0.01">
+                </div>
+                <div class="field">
+                    <label>最大参与人数</label>
+                    <input type="number" id="maxAttendees" min="1">
+                </div>
+                <div class="field">
+                    <label>图片URL</label>
+                    <input type="url" id="imageUrl">
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="button" id="cancelBtn" class="btn btn-secondary">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/events.js"></script>
+</body>
+</html>

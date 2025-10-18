@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html ng-app="testApp">
+<head>
+    <meta charset="UTF-8">
+    <title>简单测试</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body>
+    <div ng-controller="TestController as vm">
+        <h1>简单测试</h1>
+        <p>当前时间: {{vm.currentTime}}</p>
+        <p>测试数据: {{vm.testData}}</p>
+        <button ng-click="vm.loadData()">加载数据</button>
+        <div ng-if="vm.loaded">
+            <p>数据已加载: {{vm.data}}</p>
+        </div>
+    </div>
+
+    <script>
+        angular.module('testApp', [])
+        .controller('TestController', function() {
+            var vm = this;
+            vm.currentTime = new Date().toLocaleString();
+            vm.testData = 'Hello World';
+            vm.loaded = false;
+            vm.data = null;
+
+            vm.loadData = function() {
+                vm.data = 'Data loaded at ' + new Date().toLocaleString();
+                vm.loaded = true;
+            };
+        });
+    </script>
+</body>
+</html>

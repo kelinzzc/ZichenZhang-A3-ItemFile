@@ -5,8 +5,10 @@ angular.module('CharityEventsAdminApp')
     return {
         // 通用 GET 请求
         get: function(endpoint, params = {}) {
+            console.log('AdminApiService GET 请求:', `${API_BASE_URL}${endpoint}`, params);
             return $http.get(`${API_BASE_URL}${endpoint}`, { params: params })
                 .then(response => {
+                    console.log('AdminApiService GET 响应:', response);
                     if (response.data.success) {
                         return response.data;
                     } else {
@@ -15,6 +17,8 @@ angular.module('CharityEventsAdminApp')
                 })
                 .catch(error => {
                     console.error('Admin API GET Error:', error);
+                    console.error('Error status:', error.status);
+                    console.error('Error data:', error.data);
                     return $q.reject(this.handleError(error));
                 });
         },

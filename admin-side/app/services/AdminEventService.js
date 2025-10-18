@@ -22,7 +22,10 @@ angular.module('CharityEventsAdminApp')
             }
 
             return AdminApiService.get(`/events/${eventId}`)
-                .then(response => response.data)
+                .then(response => {
+                    console.log('AdminEventService.getEventById 原始响应:', response);
+                    return response.data; // 返回data部分，包含event和registrations
+                })
                 .catch(error => {
                     console.error('获取活动详情失败:', error);
                     return $q.reject(error);
@@ -33,8 +36,10 @@ angular.module('CharityEventsAdminApp')
          * 创建新活动
          */
         createEvent: function(eventData) {
+            console.log('AdminEventService.createEvent 调用，数据:', eventData);
             return AdminApiService.post('/events', eventData)
                 .then(response => {
+                    console.log('AdminEventService.createEvent 响应:', response);
                     return response.data;
                 })
                 .catch(error => {
@@ -47,8 +52,10 @@ angular.module('CharityEventsAdminApp')
          * 更新活动
          */
         updateEvent: function(eventId, eventData) {
+            console.log('AdminEventService.updateEvent 调用，ID:', eventId, '数据:', eventData);
             return AdminApiService.put(`/events/${eventId}`, eventData)
                 .then(response => {
+                    console.log('AdminEventService.updateEvent 响应:', response);
                     return response.data;
                 })
                 .catch(error => {
@@ -61,9 +68,11 @@ angular.module('CharityEventsAdminApp')
          * 删除活动（A3要求：有注册记录时阻止删除）
          */
         deleteEvent: function(eventId) {
+            console.log('AdminEventService.deleteEvent 调用，ID:', eventId);
             return AdminApiService.delete(`/events/${eventId}`)
                 .then(response => {
-                    return response;
+                    console.log('AdminEventService.deleteEvent 响应:', response);
+                    return response.data;
                 })
                 .catch(error => {
                     console.error('删除活动失败:', error);

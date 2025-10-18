@@ -1,0 +1,214 @@
+<div class="registration-page" ng-controller="RegistrationController as vm">
+    <div class="container">
+        <!-- Loading State -->
+        <div ng-if="vm.isLoading" class="text-center">
+            <div class="spinner"></div>
+            <p>Loading registration information...</p>
+        </div>
+
+        <!-- Registration Form -->
+        <div ng-if="!vm.isLoading && vm.event" class="registration-container">
+            <div class="breadcrumb">
+                <a href="/events">Events List</a>
+                <i class="fas fa-chevron-right"></i>
+                <a ng-href="/events/{{vm.event.id}}">{{vm.event.title}}</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Event Registration</span>
+            </div>
+
+            <div class="row">
+                <!-- Registration Form -->
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h1>Event Registration</h1>
+                            <p>Please fill in the following information to complete registration</p>
+                        </div>
+                        
+                        <div class="card-body">
+                            <!-- Validation Errors -->
+                            <div ng-if="vm.validationErrors.length > 0" class="alert alert-error">
+                                <h4>Please correct the following errors:</h4>
+                                <ul>
+                                    <li ng-repeat="error in vm.validationErrors">{{error}}</li>
+                                </ul>
+                            </div>
+
+                            <form name="registrationForm" ng-submit="vm.submitRegistration()" novalidate>
+                                <!-- Personal Information -->
+                                <div class="form-section">
+                                    <h3>Personal Information</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="fullName" class="form-label">Full Name *</label>
+                                                <input type="text" 
+                                                       id="fullName"
+                                                       class="form-control" 
+                                                       ng-class="{'error': vm.validationErrors.includes('Please enter your name')}"
+                                                       ng-model="vm.registrationData.full_name"
+                                                       placeholder="Please enter your full name"
+                                                       required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="email" class="form-label">Email Address *</label>
+                                                <input type="email" 
+                                                       id="email"
+                                                       class="form-control" 
+                                                       ng-class="{'error': vm.validationErrors.includes('Please enter email address') || vm.validationErrors.includes('Please enter a valid email address')}"
+                                                       ng-model="vm.registrationData.email"
+                                                       placeholder="Please enter your email address"
+                                                       required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <input type="tel" 
+                                               id="phone"
+                                               class="form-control" 
+                                               ng-model="vm.registrationData.phone"
+                                               placeholder="Please enter your phone number (optional)">
+                                    </div>
+                                </div>
+
+                                <!-- Ticket Information -->
+                                <div class="form-section">
+                                    <h3>Ticket Information</h3>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Number of Tickets *</label>
+                                        <div class="ticket-selector">
+                                            <button type="button" 
+                                                    class="btn btn-outline" 
+                                                    ng-click="vm.decreaseTickets()"
+                                                    ng-disabled="vm.registrationData.ticket_count <= 1">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            
+                                            <span class="ticket-count">{{vm.registrationData.ticket_count}}</span>
+                                            
+                                            <button type="button" 
+                                                    class="btn btn-outline" 
+                                                    ng-click="vm.increaseTickets()"
+                                                    ng-disabled="vm.registrationData.ticket_count >= 10 || vm.registrationData.ticket_count >= vm.getAvailableTickets()">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="form-help">
+                                            Maximum 10 tickets per person, {{vm.getAvailableTickets()}} tickets currently available
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Special Requirements -->
+                                <div class="form-section">
+                                    <h3>Special Requirements (Optional)</h3>
+                                    
+                                    <div class="form-group">
+                                        <label for="specialRequirements" class="form-label">Special Requirements Description</label>
+                                        <textarea id="specialRequirements"
+                                                  class="form-control" 
+                                                  ng-model="vm.registrationData.special_requirements"
+                                                  placeholder="e.g., Dietary requirements, accessibility needs, other special requirements, etc."
+                                                  rows="4"></textarea>
+                                        <div class="form-help">
+                                            Please describe any special requirements here, we will do our best to accommodate
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Submit Buttons -->
+                                <div class="form-actions">
+                                    <button type="submit" 
+                                            class="btn btn-primary btn-lg"
+                                            ng-disabled="vm.isSubmitting">
+                                        <span ng-if="!vm.isSubmitting">
+                                            <i class="fas fa-check"></i>
+                                            Confirm Registration
+                                        </span>
+                                        <span ng-if="vm.isSubmitting">
+                                            <div class="spinner-sm"></div>
+                                            Submitting...
+                                        </span>
+                                    </button>
+                                    
+                                    <a ng-href="/events/{{vm.event.id}}" class="btn btn-outline btn-lg">
+                                        Cancel
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-4">
+                    <div class="card order-summary">
+                        <div class="card-header">
+                            <h3>Order Summary</h3>
+                        </div>
+                        
+                        <div class="card-body">
+                            <!-- Event Information -->
+                            <div class="event-summary">
+                                <h4>{{vm.event.title}}</h4>
+                                <div class="event-details">
+                                    <p><i class="fas fa-calendar"></i> {{$root.formatDate(vm.event.event_date)}}</p>
+                                    <p><i class="fas fa-map-marker-alt"></i> {{vm.event.location}}</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Cost Breakdown -->
+                            <div class="cost-breakdown">
+                                <div class="cost-item">
+                                    <span>Number of Tickets</span>
+                                    <span>{{vm.registrationData.ticket_count}} tickets</span>
+                                </div>
+                                
+                                <div class="cost-item" ng-if="vm.event.ticket_price > 0">
+                                    <span>Unit Price</span>
+                                    <span>{{$root.formatCurrency(vm.event.ticket_price)}}</span>
+                                </div>
+                                
+                                <div class="cost-divider"></div>
+                                
+                                <div class="cost-total">
+                                    <strong>Total</strong>
+                                    <strong>{{$root.formatCurrency(vm.calculateTotalAmount())}}</strong>
+                                </div>
+                                
+                                <div class="cost-note" ng-if="vm.event.ticket_price === 0">
+                                    This event is free to attend
+                                </div>
+                            </div>
+                            
+                            <!-- Important Notes -->
+                            <div class="important-notes">
+                                <h5>Important Notes</h5>
+                                <ul>
+                                    <li>You will receive a confirmation email after successful registration</li>
+                                    <li>Please ensure your email address is correct</li>
+                                    <li>To cancel registration, please contact the organizer at least 24 hours in advance</li>
+                                    <li>Each email can only register once for the same event</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div ng-if="!vm.isLoading && !vm.event" class="text-center error-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h2>Unable to Register</h2>
+            <p>Sorry, we couldn't find the event you're trying to register for, or this event is not available for registration.</p>
+            <a href="/events" class="btn btn-primary">Return to Events List</a>
+        </div>
+    </div>
+</div>

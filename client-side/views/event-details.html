@@ -29,19 +29,19 @@
             <div class="event-stats">
                 <div class="stat">
                     <div class="stat-value">{{event.current_amount | currency:'$':0}}</div>
-                    <div class="stat-label">已筹金额</div>
+                    <div class="stat-label">Raised Amount</div>
                 </div>
                 <div class="stat">
                     <div class="stat-value">{{event.goal_amount | currency:'$':0}}</div>
-                    <div class="stat-label">目标金额</div>
+                    <div class="stat-label">Goal Amount</div>
                 </div>
                 <div class="stat">
                     <div class="stat-value">{{event.registration_count || 0}}</div>
-                    <div class="stat-label">注册人数</div>
+                    <div class="stat-label">Registrations</div>
                 </div>
                 <div class="stat">
                     <div class="stat-value">{{event.available_tickets || 0}}</div>
-                    <div class="stat-label">剩余票数</div>
+                    <div class="stat-label">Available Tickets</div>
                 </div>
             </div>
             
@@ -50,20 +50,20 @@
                     <div class="progress-fill" ng-style="{'width': calculateProgress() + '%'}"></div>
                 </div>
                 <div class="progress-text">
-                    <span>筹款进度: {{calculateProgress() | number:1}}%</span>
+                    <span>Fundraising Progress: {{calculateProgress() | number:1}}%</span>
                 </div>
             </div>
             
             <div class="event-actions-large">
-                <a href="#/register/{{event.id}}" class="btn btn-primary btn-large" 
+                <a href="#!/register/{{event.id}}" class="btn btn-primary btn-large" 
                    ng-if="isUpcoming() && hasAvailableTickets()">
-                    立即注册
+                    Register Now
                 </a>
                 <button class="btn btn-secondary btn-large" disabled ng-if="!isUpcoming()">
-                    活动已结束
+                    Event Ended
                 </button>
                 <button class="btn btn-secondary btn-large" disabled ng-if="isUpcoming() && !hasAvailableTickets()">
-                    票已售罄
+                    Sold Out
                 </button>
             </div>
         </div>
@@ -71,28 +71,28 @@
     
     <div class="event-detail-content">
         <div class="content-section">
-            <h2>活动详情</h2>
+            <h2>Event Details</h2>
             <div class="event-full-description" ng-bind-html="event.full_description"></div>
         </div>
         
         <div class="content-section" ng-if="event.venue_details">
-            <h2>场地信息</h2>
+            <h2>Venue Information</h2>
             <p>{{event.venue_details}}</p>
         </div>
         
         <div class="content-section" ng-if="registrations.length > 0">
-            <h2>注册记录</h2>
+            <h2>Registration Records</h2>
             <div class="registrations-list">
                 <div class="registration-item" ng-repeat="registration in registrations">
                     <div class="registration-info">
                         <div class="registrant-name">{{registration.full_name}}</div>
                         <div class="registrant-email">{{registration.email}}</div>
                         <div class="registration-meta">
-                            <span>票数: {{registration.ticket_count}}</span>
-                            <span>注册时间: {{registration.registration_date | dateFormat:'short'}}</span>
+                            <span>Tickets: {{registration.ticket_count}}</span>
+                            <span>Registration Time: {{registration.registration_date | dateFormat:'short'}}</span>
                         </div>
                         <div class="special-requirements" ng-if="registration.special_requirements">
-                            特殊要求: {{registration.special_requirements}}
+                            Special Requirements: {{registration.special_requirements}}
                         </div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
 </div>
 
 <div class="container" ng-if="loading">
-    <div class="loading-spinner">正在加载活动详情...</div>
+    <div class="loading-spinner">Loading event details...</div>
 </div>
 
 <div class="container" ng-if="!loading && error">
@@ -110,5 +110,5 @@
 </div>
 
 <div class="container" ng-if="!loading && !event && !error">
-    <div class="error-message">活动不存在</div>
+    <div class="error-message">Event does not exist</div>
 </div>

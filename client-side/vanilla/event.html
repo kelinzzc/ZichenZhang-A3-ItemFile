@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components/cards.css">
+    <style>
+        .container { max-width: 900px; margin: 0 auto; padding: 16px; }
+        .hero { display:flex; gap:16px; flex-wrap:wrap; }
+        .hero img { width: 360px; height: 220px; object-fit: cover; border-radius: 8px; }
+        .muted { color:#666; }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <a href="index.html">← Back to Home</a>
+        <div id="error" class="error" style="display:none;color:#c0392b;"></div>
+        <h1 id="title"></h1>
+        <div class="hero">
+            <img id="image" alt="">
+            <div>
+                <div id="meta" class="muted"></div>
+                <div id="progress" class="muted" style="margin-top:8px;"></div>
+                <div style="margin-top:12px;">
+                    <a id="registerLink" class="btn">Register Now</a>
+                </div>
+            </div>
+        </div>
+        <h3 style="margin-top:16px;">Details</h3>
+        <p id="desc"></p>
+        <h3>Registrations</h3>
+        <ul id="regs"></ul>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script>
+    (function(){
+        function getParam(name){
+            var m = new RegExp('(?:^|&)' + name + '=([^&]*)').exec(location.search.slice(1));
+            return m ? decodeURIComponent(m[1]) : '';
+        }
+        var id = getParam('id');
+        var errorBox = document.getElementById('error');
+        function showError(msg){ errorBox.textContent = msg; errorBox.style.display='block'; }
+
+        API.eventById(id).then(function(res){
+            var data = res.data || res; // Compatible with both response structures
+            var ev = data.event || data;
+            var regs = data.registrations || [];
+
+            document.getElementById('title').textContent = ev.title || '';
+            document.getElementById('image').src = ev.image_url || '../images/default.jpg';
+            document.getElementById('image').alt = ev.title || '';
+            document.getElementById('meta').textContent = (ev.location||'') + ' · ' + (ev.event_date||'');
+            var progress = (ev.goal_amount? Math.round((ev.current_amount||0)/ev.goal_amount*100) : 0);
+            document.getElementById('progress').textContent = 'Goal $' + (ev.goal_amount||0) + ' · Progress ' + progress + '%';
+            document.getElementById('desc').textContent = ev.full_description || ev.description || '';
+            document.getElementById('registerLink').href = 'register.html?eventId=' + id;
+
+            var ul = document.getElementById('regs');
+            regs.forEach(function(r){
+                var li = document.createElement('li');
+                li.textContent = (r.full_name||'Anonymous') + ' · ' + (r.ticket_count||1) + ' tickets · ' + (r.registration_date||'');
+                ul.appendChild(li);
+            });
+        }).catch(function(e){ console.error(e); showError('Failed to load details'); });
+    })();
+    </script>
+</body>
+
+</html>
+
+

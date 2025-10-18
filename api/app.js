@@ -26,23 +26,25 @@ app.use(helmet());
 // 压缩中间件
 app.use(compression());
 
-// 速率限制
+// CORS配置（提前到限流之前，确保错误响应也带上CORS头）
+app.use(cors({
+  origin: ['http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:3002', 'http://127.0.0.1:3002', 'http://localhost:3000', 'http://127.0.0.1:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// 代理信任（如果在本地或代理后面，有助于正确限流按IP统计）
+app.set('trust proxy', 1);
+
+// 速率限制（放宽阈值，避免本地开发频繁触发429）
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15分钟
-  max: 100, // 限制每个IP每15分钟最多100个请求
-  message: {
-    error: '请求过于频繁，请稍后再试',
-    retryAfter: 900 // 15分钟
-  }
+  max: 1000, // 本地开发放宽
+  standardHeaders: true,
+  legacyHeaders: false
 });
 app.use(limiter);
-
-// CORS配置
-app.use(cors({
-  origin: ['http://localhost:3001', 'http://localhost:3002', 'http://localhost:3000'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
 
 // 解析请求体
 app.use(bodyParser.json({ limit: '10mb' }));

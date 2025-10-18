@@ -63,8 +63,8 @@ charityEventsApp.controller('EventsController', ['$scope', '$location', '$routeP
                 $scope.loading = false;
             })
             .catch(function(error) {
-                console.error('加载活动列表失败:', error);
-                $scope.error = '加载活动列表失败，请稍后重试';
+                console.error('Failed to load activity list:', error);
+                $scope.error = 'Failed to load activity list, Please try again later.';
                 $scope.loading = false;
             });
     }
@@ -76,7 +76,7 @@ charityEventsApp.controller('EventsController', ['$scope', '$location', '$routeP
                 $scope.categories = response.data;
             })
             .catch(function(error) {
-                console.error('加载类别失败:', error);
+                console.error('Failed to load category:', error);
             });
     }
     

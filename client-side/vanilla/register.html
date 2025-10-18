@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .container { max-width: 600px; margin: 0 auto; padding: 16px; }
+        .field { margin-bottom: 12px; }
+        .field label { display:block; margin-bottom:6px; }
+        .error { color:#c0392b; }
+        .success { color:#2c7a7b; }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <a href="index.html">← Back to Home</a>
+        <h1 id="title">Event Registration</h1>
+        <div id="eventMeta" class="muted" style="margin-bottom:12px;"></div>
+        <div id="msg" class="error" style="display:none;"></div>
+        <div id="ok" class="success" style="display:none;">Registration successful, redirecting to details page in 3 seconds...</div>
+
+        <form id="form">
+            <div class="field">
+                <label>Full Name</label>
+                <input id="full_name" required>
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input id="email" type="email" required>
+            </div>
+            <div class="field">
+                <label>Phone</label>
+                <input id="phone">
+            </div>
+            <div class="field">
+                <label>Number of Tickets</label>
+                <input id="ticket_count" type="number" min="1" value="1" required>
+            </div>
+            <div class="field">
+                <label>Special Requirements</label>
+                <textarea id="special_requirements"></textarea>
+            </div>
+            <button type="submit">Submit Registration</button>
+        </form>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script>
+    (function(){
+        function getParam(name){
+            var m = new RegExp('(?:^|&)' + name + '=([^&]*)').exec(location.search.slice(1));
+            return m ? decodeURIComponent(m[1]) : '';
+        }
+        var eventId = parseInt(getParam('eventId'), 10);
+        var msg = document.getElementById('msg');
+        function showMsg(text){ msg.textContent = text; msg.style.display = 'block'; }
+        function hideMsg(){ msg.textContent=''; msg.style.display='none'; }
+
+        // Load event information
+        API.eventById(eventId).then(function(res){
+            var data = res.data || res;
+            var ev = data.event || data;
+            document.getElementById('title').textContent = 'Registration: ' + (ev.title||'');
+            document.getElementById('eventMeta').textContent = (ev.location||'') + ' · ' + (ev.event_date||'');
+        }).catch(function(){ /* ignore */ });
+
+        document.getElementById('form').addEventListener('submit', function(e){
+            e.preventDefault();
+            hideMsg();
+
+            var payload = {
+                event_id: eventId,
+                full_name: document.getElementById('full_name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                ticket_count: parseInt(document.getElementById('ticket_count').value, 10) || 1,
+                special_requirements: document.getElementById('special_requirements').value.trim()
+            };
+            if (!payload.full_name || !payload.email) { showMsg('Please fill in the required fields'); return; }
+
+            API.register(payload).then(function(){
+                document.getElementById('ok').style.display = 'block';
+                setTimeout(function(){ location.href = 'event.html?id=' + eventId; }, 3000);
+            }).catch(function(err){
+                console.error(err);
+                var text = 'Submission failed, please try again later';
+                if (err && err.code === 'DUPLICATE_REGISTRATION') text = 'You have already registered for this event';
+                if (err && err.code === 'INSUFFICIENT_TICKETS') text = 'Insufficient tickets available';
+                showMsg(text);
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

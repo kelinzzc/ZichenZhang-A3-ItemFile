@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN" ng-app="charityEventsApp">
+<html lang="en" ng-app="charityEventsApp">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{appName}} - 首页</title>
+    <title>{{appName}} - Home</title>
     
-    <!-- 样式文件 -->
+    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/components/header.css">
     <link rel="stylesheet" href="css/components/footer.css">
@@ -13,12 +13,12 @@
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     
-    <!-- 本地 AngularJS 库 -->
+    <!-- AngularJS -->
     <script src="js/lib/angular.min.js"></script>
     <script src="js/lib/angular-route.min.js"></script>
 </head>
 <body ng-controller="MainController">
-    <!-- 头部导航 -->
+    <!-- Header -->
     <header id="main-header">
         <nav class="navbar">
             <div class="nav-brand">
@@ -27,16 +27,16 @@
             </div>
             <ul class="nav-menu" ng-class="{active: menuOpen}">
                 <li class="nav-item">
-                    <a href="#/" class="nav-link" ng-class="{active: currentPath === '/'}">首页</a>
+                    <a href="#!/" class="nav-link" ng-class="{active: currentPath === '/'}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#/events" class="nav-link" ng-class="{active: currentPath === '/events'}">活动列表</a>
+                    <a href="#!/events" class="nav-link" ng-class="{active: currentPath === '/events'}">Events List</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#/search" class="nav-link" ng-class="{active: currentPath === '/search'}">搜索活动</a>
+                    <a href="#!/search" class="nav-link" ng-class="{active: currentPath === '/search'}">Search Events</a>
                 </li>
                 <li class="nav-item">
-                    <a href="../admin-side/index.html" class="nav-link admin-link">管理端</a>
+                    <a href="../admin-side/index.html" class="nav-link admin-link">Admin Panel</a>
                 </li>
             </ul>
             <div class="hamburger" ng-click="toggleMenu()">
@@ -47,62 +47,62 @@
         </nav>
     </header>
 
-    <!-- 主内容区 -->
+    <!-- Content -->
     <main class="main-content">
         <div ng-view></div>
     </main>
 
-    <!-- 页脚 -->
+    <!-- Footer -->
     <footer id="main-footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>关于我们</h3>
-                    <p>我们致力于连接慈善组织与爱心人士，共同创造更美好的世界。</p>
+                    <h3>About Us</h3>
+                    <p>We are dedicated to connecting charitable organizations with caring individuals to create a better world together.</p>
                 </div>
                 <div class="footer-section">
-                    <h3>快速链接</h3>
+                    <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="#/">首页</a></li>
-                        <li><a href="#/events">活动列表</a></li>
-                        <li><a href="#/search">搜索活动</a></li>
+                        <li><a href="#!/">Home</a></li>
+                        <li><a href="#!/events">Events List</a></li>
+                        <li><a href="#!/search">Search Events</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3>联系我们</h3>
-                    <p>邮箱: info@charityevents.org</p>
-                    <p>电话: +61 2 1234 5678</p>
+                    <h3>Contact Us</h3>
+                    <p>Email: info@charityevents.org</p>
+                    <p>Phone: +61 2 1234 5678</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 {{appName}}. 保留所有权利.</p>
+                <p>&copy; 2025 {{appName}}. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- AngularJS 应用文件 -->
+    <!-- AngularJS -->
     <script src="js/app.js"></script>
     
-    <!-- 控制器 -->
+    <!-- Controllers -->
     <script src="js/controllers/MainController.js"></script>
     <script src="js/controllers/EventsController.js"></script>
     <script src="js/controllers/EventDetailsController.js"></script>
     <script src="js/controllers/RegisterController.js"></script>
     <script src="js/controllers/SearchController.js"></script>
     
-    <!-- 服务 -->
+    <!-- Services -->
     <script src="js/services/EventService.js"></script>
     <script src="js/services/RegistrationService.js"></script>
     <script src="js/services/CategoryService.js"></script>
     <script src="js/services/OrganizationService.js"></script>
     <script src="js/services/WeatherService.js"></script>
     
-    <!-- 指令 -->
+    <!-- Directives -->
     <script src="js/directives/eventCard.js"></script>
     <script src="js/directives/weatherWidget.js"></script>
     <script src="js/directives/pagination.js"></script>
     
-    <!-- 过滤器 -->
+    <!-- Filters -->
     <script src="js/filters/dateFormat.js"></script>
     <script src="js/filters/currencyFormat.js"></script>
     <script src="js/filters/truncate.js"></script>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routing Test Page</title>
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/angular-route.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .btn { padding: 10px 15px; margin: 5px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; display: inline-block; }
+        .btn:hover { background: #0056b3; }
+        .current-path { background: #f8f9fa; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body ng-app="testApp" ng-controller="TestController as vm">
+    <h1>AngularJS Routing Test Page</h1>
+    
+    <div class="current-path">
+        <strong>Current Path:</strong> {{vm.currentPath}}
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Navigation Links</h2>
+        <a href="#!/" class="btn">Home</a>
+        <a href="#!/events" class="btn">Events List</a>
+        <a href="#!/search" class="btn">Search Events</a>
+        <a href="#!/events/1" class="btn">Event Details (ID: 1)</a>
+        <a href="#!/register/1" class="btn">Registration Page (Event ID: 1)</a>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Route Content</h2>
+        <div ng-view>
+            <p>Click the links above to test route navigation</p>
+        </div>
+    </div>
+
+    <script>
+        angular.module('testApp', ['ngRoute'])
+        .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+            $locationProvider.hashPrefix('!');
+            
+            $routeProvider
+                .when('/', {
+                    template: '<h3>Home route working normally</h3><p>Path: /</p>'
+                })
+                .when('/events', {
+                    template: '<h3>Events list route working normally</h3><p>Path: /events</p>'
+                })
+                .when('/search', {
+                    template: '<h3>Search events route working normally</h3><p>Path: /search</p>'
+                })
+                .when('/events/:id', {
+                    template: '<h3>Event details route working normally</h3><p>Path: /events/{{vm.eventId}}</p>',
+                    controller: function($scope, $routeParams) {
+                        $scope.eventId = $routeParams.id;
+                    }
+                })
+                .when('/register/:eventId', {
+                    template: '<h3>Registration page route working normally</h3><p>Path: /register/{{vm.eventId}}</p>',
+                    controller: function($scope, $routeParams) {
+                        $scope.eventId = $routeParams.eventId;
+                    }
+                })
+                .otherwise({
+                    template: '<h3>404 - Route Not Found</h3><p>Path: {{vm.currentPath}}</p>'
+                });
+        }])
+        .controller('TestController', ['$scope', '$location', function($scope, $location) {
+            var vm = this;
+            
+            $scope.$on('$routeChangeSuccess', function(event, current) {
+                vm.currentPath = $location.path();
+            });
+            
+            vm.currentPath = $location.path();
+        }]);
+    </script>
+</body>
+</html>

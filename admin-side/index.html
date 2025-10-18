@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>慈善活动平台 - 管理后台</title>
-    <base href="/admin/">
+    <base href="/admin-side/">
 
-    <!-- AngularJS 核心 -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+    <!-- AngularJS 核心（改为本地文件，避免 CDN 超时） -->
+    <script src="../client-side/js/lib/angular.min.js"></script>
+    <script src="../client-side/js/lib/angular-route.min.js"></script>
 
     <!-- 字体图标 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -17,17 +17,18 @@
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/registrations.css">
 
     <!-- AngularJS 应用脚本 -->
     <script src="app/app.js"></script>
     
     
     <!-- 控制器 -->
-    <script src="app/controllers/DashboardController.js"></script>
-    <script src="app/controllers/EventsController.js"></script>
-    <script src="app/controllers/EventFormController.js"></script>
-    <script src="app/controllers/EventDetailController.js"></script>
-    <script src="app/controllers/RegistrationsController.js"></script>
+    <script src="app/controllers/DashboardController.js?v=20250128"></script>
+    <script src="app/controllers/EventsController.js?v=20250128"></script>
+    <script src="app/controllers/EventFormController.js?v=20250128"></script>
+    <script src="app/controllers/EventDetailController.js?v=20250128"></script>
+    <script src="app/controllers/RegistrationsController.js?v=20250129"></script>
     
     <!-- 服务 -->
     <script src="app/services/AdminEventService.js"></script>
@@ -58,19 +59,19 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li>
-                        <a href="#/dashboard" ng-class="{ active: layout.isActive('/dashboard') }">
+                        <a href="#!/dashboard" ng-class="{ active: layout.isActive('/dashboard') }">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>仪表板</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#/events" ng-class="{ active: layout.isActive('/events') }">
+                        <a href="#!/events" ng-class="{ active: layout.isActive('/events') }">
                             <i class="fas fa-calendar-alt"></i>
                             <span>活动管理</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#/registrations" ng-class="{ active: layout.isActive('/registrations') }">
+                        <a href="#!/registrations" ng-class="{ active: layout.isActive('/registrations') }">
                             <i class="fas fa-users"></i>
                             <span>注册记录</span>
                         </a>

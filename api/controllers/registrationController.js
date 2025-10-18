@@ -27,13 +27,17 @@ class RegistrationController {
         });
       }
 
+      // 获取总数（不分页）
+      const countResult = await RegistrationModel.getRegistrationCount(options.event_id);
+      const total = countResult.success ? countResult.data[0].total : result.data.length;
+
       res.json({
         success: true,
         data: result.data,
         pagination: {
           page: options.page,
           limit: options.limit,
-          total: result.data.length
+          total: total
         },
         timestamp: new Date().toISOString()
       });

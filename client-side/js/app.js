@@ -1,8 +1,11 @@
-// AngularJS 主应用模块定义
+// AngularJS main application module definition
 var charityEventsApp = angular.module('charityEventsApp', ['ngRoute']);
 
-// 路由配置
-charityEventsApp.config(['$routeProvider', function($routeProvider) {
+// Route configuration
+charityEventsApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    // Configure route mode to hashbang mode (#!/)
+    $locationProvider.hashPrefix('!');
+    
     $routeProvider
         .when('/', {
             templateUrl: 'views/home.html',
@@ -29,16 +32,16 @@ charityEventsApp.config(['$routeProvider', function($routeProvider) {
         });
 }]);
 
-// 运行配置
+// Run configuration
 charityEventsApp.run(['$rootScope', '$location', function($rootScope, $location) {
-    // 全局配置
+    // Global configuration
     $rootScope.apiBaseUrl = 'http://localhost:3000/api';
-    $rootScope.appName = '慈善活动平台';
+    $rootScope.appName = 'Charity Events Platform';
     $rootScope.menuOpen = false;
     
-    // 路由变化监听
+    // Route change listener
     $rootScope.$on('$routeChangeSuccess', function(event, current) {
         $rootScope.currentPath = $location.path();
-        $rootScope.menuOpen = false; // 关闭移动端菜单
+        $rootScope.menuOpen = false; // Close mobile menu
     });
 }]);

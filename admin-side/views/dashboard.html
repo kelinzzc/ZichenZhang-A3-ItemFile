@@ -14,7 +14,7 @@
                     <i class="fas fa-calendar-alt"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>{{vm.formatNumber(vm.stats.events?.total_events || 0)}}</h3>
+                    <h3>{{vm.formatNumber(((vm.stats.events && vm.stats.events.data && vm.stats.events.data.total_events) || 0))}}</h3>
                     <p>总活动数</p>
                 </div>
             </div>
@@ -24,29 +24,27 @@
                     <i class="fas fa-users"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>{{vm.formatNumber(vm.stats.registrations?.total_registrations || 0)}}</h3>
+                    <h3>{{vm.formatNumber(((vm.stats.registrations && vm.stats.registrations.data && vm.stats.registrations.data.total_registrations) || 0))}}</h3>
                     <p>总注册人数</p>
                 </div>
             </div>
             
             <div class="stat-card">
-                <div class="stat-card">
                 <div class="stat-icon warning">
                     <i class="fas fa-dollar-sign"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>{{vm.formatCurrency(vm.stats.events?.total_raised || 0)}}</h3>
+                    <h3>{{vm.formatCurrency(((vm.stats.events && vm.stats.events.data && vm.stats.events.data.total_raised) || 0))}}</h3>
                     <p>总筹款金额</p>
                 </div>
             </div>
             
             <div class="stat-card">
-                <div class="stat-card">
                 <div class="stat-icon info">
                     <i class="fas fa-ticket-alt"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>{{vm.formatNumber(vm.stats.registrations?.total_tickets || 0)}}</h3>
+                    <h3>{{vm.formatNumber(((vm.stats.registrations && vm.stats.registrations.data && vm.stats.registrations.data.total_tickets) || 0))}}</h3>
                     <p>总票数</p>
                 </div>
             </div>

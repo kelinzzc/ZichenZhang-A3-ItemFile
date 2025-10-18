@@ -47,7 +47,7 @@ class WeatherController {
       const weatherData = await response.json();
 
       // 处理天气数据
-      const processedData = this.processWeatherData(weatherData);
+      const processedData = WeatherController.processWeatherData(weatherData);
 
       res.json({
         success: true,
@@ -65,7 +65,7 @@ class WeatherController {
         success: false,
         error: '天气服务暂时不可用',
         message: '无法获取天气信息，请稍后重试',
-        fallback: this.getFallbackWeather(),
+        fallback: WeatherController.getFallbackWeather(),
         timestamp: new Date().toISOString()
       });
     }
@@ -87,14 +87,14 @@ class WeatherController {
     return {
       date: daily.time[todayIndex],
       weatherCode: daily.weather_code[todayIndex],
-      weatherDescription: this.getWeatherDescription(daily.weather_code[todayIndex]),
+      weatherDescription: WeatherController.getWeatherDescription(daily.weather_code[todayIndex]),
       temperatureMax: daily.temperature_2m_max[todayIndex],
       temperatureMin: daily.temperature_2m_min[todayIndex],
       temperatureUnit: 'celsius',
       forecast: daily.time.slice(0, 3).map((date, index) => ({
         date,
         weatherCode: daily.weather_code[index],
-        weatherDescription: this.getWeatherDescription(daily.weather_code[index]),
+        weatherDescription: WeatherController.getWeatherDescription(daily.weather_code[index]),
         temperatureMax: daily.temperature_2m_max[index],
         temperatureMin: daily.temperature_2m_min[index]
       }))

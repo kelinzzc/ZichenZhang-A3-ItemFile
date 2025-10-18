@@ -1,0 +1,216 @@
+<div class="event-detail-page" ng-controller="EventDetailController as vm">
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <div class="header-left">
+            <h1><i class="fas fa-calendar-alt"></i> 活动详情</h1>
+            <p>查看活动详细信息和注册记录</p>
+        </div>
+        <div class="header-right">
+            <button class="btn btn-outline" ng-click="vm.goBack()">
+                <i class="fas fa-arrow-left"></i> 返回
+            </button>
+            <button class="btn btn-warning" ng-click="vm.editEvent()" ng-if="vm.event">
+                <i class="fas fa-edit"></i> 编辑
+            </button>
+        </div>
+    </div>
+
+
+    <!-- 加载状态 -->
+    <div ng-if="vm.isLoading" class="loading-state">
+        <div class="spinner"></div>
+        <p>加载活动详情中...</p>
+    </div>
+
+    <!-- 活动详情内容 -->
+    <div ng-if="!vm.isLoading && vm.event" class="content-section">
+        <!-- 活动基本信息 -->
+        <div class="card">
+            <div class="card-header">
+                <h2>{{vm.event.title}}</h2>
+                <div class="event-status">
+                    <span class="status-badge" ng-class="{
+                        'badge-success': vm.event.is_active && !vm.event.is_suspended,
+                        'badge-warning': vm.event.is_active && vm.event.is_suspended,
+                        'badge-secondary': !vm.event.is_active
+                    }">
+                        {{vm.event.is_active && !vm.event.is_suspended ? '进行中' : 
+                          (vm.event.is_suspended ? '已暂停' : '已结束')}}
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="event-description">
+                            <h4>活动描述</h4>
+                            <p>{{vm.event.description}}</p>
+                            <div ng-if="vm.event.full_description">
+                                <h5>详细描述</h5>
+                                <p>{{vm.event.full_description}}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="event-details">
+                            <h4>活动详情</h4>
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span class="label">活动时间：</span>
+                                    <span>{{vm.formatDate(vm.event.event_date)}}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span class="label">活动地点：</span>
+                                    <span>{{vm.event.location}}</span>
+                                </div>
+                                <div class="detail-item" ng-if="vm.event.venue_details">
+                                    <i class="fas fa-building"></i>
+                                    <span class="label">场地详情：</span>
+                                    <span>{{vm.event.venue_details}}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-users"></i>
+                                    <span class="label">最大参与人数：</span>
+                                    <span>{{vm.event.max_attendees}}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-ticket-alt"></i>
+                                    <span class="label">票价：</span>
+                                    <span>{{vm.formatCurrency(vm.event.ticket_price)}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="event-stats">
+                            <h4>筹款统计</h4>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" 
+                                         ng-style="{'width': vm.calculateProgress(vm.event.current_amount, vm.event.goal_amount) + '%'}">
+                                    </div>
+                                </div>
+                                <div class="progress-text">
+                                    <span>已筹 {{vm.formatCurrency(vm.event.current_amount)}}</span>
+                                    <span>目标 {{vm.formatCurrency(vm.event.goal_amount)}}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-number">{{vm.getRegistrationStats().totalRegistrations}}</div>
+                                    <div class="stat-label">注册人数</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">{{vm.getRegistrationStats().totalTickets}}</div>
+                                    <div class="stat-label">总票数</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 标签页导航 -->
+        <div class="tab-navigation">
+            <button class="tab-btn" 
+                    ng-class="{'active': vm.activeTab === 'details'}"
+                    ng-click="vm.setActiveTab('details')">
+                <i class="fas fa-info-circle"></i> 活动详情
+            </button>
+            <button class="tab-btn" 
+                    ng-class="{'active': vm.activeTab === 'registrations'}"
+                    ng-click="vm.setActiveTab('registrations')">
+                <i class="fas fa-users"></i> 注册记录 ({{vm.registrations.length}})
+            </button>
+        </div>
+
+        <!-- 标签页内容 -->
+        <div class="tab-content">
+            <!-- 活动详情标签页 -->
+            <div ng-if="vm.activeTab === 'details'" class="tab-pane">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>组织信息</h4>
+                                <div class="organization-info">
+                                    <p><strong>组织名称：</strong>{{vm.event.organization_name}}</p>
+                                    <p><strong>联系方式：</strong>{{vm.event.organization_contact}}</p>
+                                    <p><strong>电话：</strong>{{vm.event.organization_phone}}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>活动分类</h4>
+                                <div class="category-info">
+                                    <p><strong>类别：</strong>{{vm.event.category_name}}</p>
+                                    <p><strong>创建时间：</strong>{{vm.formatDate(vm.event.created_at)}}</p>
+                                    <p><strong>更新时间：</strong>{{vm.formatDate(vm.event.updated_at)}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 注册记录标签页 -->
+            <div ng-if="vm.activeTab === 'registrations'" class="tab-pane">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>注册记录</h3>
+                        <div class="registration-stats">
+                            <span>总注册人数：{{vm.getRegistrationStats().totalRegistrations}}</span>
+                            <span>总票数：{{vm.getRegistrationStats().totalTickets}}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div ng-if="vm.registrations.length === 0" class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <h3>暂无注册记录</h3>
+                            <p>还没有用户注册此活动</p>
+                        </div>
+                        
+                        <div ng-if="vm.registrations.length > 0" class="registrations-list">
+                            <div class="registration-item" ng-repeat="registration in vm.registrations">
+                                <div class="user-info">
+                                    <div class="user-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="user-details">
+                                        <h4>{{registration.full_name}}</h4>
+                                        <p>{{registration.email}}</p>
+                                        <p ng-if="registration.phone">{{registration.phone}}</p>
+                                    </div>
+                                </div>
+                                <div class="registration-info">
+                                    <div class="ticket-count">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        {{registration.ticket_count}} 张票
+                                    </div>
+                                    <div class="registration-date">
+                                        {{vm.formatDate(registration.registration_date)}}
+                                    </div>
+                                    <div class="special-requirements" ng-if="registration.special_requirements">
+                                        <i class="fas fa-info-circle"></i>
+                                        {{registration.special_requirements}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 错误状态 -->
+    <div ng-if="!vm.isLoading && !vm.event" class="error-state">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h3>加载失败</h3>
+        <p>{{vm.error || '无法加载活动详情，请稍后重试'}}</p>
+        <button class="btn btn-primary" ng-click="vm.init()">重试</button>
+    </div>
+</div>

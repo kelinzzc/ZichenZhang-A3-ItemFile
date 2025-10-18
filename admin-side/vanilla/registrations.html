@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 注册记录（原生版）</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <style>
+        .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+        .toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+        .toolbar input, .toolbar select { padding: 6px 8px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #eee; padding: 8px; text-align: left; }
+        th { background: #f5f5f5; }
+        .muted { color: #666; font-size: 12px; }
+        .nav { margin-bottom: 16px; }
+        .nav a { margin-right: 12px; padding: 6px 12px; background: #f0f0f0; text-decoration: none; border-radius: 4px; }
+        .nav a.active { background: #007bff; color: white; }
+        .btn { padding: 6px 12px; margin-right: 8px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; border: none; }
+        .btn-danger { background: #dc3545; color: white; border: none; }
+        .btn-secondary { background: #6c757d; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="dashboard.html">仪表板</a>
+            <a href="events.html">活动管理</a>
+            <a href="registrations.html" class="active">注册记录</a>
+        </div>
+        
+        <h1>注册记录</h1>
+        <div id="error" class="muted" style="color: #c0392b; display: none;"></div>
+        <div id="success" class="muted" style="color: #28a745; display: none;"></div>
+        
+        <div class="toolbar">
+            <input id="searchInput" placeholder="搜索姓名或邮箱">
+            <select id="eventFilter">
+                <option value="">全部活动</option>
+            </select>
+            <button id="searchBtn" class="btn btn-primary">搜索</button>
+            <button id="reloadBtn" class="btn btn-secondary">刷新</button>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>姓名</th>
+                    <th>邮箱</th>
+                    <th>活动</th>
+                    <th>票数</th>
+                    <th>注册时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="registrationsTable"></tbody>
+        </table>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/registrations.js"></script>
+</body>
+</html>

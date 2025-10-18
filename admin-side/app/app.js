@@ -42,6 +42,12 @@ angular.module('CharityEventsAdminApp', [
             redirectTo: '/dashboard'
         });
 }])
+.run(['$rootScope', '$templateCache', function($rootScope, $templateCache) {
+    // 防止浏览器缓存视图模板，确保你看到的始终是最新的 dashboard.html 等
+    $rootScope.$on('$routeChangeStart', function() {
+        try { $templateCache.removeAll(); } catch(e) {}
+    });
+}])
 .controller('AdminLayoutController', ['$location', function($location) {
     var vm = this;
     

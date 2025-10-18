@@ -82,23 +82,7 @@ class RegistrationModel {
     return await db.query(sql, [eventId]);
   }
 
-  // 获取所有注册记录（管理端使用）
-  static async getAllRegistrations() {
-    const sql = `
-      SELECT 
-        r.*, 
-        e.title as event_title, 
-        e.event_date,
-        c.name as category_name,
-        o.name as organization_name
-      FROM registrations r
-      JOIN events e ON r.event_id = e.id
-      LEFT JOIN categories c ON e.category_id = c.id
-      LEFT JOIN organizations o ON e.organization_id = o.id
-      ORDER BY r.registration_date DESC
-    `;
-    return await db.query(sql);
-  }
+  // 获取所有注册记录（管理端使用，已移至下方带分页的版本）
 
   // 删除注册记录
   static async deleteRegistration(id) {
@@ -153,6 +137,21 @@ static async getAllRegistrations(options = {}) {
     const offset = (options.page - 1) * options.limit;
     sql += ' LIMIT ? OFFSET ?';
     params.push(options.limit, offset);
+  }
+
+  return await db.query(sql, params);
+}
+
+/**
+ * 获取注册记录总数
+ */
+static async getRegistrationCount(eventId = null) {
+  let sql = 'SELECT COUNT(*) as total FROM registrations r';
+  const params = [];
+
+  if (eventId) {
+    sql += ' WHERE r.event_id = ?';
+    params.push(eventId);
   }
 
   return await db.query(sql, params);

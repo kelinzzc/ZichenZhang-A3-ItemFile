@@ -42,12 +42,11 @@
                                 <div class="form-group">
                                     <label class="form-label">活动类别</label>
                                     <select class="form-control" ng-model="vm.event.category_id">
-                                        <option value="1">慈善晚宴</option>
-                                        <option value="2">趣味跑</option>
-                                        <option value="3">艺术展览</option>
-                                        <option value="4">线上募捐</option>
-                                        <option value="5">社区服务</option>
-                                        <option value="6">教育讲座</option>
+                                        <option value="">请选择类别</option>
+                                        <option ng-repeat="category in vm.categories" 
+                                                value="{{category.id}}">
+                                            {{category.name}}
+                                        </option>
                                     </select>
                                 </div>
                             </div>

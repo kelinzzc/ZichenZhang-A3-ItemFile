@@ -8,6 +8,7 @@ function($scope, $routeParams, AdminEventService, AdminRegistrationService) {
     vm.registrations = [];
     vm.isLoading = true;
     vm.activeTab = 'details';
+    vm.error = '';
 
     /**
      * 初始化控制器
@@ -23,20 +24,53 @@ function($scope, $routeParams, AdminEventService, AdminRegistrationService) {
     };
 
     /**
+     * 返回上一页
+     */
+    vm.goBack = function() {
+        window.history.back();
+    };
+
+    /**
+     * 编辑活动
+     */
+    vm.editEvent = function() {
+        if (vm.event) {
+            window.location.hash = '#/events/edit/' + vm.event.id;
+        }
+    };
+
+    /**
      * 加载活动详情
      */
     vm.loadEventDetails = function(eventId) {
+        console.log('开始加载活动详情，ID:', eventId);
         vm.isLoading = true;
+        vm.error = '';
 
         AdminEventService.getEventById(eventId)
             .then(function(response) {
-                vm.event = response.event;
-                vm.registrations = response.registrations;
+                console.log('活动详情API响应:', response);
+                console.log('响应数据结构:', {
+                    hasData: !!response.data,
+                    hasEvent: !!response.data.event,
+                    hasRegistrations: !!response.data.registrations,
+                    eventKeys: response.data.event ? Object.keys(response.data.event) : 'N/A',
+                    registrationsCount: response.data.registrations ? response.data.registrations.length : 0
+                });
+                
+                vm.event = response.data.event;
+                vm.registrations = response.data.registrations;
                 vm.isLoading = false;
+                
+                console.log('数据设置完成:', {
+                    event: vm.event,
+                    registrations: vm.registrations,
+                    isLoading: vm.isLoading
+                });
             })
             .catch(function(error) {
                 console.error('加载活动详情失败:', error);
-                alert('加载活动详情失败');
+                vm.error = error.message || '无法加载活动详情，请稍后重试';
                 vm.isLoading = false;
             });
     };

@@ -1,14 +1,14 @@
 charityEventsApp.controller('MainController', ['$scope', '$rootScope', '$location', 'EventService', 'CategoryService', 
     function($scope, $rootScope, $location, EventService, CategoryService) {
     
-    // 初始化数据
+    // Initialize data
     $scope.featuredEvents = [];
     $scope.categories = [];
     $scope.stats = {};
     $scope.loadingFeatured = true;
     $scope.featuredError = '';
     
-    // 加载精选活动
+    // Load featured events
     function loadFeaturedEvents() {
         $scope.loadingFeatured = true;
         EventService.getFeaturedEvents()
@@ -17,45 +17,45 @@ charityEventsApp.controller('MainController', ['$scope', '$rootScope', '$locatio
                 $scope.loadingFeatured = false;
             })
             .catch(function(error) {
-                console.error('加载精选活动失败:', error);
-                $scope.featuredError = '加载精选活动失败，请稍后重试';
+                console.error('Failed to load featured events:', error);
+                $scope.featuredError = 'Failed to load featured events, please try again later';
                 $scope.loadingFeatured = false;
             });
     }
     
-    // 加载类别
+    // Load categories
     function loadCategories() {
         CategoryService.getAll()
             .then(function(response) {
                 $scope.categories = response.data;
             })
             .catch(function(error) {
-                console.error('加载类别失败:', error);
+                console.error('Failed to load categories:', error);
             });
     }
     
-    // 加载统计数据
+    // Load statistics
     function loadStats() {
         EventService.getStats()
             .then(function(response) {
                 $scope.stats = response.data;
             })
             .catch(function(error) {
-                console.error('加载统计数据失败:', error);
+                console.error('Failed to load statistics:', error);
             });
     }
     
-    // 切换移动端菜单
+    // Toggle mobile menu
     $scope.toggleMenu = function() {
         $rootScope.menuOpen = !$rootScope.menuOpen;
     };
     
-    // 按类别筛选
+    // Filter by category
     $scope.filterByCategory = function(categoryId) {
         $location.path('/events').search({category: categoryId});
     };
     
-    // 初始化
+    // Initialize
     loadFeaturedEvents();
     loadCategories();
     loadStats();

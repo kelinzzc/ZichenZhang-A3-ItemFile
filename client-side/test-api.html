@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>
+</head>
+<body ng-app="testApp" ng-controller="TestController as vm">
+    <h1>API Test Page</h1>
+    
+    <div>
+        <h2>Test Events List API</h2>
+        <button ng-click="vm.testEvents()">Test Get Events List</button>
+        <div ng-if="vm.eventsResult">
+            <h3>Result:</h3>
+            <pre>{{vm.eventsResult | json}}</pre>
+        </div>
+    </div>
+    
+    <div>
+        <h2>Test Search API</h2>
+        <input type="text" ng-model="vm.searchQuery" placeholder="Enter search keyword">
+        <button ng-click="vm.testSearch()">Test Search</button>
+        <div ng-if="vm.searchResult">
+            <h3>Search Result:</h3>
+            <pre>{{vm.searchResult | json}}</pre>
+        </div>
+    </div>
+    
+    <div>
+        <h2>Test Categories API</h2>
+        <button ng-click="vm.testCategories()">Test Get Categories</button>
+        <div ng-if="vm.categoriesResult">
+            <h3>Result:</h3>
+            <pre>{{vm.categoriesResult | json}}</pre>
+        </div>
+    </div>
+
+    <script>
+        angular.module('testApp', [])
+        .controller('TestController', function($http) {
+            var vm = this;
+            vm.apiBaseUrl = 'http://localhost:3000/api';
+            
+            vm.testEvents = function() {
+                $http.get(vm.apiBaseUrl + '/events')
+                    .then(function(response) {
+                        vm.eventsResult = response.data;
+                        console.log('Events API response:', response);
+                    })
+                    .catch(function(error) {
+                        vm.eventsResult = { error: error.data || error.message };
+                        console.error('Events API error:', error);
+                    });
+            };
+            
+            vm.testSearch = function() {
+                var params = { q: vm.searchQuery || 'charity' };
+                $http.get(vm.apiBaseUrl + '/events/search', { params: params })
+                    .then(function(response) {
+                        vm.searchResult = response.data;
+                        console.log('Search API response:', response);
+                    })
+                    .catch(function(error) {
+                        vm.searchResult = { error: error.data || error.message };
+                        console.error('Search API error:', error);
+                    });
+            };
+            
+            vm.testCategories = function() {
+                $http.get(vm.apiBaseUrl + '/categories')
+                    .then(function(response) {
+                        vm.categoriesResult = response.data;
+                        console.log('Categories API response:', response);
+                    })
+                    .catch(function(error) {
+                        vm.categoriesResult = { error: error.data || error.message };
+                        console.error('Categories API error:', error);
+                    });
+            };
+        });
+    </script>
+</body>
+</html>

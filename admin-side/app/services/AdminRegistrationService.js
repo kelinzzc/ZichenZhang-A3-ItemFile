@@ -5,8 +5,12 @@ angular.module('CharityEventsAdminApp')
          * 获取所有注册记录
          */
         getAllRegistrations: function(params = {}) {
+            console.log('AdminRegistrationService.getAllRegistrations 调用，参数:', params);
             return AdminApiService.get('/registrations', params)
-                .then(response => response.data)
+                .then(response => {
+                    console.log('AdminRegistrationService 响应:', response);
+                    return response.data;
+                })
                 .catch(error => {
                     console.error('获取注册记录失败:', error);
                     return $q.reject(error);

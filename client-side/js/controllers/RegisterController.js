@@ -1,7 +1,7 @@
 charityEventsApp.controller('RegisterController', ['$scope', '$routeParams', '$location', 'EventService', 'RegistrationService',
     function($scope, $routeParams, $location, EventService, RegistrationService) {
     
-    // 初始化数据
+    // Initialize data
     $scope.event = null;
     $scope.registration = {
         event_id: parseInt($routeParams.eventId),
@@ -16,7 +16,7 @@ charityEventsApp.controller('RegisterController', ['$scope', '$routeParams', '$l
     $scope.error = '';
     $scope.success = false;
     
-    // 加载活动信息
+    // Load event information
     function loadEvent() {
         EventService.getById($routeParams.eventId)
             .then(function(response) {
@@ -25,16 +25,16 @@ charityEventsApp.controller('RegisterController', ['$scope', '$routeParams', '$l
                 $scope.loading = false;
             })
             .catch(function(error) {
-                console.error('加载活动信息失败:', error);
-                $scope.error = '加载活动信息失败，请稍后重试';
+                console.error('Failed to load event information:', error);
+                $scope.error = 'Failed to load event information, please try again later';
                 $scope.loading = false;
             });
     }
     
-    // 提交注册
+    // Submit registration
     $scope.submitRegistration = function() {
         if ($scope.registrationForm.$invalid) {
-            $scope.error = '请填写所有必填字段';
+            $scope.error = 'Please fill in all required fields';
             return;
         }
         
@@ -46,38 +46,38 @@ charityEventsApp.controller('RegisterController', ['$scope', '$routeParams', '$l
                 $scope.success = true;
                 $scope.submitting = false;
                 
-                // 3秒后跳转到活动详情页
+                // Redirect to event details page after 3 seconds
                 setTimeout(function() {
                     $location.path('/events/' + $routeParams.eventId);
                 }, 3000);
             })
             .catch(function(error) {
-                console.error('注册失败:', error);
+                console.error('Registration failed:', error);
                 
                 if (error.data && error.data.code === 'DUPLICATE_REGISTRATION') {
-                    $scope.error = '您已经注册过此活动，无法重复注册';
+                    $scope.error = 'You have already registered for this event and cannot register again';
                 } else if (error.data && error.data.code === 'INSUFFICIENT_TICKETS') {
-                    $scope.error = '剩余票数不足，请选择更少的票数';
+                    $scope.error = 'Insufficient tickets available, please select fewer tickets';
                 } else {
-                    $scope.error = error.data && error.data.message ? error.data.message : '注册失败，请稍后重试';
+                    $scope.error = error.data && error.data.message ? error.data.message : 'Registration failed, please try again later';
                 }
                 
                 $scope.submitting = false;
             });
     };
     
-    // 计算总金额
+    // Calculate total amount
     $scope.calculateTotal = function() {
         if (!$scope.event) return 0;
         return $scope.registration.ticket_count * $scope.event.ticket_price;
     };
     
-    // 检查是否还有空位
+    // Check if there are available tickets
     $scope.hasAvailableTickets = function() {
         if (!$scope.event) return false;
         return $scope.event.available_tickets > 0;
     };
     
-    // 初始化
+    // Initialize
     loadEvent();
 }]);

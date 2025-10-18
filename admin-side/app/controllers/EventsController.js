@@ -28,7 +28,9 @@ function($scope, $location, AdminEventService, ModalService) {
         vm.isLoading = true;
 
         AdminEventService.getAllEvents()
-            .then(function(events) {
+            .then(function(response) {
+                console.log('EventsController.loadEvents 响应:', response);
+                var events = response.data || response;
                 vm.events = events;
                 vm.filteredEvents = events;
                 vm.pagination.totalItems = events.length;
@@ -124,6 +126,18 @@ function($scope, $location, AdminEventService, ModalService) {
         }
 
         return { text: '进行中', class: 'status-active' };
+    };
+
+    /**
+     * 格式化日期
+     */
+    vm.formatDate = function(value) {
+        if (!value) return '';
+        try { 
+            return new Date(value).toLocaleDateString('zh-CN'); 
+        } catch(e) { 
+            return value; 
+        }
     };
 
     // 初始化控制器

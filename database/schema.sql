@@ -38,19 +38,19 @@ INSERT IGNORE INTO events (title, description, full_description, category_id, or
 
 -- Insert A3 registration data (minimum 10 registrations)
 INSERT IGNORE INTO registrations (event_id, full_name, email, phone, ticket_count, special_requirements) VALUES
-(1, '张伟', 'zhang.wei@email.com', '0412345678', 2, '素食要求'),
-(1, '李娜', 'li.na@email.com', '0423456789', 1, NULL),
-(1, '王小明', 'wang.xiaoming@email.com', '0434567890', 2, '需要轮椅通道'),
-(2, '陈大文', 'chen.dawen@email.com', '0456789012', 1, NULL),
-(2, 'Sarah Johnson', 'sarah.j@email.com', '0467890123', 2, '初学者，需要指导'),
+(1, 'Zhang Wei', 'zhang.wei@email.com', '0412345678', 2, 'Vegetarian meal required'),
+(1, 'Li Na', 'li.na@email.com', '0423456789', 1, NULL),
+(1, 'Wang Xiaoming', 'wang.xiaoming@email.com', '0434567890', 2, 'Wheelchair access required'),
+(2, 'Chen Dawen', 'chen.dawen@email.com', '0456789012', 1, NULL),
+(2, 'Sarah Johnson', 'sarah.j@email.com', '0467890123', 2, 'Beginner, needs guidance'),
 (3, 'Robert Smith', 'robert.smith@email.com', '0478901234', 1, NULL),
-(3, '黄美丽', 'huang.meili@email.com', '0489012345', 3, '团体票，需要连座'),
+(3, 'Huang Meili', 'huang.meili@email.com', '0489012345', 3, 'Group tickets, need adjacent seats'),
 (4, 'David Wilson', 'david.wilson@email.com', '0490123456', 2, NULL),
-(5, '孙小美', 'sun.xiaomei@email.com', '0401234567', 1, '学生，需要学习材料'),
-(6, 'Michael Chen', 'michael.chen@email.com', '0411122233', 4, '家庭票，有2个小孩'),
-(7, '吴大志', 'wu.dazhi@email.com', '0422233344', 1, NULL),
-(8, 'Emma Zhang', 'emma.zhang@email.com', '0433344455', 2, '素食要求'),
-(9, '郑成功', 'zheng.chenggong@email.com', '0444455566', 1, '自带手套和垃圾袋'),
+(5, 'Sun Xiaomei', 'sun.xiaomei@email.com', '0401234567', 1, 'Student, needs learning materials'),
+(6, 'Michael Chen', 'michael.chen@email.com', '0411122233', 4, 'Family ticket, 2 children'),
+(7, 'Wu Dazhi', 'wu.dazhi@email.com', '0422233344', 1, NULL),
+(8, 'Emma Zhang', 'emma.zhang@email.com', '0433344455', 2, 'Vegetarian meal required'),
+(9, 'Zheng Chenggong', 'zheng.chenggong@email.com', '0444455566', 1, 'Bringing own gloves and trash bags'),
 (10, 'Olivia Wang', 'olivia.wang@email.com', '0455566677', 1, NULL);
 
 SELECT 'A3 Sample Data Insertion Completed!' as status;

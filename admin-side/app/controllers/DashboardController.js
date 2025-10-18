@@ -105,6 +105,21 @@ function($scope, AdminEventService, AdminRegistrationService) {
         });
     };
 
+    /**
+     * 格式化日期
+     */
+    vm.formatDate = function(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
     // 初始化控制器
     vm.init();
 }]);

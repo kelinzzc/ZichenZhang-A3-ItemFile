@@ -1,65 +1,65 @@
 <div class="container">
     <div class="page-header">
-        <h1>搜索活动</h1>
-        <p>通过关键词、类别、地点等条件查找您感兴趣的活动</p>
+        <h1>Search Events</h1>
+        <p>Find events you're interested in by keywords, categories, location, and other criteria</p>
     </div>
 
-    <!-- 搜索表单 -->
+    <!-- Search Form -->
     <div class="search-form-section">
         <form name="searchForm" class="search-form">
             <div class="form-row">
                 <div class="form-group full-width">
-                    <label for="searchQuery" class="form-label">关键词搜索</label>
+                    <label for="searchQuery" class="form-label">Keyword Search</label>
                     <input type="text" id="searchQuery" class="form-control" 
                            ng-model="searchParams.q"
-                           placeholder="输入活动名称、描述或地点...">
+                           placeholder="Enter event name, description, or location...">
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="searchCategory" class="form-label">活动类别</label>
+                    <label for="searchCategory" class="form-label">Event Category</label>
                     <select id="searchCategory" class="form-control" ng-model="searchParams.category">
-                        <option value="">所有类别</option>
+                        <option value="">All Categories</option>
                         <option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="searchLocation" class="form-label">地点</label>
+                    <label for="searchLocation" class="form-label">Location</label>
                     <input type="text" id="searchLocation" class="form-control" 
                            ng-model="searchParams.location"
-                           placeholder="输入活动地点...">
+                           placeholder="Enter event location...">
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="dateFrom" class="form-label">开始日期</label>
+                    <label for="dateFrom" class="form-label">Start Date</label>
                     <input type="date" id="dateFrom" class="form-control" ng-model="searchParams.date_from">
                 </div>
                 
                 <div class="form-group">
-                    <label for="dateTo" class="form-label">结束日期</label>
+                    <label for="dateTo" class="form-label">End Date</label>
                     <input type="date" id="dateTo" class="form-control" ng-model="searchParams.date_to">
                 </div>
             </div>
             
             <div class="form-actions">
                 <button type="button" class="btn btn-primary" ng-click="performSearch()" ng-disabled="loading">
-                    {{loading ? '搜索中...' : '搜索'}}
+                    {{loading ? 'Searching...' : 'Search'}}
                 </button>
-                <button type="button" class="btn btn-outline" ng-click="clearSearch()">清除</button>
+                <button type="button" class="btn btn-outline" ng-click="clearSearch()">Clear</button>
             </div>
         </form>
     </div>
 
-    <!-- 搜索结果 -->
+    <!-- Search Results -->
     <div class="search-results-section" ng-if="searchPerformed">
-        <h2>搜索结果</h2>
+        <h2>Search Results</h2>
         
         <div class="search-summary" ng-if="!loading">
-            <p>找到 {{events.length}} 个匹配的活动</p>
+            <p>Found {{events.length}} matching events</p>
         </div>
         
         <div class="events-grid">
@@ -67,7 +67,7 @@
                 <div class="event-image-container">
                     <img ng-src="{{event.image_url || 'images/events/default.jpg'}}" alt="{{event.title}}" class="event-image">
                     <div class="event-status" ng-class="{'upcoming': isUpcoming(event), 'past': isPast(event)}">
-                        {{isUpcoming(event) ? '即将开始' : (isPast(event) ? '已结束' : '进行中')}}
+                        {{isUpcoming(event) ? 'Upcoming' : (isPast(event) ? 'Ended' : 'In Progress')}}
                     </div>
                 </div>
                 <div class="event-content">
@@ -90,21 +90,21 @@
                             <div class="progress-fill" ng-style="{'width': calculateProgress(event) + '%'}"></div>
                         </div>
                         <div class="progress-text">
-                            <span>已筹 {{event.current_amount | currency:'$':0}}</span>
-                            <span>目标 {{event.goal_amount | currency:'$':0}}</span>
+                            <span>Raised {{event.current_amount | currency:'$':0}}</span>
+                            <span>Goal {{event.goal_amount | currency:'$':0}}</span>
                         </div>
                     </div>
                     
                     <div class="event-actions">
-                        <a href="#/events/{{event.id}}" class="btn btn-outline">查看详情</a>
-                        <a href="#/register/{{event.id}}" class="btn btn-primary" ng-if="isUpcoming(event) && event.available_tickets > 0">立即注册</a>
+                        <a href="#!/events/{{event.id}}" class="btn btn-outline">View Details</a>
+                        <a href="#!/register/{{event.id}}" class="btn btn-primary" ng-if="isUpcoming(event) && event.available_tickets > 0">Register Now</a>
                     </div>
                 </div>
             </div>
         </div>
         
         <div class="loading-spinner" ng-if="loading">
-            正在搜索活动...
+            Searching for events...
         </div>
         
         <div class="error-message" ng-if="error">
@@ -112,7 +112,7 @@
         </div>
         
         <div class="no-results" ng-if="!loading && events.length === 0 && searchPerformed">
-            <p>没有找到匹配的活动，请尝试调整搜索条件</p>
+            <p>No matching events found, please try adjusting your search criteria</p>
         </div>
     </div>
 </div>

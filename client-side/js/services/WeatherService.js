@@ -3,7 +3,7 @@ charityEventsApp.factory('WeatherService', ['$http', '$rootScope', function($htt
     var baseUrl = $rootScope.apiBaseUrl + '/weather';
     
     return {
-        // 获取天气信息
+        // 获取天气
         getWeather: function(latitude, longitude) {
             return $http.get(baseUrl, {
                 params: {
