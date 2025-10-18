@@ -1,36 +1,31 @@
-/**
- * 数据验证中间件
- */
-
-// 事件数据验证
 const validateEvent = (req, res, next) => {
   const { title, description, event_date, location, max_attendees } = req.body;
   const errors = [];
 
   if (!title || title.trim().length === 0) {
-    errors.push('活动标题是必需的');
+    errors.push('Event title is required');
   }
 
   if (!description || description.trim().length === 0) {
-    errors.push('活动描述是必需的');
+    errors.push('Event description is required');
   }
 
   if (!event_date) {
-    errors.push('活动日期是必需的');
+    errors.push('Event date is required');
   } else if (new Date(event_date) <= new Date()) {
-    errors.push('活动日期必须是将来的时间');
+    errors.push('Event date must be in the future');
   }
 
   if (!location || location.trim().length === 0) {
-    errors.push('活动地点是必需的');
+    errors.push('Event location is required');
   }
 
   if (!max_attendees || max_attendees <= 0) {
-    errors.push('最大参与人数必须大于0');
+    errors.push('Maximum attendees must be greater than 0');
   }
 
   if (errors.length > 0) {
-    const error = new Error('数据验证失败');
+    const error = new Error('Data validation failed');
     error.name = 'ValidationError';
     error.details = errors;
     return next(error);
@@ -39,31 +34,31 @@ const validateEvent = (req, res, next) => {
   next();
 };
 
-// 注册数据验证
+// Registration data validation
 const validateRegistration = (req, res, next) => {
   const { event_id, full_name, email, ticket_count } = req.body;
   const errors = [];
 
   if (!event_id) {
-    errors.push('活动ID是必需的');
+    errors.push('Event ID is required');
   }
 
   if (!full_name || full_name.trim().length === 0) {
-    errors.push('参与者姓名是必需的');
+    errors.push('Participant name is required');
   }
 
   if (!email || email.trim().length === 0) {
-    errors.push('邮箱是必需的');
+    errors.push('Email is required');
   } else if (!isValidEmail(email)) {
-    errors.push('邮箱格式无效');
+    errors.push('Invalid email format');
   }
 
   if (!ticket_count || ticket_count <= 0) {
-    errors.push('票数必须大于0');
+    errors.push('Ticket count must be greater than 0');
   }
 
   if (errors.length > 0) {
-    const error = new Error('数据验证失败');
+    const error = new Error('Data validation failed');
     error.name = 'ValidationError';
     error.details = errors;
     return next(error);
@@ -72,13 +67,13 @@ const validateRegistration = (req, res, next) => {
   next();
 };
 
-// 邮箱验证函数
+// Email validation function
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
-// 分页参数验证
+// Pagination parameter validation
 const validatePagination = (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -86,14 +81,14 @@ const validatePagination = (req, res, next) => {
   if (page < 1) {
     return res.status(400).json({
       success: false,
-      error: '页码必须大于0'
+      error: 'Page number must be greater than 0'
     });
   }
 
   if (limit < 1 || limit > 100) {
     return res.status(400).json({
       success: false,
-      error: '每页数量必须在1-100之间'
+      error: 'Items per page must be between 1 and 100'
     });
   }
 

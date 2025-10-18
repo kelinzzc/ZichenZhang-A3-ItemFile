@@ -1,52 +1,46 @@
 const fetch = require('node-fetch');
 
-/**
- * 天气控制器 - 集成Open-Meteo API
- */
 class WeatherController {
-  /**
-   * 获取天气信息
-   */
   static async getWeather(req, res, next) {
     try {
       const { latitude, longitude } = req.query;
 
-      // 验证参数
+      // Validate parameters
       if (!latitude || !longitude) {
         return res.status(400).json({
           success: false,
-          error: '缺少必需参数',
-          message: '请提供纬度和经度参数',
+          error: 'Missing required parameters',
+          message: 'Please provide latitude and longitude parameters',
           example: '/api/weather?latitude=-33.87&longitude=151.21'
         });
       }
 
-      // 验证坐标格式
+      // Validate coordinate format
       const lat = parseFloat(latitude);
       const lng = parseFloat(longitude);
 
       if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
         return res.status(400).json({
           success: false,
-          error: '无效的坐标参数',
-          message: '请提供有效的纬度和经度'
+          error: 'Invalid coordinate parameters',
+          message: 'Please provide valid latitude and longitude'
         });
       }
 
-      // 构建API URL
+      // Call Open-Meteo API
       const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Australia%2FSydney`;
 
-      console.log('🌤️  请求天气API:', apiUrl);
+      console.log('🌤️  Requesting weather API:', apiUrl);
 
       const response = await fetch(apiUrl);
       
       if (!response.ok) {
-        throw new Error(`天气API请求失败: ${response.status} ${response.statusText}`);
+        throw new Error(`Weather API request failed: ${response.status} ${response.statusText}`);
       }
 
       const weatherData = await response.json();
 
-      // 处理天气数据
+      // Process weather data
       const processedData = WeatherController.processWeatherData(weatherData);
 
       res.json({
@@ -58,13 +52,13 @@ class WeatherController {
       });
 
     } catch (error) {
-      console.error('天气API错误:', error);
+      console.error('Weather API error:', error);
       
-      // 提供降级响应
+      // Provide fallback response
       res.status(503).json({
         success: false,
-        error: '天气服务暂时不可用',
-        message: '无法获取天气信息，请稍后重试',
+        error: 'Weather service temporarily unavailable',
+        message: 'Unable to retrieve weather information, please try again later',
         fallback: WeatherController.getFallbackWeather(),
         timestamp: new Date().toISOString()
       });
@@ -72,16 +66,16 @@ class WeatherController {
   }
 
   /**
-   * 处理原始天气数据
+   * Process raw weather data
    */
   static processWeatherData(weatherData) {
     const { daily } = weatherData;
     
     if (!daily || !daily.time || daily.time.length === 0) {
-      throw new Error('天气数据格式无效');
+      throw new Error('Invalid weather data format');
     }
 
-    // 获取今天的数据（索引0）
+    // Get today's data
     const todayIndex = 0;
     
     return {
@@ -102,54 +96,54 @@ class WeatherController {
   }
 
   /**
-   * 将天气代码转换为描述
+   * Convert weather code to description
    */
   static getWeatherDescription(code) {
     const weatherMap = {
-      0: '晴朗',
-      1: '基本晴朗', 
-      2: '部分多云', 
-      3: '阴天',
-      45: '雾', 
-      48: '冻雾',
-      51: '小雨', 
-      53: '中雨', 
-      55: '大雨',
-      56: '冻毛毛雨', 
-      57: '密集冻毛毛雨',
-      61: '小雨', 
-      63: '中雨', 
-      65: '暴雨',
-      66: '冻雨', 
-      67: '大冻雨',
-      71: '小雪', 
-      73: '中雪', 
-      75: '大雪',
-      77: '雪粒',
-      80: '小雨阵雨', 
-      81: '中雨阵雨', 
-      82: '暴雨阵雨',
-      85: '小雪阵雨', 
-      86: '大雪阵雨',
-      95: '雷暴',
-      96: '雷暴伴有轻微冰雹', 
-      99: '雷暴伴有大冰雹'
+      0: 'Clear sky',
+      1: 'Mainly clear', 
+      2: 'Partly cloudy', 
+      3: 'Overcast',
+      45: 'Fog', 
+      48: 'Freezing fog',
+      51: 'Light drizzle', 
+      53: 'Moderate drizzle', 
+      55: 'Heavy drizzle',
+      56: 'Light freezing drizzle', 
+      57: 'Heavy freezing drizzle',
+      61: 'Light rain', 
+      63: 'Moderate rain', 
+      65: 'Heavy rain',
+      66: 'Light freezing rain', 
+      67: 'Heavy freezing rain',
+      71: 'Light snow', 
+      73: 'Moderate snow', 
+      75: 'Heavy snow',
+      77: 'Snow grains',
+      80: 'Light rain showers', 
+      81: 'Moderate rain showers', 
+      82: 'Heavy rain showers',
+      85: 'Light snow showers', 
+      86: 'Heavy snow showers',
+      95: 'Thunderstorm',
+      96: 'Thunderstorm with light hail', 
+      99: 'Thunderstorm with heavy hail'
     };
 
-    return weatherMap[code] || '未知';
+    return weatherMap[code] || 'Unknown';
   }
 
   /**
-   * 提供降级天气数据
+   * Provide fallback weather data
    */
   static getFallbackWeather() {
     return {
       date: new Date().toISOString().split('T')[0],
-      weatherDescription: '天气信息暂时不可用',
+      weatherDescription: 'Weather information temporarily unavailable',
       temperatureMax: 22,
       temperatureMin: 15,
       temperatureUnit: 'celsius',
-      note: '这是模拟数据，实际天气可能不同'
+      note: 'This is simulated data, actual weather may differ'
     };
   }
 }

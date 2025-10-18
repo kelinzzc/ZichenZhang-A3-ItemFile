@@ -1,11 +1,11 @@
 const RegistrationModel = require('../models/RegistrationModel');
 
 /**
- * 注册控制器
+ * Registration Controller
  */
 class RegistrationController {
   /**
-   * 获取所有注册记录（管理端）
+   * Get all registration records (admin side)
    */
   static async getAllRegistrations(req, res, next) {
     try {
@@ -22,12 +22,12 @@ class RegistrationController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '获取注册记录失败',
+          error: 'Failed to retrieve registration records',
           message: result.error
         });
       }
 
-      // 获取总数（不分页）
+      // Get total count (without pagination)
       const countResult = await RegistrationModel.getRegistrationCount(options.event_id);
       const total = countResult.success ? countResult.data[0].total : result.data.length;
 
@@ -47,7 +47,7 @@ class RegistrationController {
   }
 
   /**
-   * 获取活动的注册记录（A3要求：按时间倒序）
+   * Get event registration records (A3 requirement: sorted by time in descending order)
    */
   static async getRegistrationsByEventId(req, res, next) {
     try {
@@ -56,8 +56,8 @@ class RegistrationController {
       if (!eventId || isNaN(parseInt(eventId))) {
         return res.status(400).json({
           success: false,
-          error: '无效的活动ID',
-          message: '请提供有效的活动ID'
+          error: 'Invalid event ID',
+          message: 'Please provide a valid event ID'
         });
       }
 
@@ -66,7 +66,7 @@ class RegistrationController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '获取注册记录失败',
+          error: 'Failed to retrieve registration records',
           message: result.error
         });
       }
@@ -84,71 +84,71 @@ class RegistrationController {
   }
 
   /**
-   * 创建注册记录（A3核心功能）
+   * Create registration record (A3 core functionality)
    */
   static async createRegistration(req, res, next) {
     try {
       const registrationData = req.body;
 
-      // 验证必需字段
+      // Validate required fields
       const requiredFields = ['event_id', 'full_name', 'email', 'ticket_count'];
       const missingFields = requiredFields.filter(field => !registrationData[field]);
 
       if (missingFields.length > 0) {
         return res.status(400).json({
           success: false,
-          error: '缺少必需字段',
-          message: `以下字段是必需的: ${missingFields.join(', ')}`,
+          error: 'Missing required fields',
+          message: `The following fields are required: ${missingFields.join(', ')}`,
           missingFields
         });
       }
 
-      // 验证票数
+      // Validate ticket count
       if (registrationData.ticket_count <= 0) {
         return res.status(400).json({
           success: false,
-          error: '无效的票数',
-          message: '票数必须大于0'
+          error: 'Invalid ticket count',
+          message: 'Ticket count must be greater than 0'
         });
       }
 
-      // 验证邮箱格式
+      // Validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(registrationData.email)) {
         return res.status(400).json({
           success: false,
-          error: '无效的邮箱格式',
-          message: '请提供有效的邮箱地址'
+          error: 'Invalid email format',
+          message: 'Please provide a valid email address'
         });
       }
 
       const result = await RegistrationModel.createRegistration(registrationData);
 
       if (!result.success) {
-        // 处理特定错误情况
-        if (result.error.includes('已经注册')) {
+        // Handle specific error cases
+        if (result.error.includes('already registered')) {
           return res.status(409).json({
             success: false,
-            error: '重复注册',
+            error: 'Duplicate registration',
             message: result.error,
             code: 'DUPLICATE_REGISTRATION',
             existingRegistration: result.existingRegistration
           });
         }
 
-        if (result.error.includes('票数不足')) {
+        if (result.error.includes('Not enough tickets')) {
           return res.status(409).json({
             success: false,
-            error: '票数不足',
+            error: 'Insufficient tickets',
             message: result.error,
             code: 'INSUFFICIENT_TICKETS'
           });
         }
 
-        if (result.error.includes('活动不存在') || result.error.includes('暂不可注册')) {
+        if (result.error.includes('Event does not exist') || result.error.includes('registration is temporarily unavailable')) {
           return res.status(404).json({
             success: false,
-            error: '活动不可用',
+            error: 'Event unavailable',
             message: result.error,
             code: 'EVENT_UNAVAILABLE'
           });
@@ -156,7 +156,7 @@ class RegistrationController {
 
         return res.status(500).json({
           success: false,
-          error: '注册失败',
+          error: 'Registration failed',
           message: result.error
         });
       }
@@ -168,7 +168,7 @@ class RegistrationController {
           ...registrationData,
           registration_date: new Date().toISOString()
         },
-        message: '注册成功',
+        message: 'Registration successful',
         timestamp: new Date().toISOString()
       });
     } catch (error) {
@@ -177,7 +177,7 @@ class RegistrationController {
   }
 
   /**
-   * 删除注册记录（管理端）
+   * Delete registration record (admin side)
    */
   static async deleteRegistration(req, res, next) {
     try {
@@ -186,8 +186,8 @@ class RegistrationController {
       if (!id || isNaN(parseInt(id))) {
         return res.status(400).json({
           success: false,
-          error: '无效的注册ID',
-          message: '请提供有效的注册ID'
+          error: 'Invalid registration ID',
+          message: 'Please provide a valid registration ID'
         });
       }
 
@@ -196,7 +196,7 @@ class RegistrationController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '删除注册记录失败',
+          error: 'Failed to delete registration record',
           message: result.error
         });
       }
@@ -204,14 +204,14 @@ class RegistrationController {
       if (result.data.affectedRows === 0) {
         return res.status(404).json({
           success: false,
-          error: '注册记录不存在',
-          message: `找不到ID为 ${id} 的注册记录`
+          error: 'Registration record not found',
+          message: `Registration record with ID ${id} not found`
         });
       }
 
       res.json({
         success: true,
-        message: '注册记录删除成功',
+        message: 'Registration record deleted successfully',
         timestamp: new Date().toISOString()
       });
     } catch (error) {
@@ -220,7 +220,7 @@ class RegistrationController {
   }
 
   /**
-   * 获取注册统计
+   * Get registration statistics
    */
   static async getRegistrationStats(req, res, next) {
     try {
@@ -229,7 +229,7 @@ class RegistrationController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '获取注册统计失败',
+          error: 'Failed to retrieve registration statistics',
           message: result.error
         });
       }

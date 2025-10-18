@@ -1,7 +1,7 @@
 const { db } = require('../config/database');
 
 class EventModel {
-  // 获取所有活动（基于A2结构）
+  // 获取
   static async getAllEvents() {
     const sql = `
       SELECT 
@@ -22,7 +22,6 @@ class EventModel {
     return await db.query(sql);
   }
 
-  // 根据ID获取活动详情（包含注册记录）
   static async getEventById(id) {
     const eventSql = `
       SELECT 
@@ -61,7 +60,7 @@ class EventModel {
     };
   }
 
-  // 创建新活动（管理端使用）
+  // 创建新活动
   static async createEvent(eventData) {
     const {
       title, description, full_description, category_id, organization_id,
@@ -112,7 +111,7 @@ class EventModel {
     return await db.query(sql, params);
   }
 
-  // 删除活动（检查是否有注册记录）
+  // 删除活动
   static async deleteEvent(id) {
     // 检查是否有注册记录
     const checkSql = 'SELECT COUNT(*) as count FROM registrations WHERE event_id = ?';
@@ -151,7 +150,7 @@ class EventModel {
     `;
     const params = [];
 
-    // 关键词搜索（搜索标题、描述、地点）
+    // 关键词搜索
     if (searchParams.search) {
       sql += ' AND (e.title LIKE ? OR e.description LIKE ? OR e.location LIKE ?)';
       const searchTerm = `%${searchParams.search}%`;
@@ -199,7 +198,7 @@ class EventModel {
     return await db.query(sql);
   }
 
-  // 获取活动统计（仪表盘使用）
+
   static async getEventStats() {
     const sql = `
       SELECT 

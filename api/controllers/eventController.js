@@ -1,12 +1,10 @@
 const EventModel = require('../models/EventModel');
 
 /**
- * 事件控制器
+ * Event Controller
  */
 class EventController {
-  /**
-   * 获取所有活动
-   */
+
   static async getAllEvents(req, res, next) {
     try {
       const { category, organization, location, status, page = 1, limit = 10 } = req.query;
@@ -25,7 +23,7 @@ class EventController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '获取活动列表失败',
+          error: 'Failed to retrieve event list',
           message: result.error
         });
       }
@@ -46,7 +44,7 @@ class EventController {
   }
 
   /**
-   * 获取单个活动详情（A3要求：包含注册记录）
+   * Get single event details (A3 requirement: including registration records)
    */
   static async getEventById(req, res, next) {
     try {
@@ -55,8 +53,8 @@ class EventController {
       if (!id || isNaN(parseInt(id))) {
         return res.status(400).json({
           success: false,
-          error: '无效的活动ID',
-          message: '请提供有效的活动ID'
+          error: 'Invalid event ID',
+          message: 'Please provide a valid event ID'
         });
       }
 
@@ -65,7 +63,7 @@ class EventController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '获取活动详情失败',
+          error: 'Failed to retrieve event details',
           message: result.error
         });
       }
@@ -73,8 +71,8 @@ class EventController {
       if (!result.data.event) {
         return res.status(404).json({
           success: false,
-          error: '活动不存在',
-          message: `找不到ID为 ${id} 的活动`
+          error: 'Event does not exist',
+          message: `Event with ID ${id} not found`
         });
       }
 
@@ -89,13 +87,13 @@ class EventController {
   }
 
   /**
-   * 创建新活动（管理端）
+   * Create new event (admin side)
    */
   static async createEvent(req, res, next) {
     try {
       const eventData = req.body;
 
-      // 设置默认值
+      // Set default values
       eventData.is_active = eventData.is_active !== undefined ? eventData.is_active : true;
       eventData.is_suspended = eventData.is_suspended !== undefined ? eventData.is_suspended : false;
 
@@ -104,7 +102,7 @@ class EventController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '创建活动失败',
+          error: 'Failed to create event',
           message: result.error
         });
       }
@@ -115,7 +113,7 @@ class EventController {
           id: result.data.insertId,
           ...eventData
         },
-        message: '活动创建成功',
+        message: 'Event created successfully',
         timestamp: new Date().toISOString()
       });
     } catch (error) {
@@ -124,7 +122,7 @@ class EventController {
   }
 
   /**
-   * 更新活动（管理端）
+   * Update event (admin side)
    */
   static async updateEvent(req, res, next) {
     try {
@@ -134,8 +132,8 @@ class EventController {
       if (!id || isNaN(parseInt(id))) {
         return res.status(400).json({
           success: false,
-          error: '无效的活动ID',
-          message: '请提供有效的活动ID'
+          error: 'Invalid event ID',
+          message: 'Please provide a valid event ID'
         });
       }
 
@@ -144,7 +142,7 @@ class EventController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '更新活动失败',
+          error: 'Failed to update event',
           message: result.error
         });
       }
@@ -152,8 +150,8 @@ class EventController {
       if (result.data.affectedRows === 0) {
         return res.status(404).json({
           success: false,
-          error: '活动不存在',
-          message: `找不到ID为 ${id} 的活动`
+          error: 'Event does not exist',
+          message: `Event with ID ${id} not found`
         });
       }
 
@@ -163,7 +161,7 @@ class EventController {
           id: parseInt(id),
           ...eventData
         },
-        message: '活动更新成功',
+        message: 'Event updated successfully',
         timestamp: new Date().toISOString()
       });
     } catch (error) {
@@ -172,7 +170,7 @@ class EventController {
   }
 
   /**
-   * 删除活动（A3要求：有注册记录时阻止删除）
+   * Delete event (A3 requirement: prevent deletion if there are registration records)
    */
   static async deleteEvent(req, res, next) {
     try {
@@ -181,20 +179,20 @@ class EventController {
       if (!id || isNaN(parseInt(id))) {
         return res.status(400).json({
           success: false,
-          error: '无效的活动ID',
-          message: '请提供有效的活动ID'
+          error: 'Invalid event ID',
+          message: 'Please provide a valid event ID'
         });
       }
 
       const result = await EventModel.deleteEvent(parseInt(id));
 
       if (!result.success) {
-        // 检查是否是注册记录阻止删除
+        // Check if deletion was prevented by registration records
         if (result.registrationsCount > 0) {
           return res.status(409).json({
             success: false,
-            error: '无法删除活动',
-            message: `该活动有 ${result.registrationsCount} 个注册记录，无法删除`,
+            error: 'Cannot delete event',
+            message: `This event has ${result.registrationsCount} registration records and cannot be deleted`,
             registrationsCount: result.registrationsCount,
             code: 'HAS_REGISTRATIONS'
           });
@@ -202,7 +200,7 @@ class EventController {
 
         return res.status(500).json({
           success: false,
-          error: '删除活动失败',
+          error: 'Failed to delete event',
           message: result.error
         });
       }
@@ -210,14 +208,14 @@ class EventController {
       if (result.data.affectedRows === 0) {
         return res.status(404).json({
           success: false,
-          error: '活动不存在',
-          message: `找不到ID为 ${id} 的活动`
+          error: 'Event does not exist',
+          message: `Event with ID ${id} not found`
         });
       }
 
       res.json({
         success: true,
-        message: '活动删除成功',
+        message: 'Event deleted successfully',
         timestamp: new Date().toISOString()
       });
     } catch (error) {
@@ -226,7 +224,7 @@ class EventController {
   }
 
   /**
-   * 搜索活动
+   * Search events
    */
   static async searchEvents(req, res, next) {
     try {
@@ -247,7 +245,7 @@ class EventController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '搜索活动失败',
+          error: 'Failed to search events',
           message: result.error
         });
       }
@@ -269,7 +267,7 @@ class EventController {
   }
 
   /**
-   * 获取活动统计
+   * Get event statistics
    */
   static async getEventStats(req, res, next) {
     try {
@@ -278,7 +276,7 @@ class EventController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '获取活动统计失败',
+          error: 'Failed to retrieve event statistics',
           message: result.error
         });
       }

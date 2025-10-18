@@ -2,7 +2,7 @@ const OrganizationModel = require('../models/OrganizationModel');
 
 class OrganizationController {
   /**
-   * 获取所有组织
+   * Get all organizations
    */
   static async getAllOrganizations(req, res, next) {
     try {
@@ -11,7 +11,7 @@ class OrganizationController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '获取组织列表失败',
+          error: 'Failed to retrieve organization list',
           message: result.error
         });
       }

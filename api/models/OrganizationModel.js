@@ -1,17 +1,13 @@
 const { db } = require('../config/database');
 
 class OrganizationModel {
-  /**
-   * 获取所有组织
-   */
+
   static async getAllOrganizations() {
     const sql = 'SELECT * FROM organizations ORDER BY name';
     return await db.query(sql);
   }
 
-  /**
-   * 根据ID获取组织
-   */
+ 
   static async getOrganizationById(id) {
     const sql = 'SELECT * FROM organizations WHERE id = ?';
     const result = await db.query(sql, [id]);
@@ -23,9 +19,7 @@ class OrganizationModel {
     return { success: true, data: null };
   }
 
-  /**
-   * 获取组织统计
-   */
+
   static async getOrganizationStats() {
     const sql = `
       SELECT 

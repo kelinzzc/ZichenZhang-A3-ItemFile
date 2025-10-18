@@ -2,7 +2,7 @@ const CategoryModel = require('../models/CategoryModel');
 
 class CategoryController {
   /**
-   * 获取所有类别
+   * Get all categories
    */
   static async getAllCategories(req, res, next) {
     try {
@@ -11,7 +11,7 @@ class CategoryController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '获取类别列表失败',
+          error: 'Failed to retrieve category list',
           message: result.error
         });
       }
@@ -28,7 +28,7 @@ class CategoryController {
   }
 
   /**
-   * 获取单个类别详情
+   * Get single category details
    */
   static async getCategoryById(req, res, next) {
     try {
@@ -37,7 +37,7 @@ class CategoryController {
       if (!id || isNaN(parseInt(id))) {
         return res.status(400).json({
           success: false,
-          error: '无效的类别ID'
+          error: 'Invalid category ID'
         });
       }
 
@@ -46,7 +46,7 @@ class CategoryController {
       if (!result.success) {
         return res.status(500).json({
           success: false,
-          error: '获取类别详情失败',
+          error: 'Failed to retrieve category details',
           message: result.error
         });
       }
@@ -54,7 +54,7 @@ class CategoryController {
       if (!result.data) {
         return res.status(404).json({
           success: false,
-          error: '类别不存在'
+          error: 'Category does not exist'
         });
       }
 

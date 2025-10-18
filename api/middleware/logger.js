@@ -1,11 +1,8 @@
-/**
- * 请求日志中间件
- */
 const requestLogger = (req, res, next) => {
   const start = Date.now();
   
-  // 请求日志
-  console.log('📥 收到请求:', {
+  // Request logging
+  console.log(' Request received:', {
     method: req.method,
     url: req.url,
     ip: req.ip,
@@ -13,10 +10,10 @@ const requestLogger = (req, res, next) => {
     timestamp: new Date().toISOString()
   });
 
-  // 响应日志
+  // Response logging
   res.on('finish', () => {
     const duration = Date.now() - start;
-    console.log('📤 发送响应:', {
+    console.log(' Response sent:', {
       method: req.method,
       url: req.url,
       statusCode: res.statusCode,

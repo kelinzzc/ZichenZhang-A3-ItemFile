@@ -6,27 +6,25 @@ const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const { testConnection } = require('./config/database');
 
-// 导入路由
 const eventRoutes = require('./routes/events');
 const registrationRoutes = require('./routes/registrations');
 const categoryRoutes = require('./routes/categories');
 const organizationRoutes = require('./routes/organizations');
 const weatherRoutes = require('./routes/weather');
 
-// 导入中间件
 const errorHandler = require('./middleware/errorHandler');
 const requestLogger = require('./middleware/logger');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 安全中间件
+// Security middleware
 app.use(helmet());
 
-// 压缩中间件
+// Compression middleware
 app.use(compression());
 
-// CORS配置（提前到限流之前，确保错误响应也带上CORS头）
+// CORS configuration
 app.use(cors({
   origin: ['http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:3002', 'http://127.0.0.1:3002', 'http://localhost:3000', 'http://127.0.0.1:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -34,46 +32,45 @@ app.use(cors({
   credentials: true
 }));
 
-// 代理信任（如果在本地或代理后面，有助于正确限流按IP统计）
 app.set('trust proxy', 1);
 
-// 速率限制（放宽阈值，避免本地开发频繁触发429）
+// Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15分钟
-  max: 1000, // 本地开发放宽
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // Maximum 1000 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false
 });
 app.use(limiter);
 
-// 解析请求体
+// Parse request body
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
-// 静态文件服务
+// Static file serving
 app.use(express.static('public'));
 
-// 请求日志
+// Request logging
 app.use(requestLogger);
 
-// 数据库连接检查中间件
+// Database connection check middleware
 app.use(async (req, res, next) => {
   const isConnected = await testConnection();
   if (!isConnected) {
     return res.status(503).json({
       success: false,
-      error: '数据库服务暂时不可用，请稍后重试',
+      error: 'Database service is temporarily unavailable, please try again later',
       timestamp: new Date().toISOString()
     });
   }
   next();
 });
 
-// 基础路由
+// Root endpoint
 app.get('/', (req, res) => {
   res.json({
     success: true,
-    message: '慈善活动平台 API 服务器',
+    message: 'Charity Event Platform API Server',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
     endpoints: {
@@ -86,7 +83,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// 健康检查端点
+// Health check endpoint
 app.get('/health', async (req, res) => {
   const dbStatus = await testConnection() ? 'connected' : 'disconnected';
   
@@ -101,51 +98,51 @@ app.get('/health', async (req, res) => {
   });
 });
 
-// API路由
+// API routes
 app.use('/api/events', eventRoutes);
 app.use('/api/registrations', registrationRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/organizations', organizationRoutes);
 app.use('/api/weather', weatherRoutes);
 
-// API文档端点
+// API documentation
 app.get('/api', (req, res) => {
   res.json({
     success: true,
-    message: 'API 文档',
+    message: 'API Documentation',
     version: '1.0.0',
     endpoints: {
       events: {
-        'GET /api/events': '获取所有活动',
-        'GET /api/events/:id': '获取单个活动详情（包含注册记录）',
-        'POST /api/events': '创建新活动（管理端）',
-        'PUT /api/events/:id': '更新活动（管理端）',
-        'DELETE /api/events/:id': '删除活动（管理端）'
+        'GET /api/events': 'Get all events',
+        'GET /api/events/:id': 'Get single event details (including registration records)',
+        'POST /api/events': 'Create new event (admin side)',
+        'PUT /api/events/:id': 'Update event (admin side)',
+        'DELETE /api/events/:id': 'Delete event (admin side)'
       },
       registrations: {
-        'GET /api/registrations': '获取所有注册记录（管理端）',
-        'GET /api/registrations/event/:eventId': '获取活动的注册记录',
-        'POST /api/registrations': '创建注册记录',
-        'DELETE /api/registrations/:id': '删除注册记录（管理端）'
+        'GET /api/registrations': 'Get all registration records (admin side)',
+        'GET /api/registrations/event/:eventId': 'Get event registration records',
+        'POST /api/registrations': 'Create registration record',
+        'DELETE /api/registrations/:id': 'Delete registration record (admin side)'
       },
       categories: {
-        'GET /api/categories': '获取所有类别'
+        'GET /api/categories': 'Get all categories'
       },
       organizations: {
-        'GET /api/organizations': '获取所有组织'
+        'GET /api/organizations': 'Get all organizations'
       },
       weather: {
-        'GET /api/weather': '获取天气信息'
+        'GET /api/weather': 'Get weather information'
       }
     }
   });
 });
 
-// 404处理
+// Handle 404 - Endpoint not found
 app.use('*', (req, res) => {
   res.status(404).json({
     success: false,
-    error: '端点不存在',
+    error: 'Endpoint does not exist',
     path: req.originalUrl,
     method: req.method,
     availableEndpoints: [
@@ -163,32 +160,32 @@ app.use('*', (req, res) => {
   });
 });
 
-// 错误处理中间件
+// Error handling middleware
 app.use(errorHandler);
 
-// 启动服务器
+// Startup
 const server = app.listen(PORT, async () => {
-  console.log('🚀 慈善活动平台 API 服务器启动成功');
-  console.log(`📍 服务器运行在: http://localhost:${PORT}`);
-  console.log(`🔧 环境: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`⏰ 启动时间: ${new Date().toISOString()}`);
+  console.log(' Charity Event Platform API server started successfully');
+  console.log(` Server running at: http://localhost:${PORT}`);
+  console.log(` Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(` Start time: ${new Date().toISOString()}`);
   
-  // 测试数据库连接
+  // Test database connection
   const dbStatus = await testConnection();
-  console.log(`🗄️  数据库状态: ${dbStatus ? '✅ 已连接' : '❌ 连接失败'}`);
+  console.log(`🗄️  Database status: ${dbStatus ? '✅ Connected' : '❌ Connection failed'}`);
   
-  console.log('\n📋 可用端点:');
-  console.log(`  健康检查: http://localhost:${PORT}/health`);
-  console.log(`  API文档: http://localhost:${PORT}/api`);
-  console.log(`  事件API: http://localhost:${PORT}/api/events`);
-  console.log(`  注册API: http://localhost:${PORT}/api/registrations`);
+  console.log('\n📋 Available endpoints:');
+  console.log(`  Health check: http://localhost:${PORT}/health`);
+  console.log(`  API documentation: http://localhost:${PORT}/api`);
+  console.log(`  Events API: http://localhost:${PORT}/api/events`);
+  console.log(`  Registrations API: http://localhost:${PORT}/api/registrations`);
 });
 
-// 优雅关闭
+// Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('收到 SIGTERM 信号，开始关闭服务器...');
+  console.log('Received SIGTERM signal, starting server shutdown...');
   server.close(() => {
-    console.log('服务器已关闭');
+    console.log('Server has been shut down');
     process.exit(0);
   });
 });

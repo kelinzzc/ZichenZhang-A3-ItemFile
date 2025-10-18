@@ -1,17 +1,13 @@
 const { db } = require('../config/database');
 
 class CategoryModel {
-  /**
-   * 获取所有类别
-   */
+  
   static async getAllCategories() {
     const sql = 'SELECT * FROM categories ORDER BY name';
     return await db.query(sql);
   }
 
-  /**
-   * 根据ID获取类别
-   */
+
   static async getCategoryById(id) {
     const sql = 'SELECT * FROM categories WHERE id = ?';
     const result = await db.query(sql, [id]);
@@ -23,9 +19,7 @@ class CategoryModel {
     return { success: true, data: null };
   }
 
-  /**
-   * 获取类别统计
-   */
+
   static async getCategoryStats() {
     const sql = `
       SELECT 
