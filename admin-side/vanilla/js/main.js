@@ -14,17 +14,17 @@
         <td>'+ (ev.event_date||'') +'</td>\
         <td>'+ (ev.location||'') +'</td>\
         <td>$'+(ev.goal_amount||0)+' / $'+(ev.current_amount||0)+'</td>\
-        <td><button data-id="'+ev.id+'" class="del">删除</button></td>';
+        <td><button data-id="'+ev.id+'" class="del">Delete</button></td>';
       tbody.appendChild(tr);
     });
   }
 
   function load(){
-    setMsg('加载中…');
+    setMsg('Loading...');
     AdminAPI.listEvents({ limit: 50 }).then(function(res){
       render(res.data || res);
       setMsg('');
-    }).catch(function(e){ setMsg('加载失败'); console.error(e); });
+    }).catch(function(e){ setMsg('Failed to load'); console.error(e); });
   }
 
   document.getElementById('reload').addEventListener('click', load);
@@ -32,9 +32,9 @@
     var now = new Date();
     var in2Days = new Date(now.getTime()+2*24*3600*1000);
     var payload = {
-      title: '示例活动 ' + now.toLocaleTimeString(),
-      description: '管理端原生版快速创建',
-      full_description: '示例',
+      title: 'Sample Event ' + now.toLocaleTimeString(),
+      description: 'Quick creation from admin native version',
+      full_description: 'Example',
       category_id: 1,
       organization_id: 1,
       event_date: in2Days.toISOString().slice(0,19).replace('T',' '),
@@ -48,19 +48,19 @@
       latitude: -33.86,
       longitude: 151.21
     };
-    setMsg('创建中…');
-    AdminAPI.createEvent(payload).then(function(){ setMsg('创建成功'); load(); })
-      .catch(function(e){ setMsg((e && e.message) || '创建失败'); console.error(e); });
+    setMsg('Creating...');
+    AdminAPI.createEvent(payload).then(function(){ setMsg('Created successfully'); load(); })
+      .catch(function(e){ setMsg((e && e.message) || 'Creation failed'); console.error(e); });
   });
 
   tbody.addEventListener('click', function(e){
     if(e.target && e.target.classList.contains('del')){
       var id = e.target.getAttribute('data-id');
       if(!id) return;
-      if(!confirm('确定删除活动 '+id+' 吗？')) return;
-      setMsg('删除中…');
-      AdminAPI.deleteEvent(id).then(function(){ setMsg('删除成功'); load(); })
-        .catch(function(err){ setMsg((err && err.message) || '删除失败'); console.error(err); });
+      if(!confirm('Are you sure you want to delete event '+id+'?')) return;
+      setMsg('Deleting...');
+      AdminAPI.deleteEvent(id).then(function(){ setMsg('Deleted successfully'); load(); })
+        .catch(function(err){ setMsg((err && err.message) || 'Deletion failed'); console.error(err); });
     }
   });
 

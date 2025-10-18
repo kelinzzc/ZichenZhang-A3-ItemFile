@@ -10,9 +10,7 @@ angular.module('CharityEventsAdminApp')
     };
 
     return {
-        /**
-         * 打开确认模态框
-         */
+ 
         openConfirm: function(title, message, onConfirm, onCancel) {
             modalState.isOpen = true;
             modalState.title = title;
@@ -21,15 +19,12 @@ angular.module('CharityEventsAdminApp')
             modalState.onConfirm = onConfirm;
             modalState.onCancel = onCancel;
             
-            // 触发 AngularJS 更新
+
             if (!$rootScope.$$phase) {
                 $rootScope.$apply();
             }
         },
 
-        /**
-         * 打开警告模态框
-         */
         openWarning: function(title, message, onConfirm) {
             modalState.isOpen = true;
             modalState.title = title;
@@ -42,9 +37,7 @@ angular.module('CharityEventsAdminApp')
             }
         },
 
-        /**
-         * 打开危险操作模态框
-         */
+   
         openDanger: function(title, message, onConfirm) {
             modalState.isOpen = true;
             modalState.title = title;
@@ -57,9 +50,7 @@ angular.module('CharityEventsAdminApp')
             }
         },
 
-        /**
-         * 关闭模态框
-         */
+
         close: function() {
             modalState.isOpen = false;
             modalState.title = '';
@@ -73,9 +64,7 @@ angular.module('CharityEventsAdminApp')
             }
         },
 
-        /**
-         * 获取模态框状态
-         */
+ 
         getState: function() {
             return modalState;
         }

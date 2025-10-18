@@ -3,12 +3,12 @@ angular.module('CharityEventsAdminApp')
     const API_BASE_URL = 'http://localhost:3000/api';
 
     return {
-        // 通用 GET 请求
+        // Generic GET request
         get: function(endpoint, params = {}) {
-            console.log('AdminApiService GET 请求:', `${API_BASE_URL}${endpoint}`, params);
+            console.log('AdminApiService GET request:', `${API_BASE_URL}${endpoint}`, params);
             return $http.get(`${API_BASE_URL}${endpoint}`, { params: params })
                 .then(response => {
-                    console.log('AdminApiService GET 响应:', response);
+                    console.log('AdminApiService GET response:', response);
                     if (response.data.success) {
                         return response.data;
                     } else {
@@ -23,7 +23,7 @@ angular.module('CharityEventsAdminApp')
                 });
         },
 
-        // 通用 POST 请求
+        // Generic POST request
         post: function(endpoint, data = {}) {
             return $http.post(`${API_BASE_URL}${endpoint}`, data)
                 .then(response => {
@@ -39,7 +39,7 @@ angular.module('CharityEventsAdminApp')
                 });
         },
 
-        // 通用 PUT 请求
+        // Generic PUT request
         put: function(endpoint, data = {}) {
             return $http.put(`${API_BASE_URL}${endpoint}`, data)
                 .then(response => {
@@ -55,7 +55,7 @@ angular.module('CharityEventsAdminApp')
                 });
         },
 
-        // 通用 DELETE 请求
+        // Generic DELETE request
         delete: function(endpoint) {
             return $http.delete(`${API_BASE_URL}${endpoint}`)
                 .then(response => {
@@ -71,22 +71,22 @@ angular.module('CharityEventsAdminApp')
                 });
         },
 
-        // 错误处理
+        // Error handling
         handleError: function(error) {
             if (error.data) {
                 return {
-                    message: error.data.message || '请求失败',
+                    message: error.data.message || 'Request failed',
                     code: error.data.code,
                     details: error.data.details
                 };
             } else if (error.status === 0) {
                 return {
-                    message: '网络连接失败，请检查网络连接',
+                    message: 'Network connection failed, please check your network connection',
                     code: 'NETWORK_ERROR'
                 };
             } else {
                 return {
-                    message: '发生未知错误',
+                    message: 'An unknown error occurred',
                     code: 'UNKNOWN_ERROR'
                 };
             }

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理后台 - 活动管理（原生版）</title>
+    <title>Admin Panel - Event Management</title>
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/forms.css">
     <style>
@@ -31,87 +31,87 @@
 <body>
     <div class="container">
         <div class="nav">
-            <a href="dashboard.html">仪表板</a>
-            <a href="events.html" class="active">活动管理</a>
-            <a href="registrations.html">注册记录</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="events.html" class="active">Event Management</a>
+            <a href="registrations.html">Registration Records</a>
         </div>
         
-        <h1>活动管理</h1>
+        <h1>Event Management</h1>
         <div id="error" class="muted" style="color: #c0392b; display: none;"></div>
         <div id="success" class="muted" style="color: #28a745; display: none;"></div>
         
         <div class="toolbar">
-            <input id="searchInput" placeholder="搜索活动标题">
+            <input id="searchInput" placeholder="Search event title">
             <select id="categoryFilter">
-                <option value="">全部类别</option>
+                <option value="">All Categories</option>
             </select>
-            <button id="searchBtn" class="btn btn-primary">搜索</button>
-            <button id="addBtn" class="btn btn-primary">新建活动</button>
-            <button id="reloadBtn" class="btn btn-secondary">刷新</button>
+            <button id="searchBtn" class="btn btn-primary">Search</button>
+            <button id="addBtn" class="btn btn-primary">New Event</button>
+            <button id="reloadBtn" class="btn btn-secondary">Refresh</button>
         </div>
         
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>标题</th>
-                    <th>日期</th>
-                    <th>地点</th>
-                    <th>目标/当前</th>
-                    <th>状态</th>
-                    <th>操作</th>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Goal/Current</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="eventsTable"></tbody>
         </table>
         
-        <!-- 新建/编辑表单 -->
+        <!-- New/Edit Form -->
         <div id="eventForm" class="form" style="display: none;">
-            <h3 id="formTitle">新建活动</h3>
+            <h3 id="formTitle">New Event</h3>
             <form id="form">
                 <div class="field">
-                    <label>活动标题 *</label>
+                    <label>Event Title *</label>
                     <input type="text" id="title" required>
                 </div>
                 <div class="field">
-                    <label>活动描述</label>
+                    <label>Event Description</label>
                     <textarea id="description" rows="3"></textarea>
                 </div>
                 <div class="field">
-                    <label>详细描述</label>
+                    <label>Full Description</label>
                     <textarea id="fullDescription" rows="4"></textarea>
                 </div>
                 <div class="field">
-                    <label>活动日期 *</label>
+                    <label>Event Date *</label>
                     <input type="datetime-local" id="eventDate" required>
                 </div>
                 <div class="field">
-                    <label>地点 *</label>
+                    <label>Location *</label>
                     <input type="text" id="location" required>
                 </div>
                 <div class="field">
-                    <label>场地详情</label>
+                    <label>Venue Details</label>
                     <input type="text" id="venueDetails">
                 </div>
                 <div class="field">
-                    <label>票价</label>
+                    <label>Ticket Price</label>
                     <input type="number" id="ticketPrice" min="0" step="0.01">
                 </div>
                 <div class="field">
-                    <label>目标金额</label>
+                    <label>Goal Amount</label>
                     <input type="number" id="goalAmount" min="0" step="0.01">
                 </div>
                 <div class="field">
-                    <label>最大参与人数</label>
+                    <label>Maximum Attendees</label>
                     <input type="number" id="maxAttendees" min="1">
                 </div>
                 <div class="field">
-                    <label>图片URL</label>
+                    <label>Image URL</label>
                     <input type="url" id="imageUrl">
                 </div>
                 <div class="actions">
-                    <button type="submit" class="btn btn-primary">保存</button>
-                    <button type="button" id="cancelBtn" class="btn btn-secondary">取消</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
                 </div>
             </form>
         </div>

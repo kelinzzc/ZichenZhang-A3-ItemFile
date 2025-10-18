@@ -1,48 +1,48 @@
 <div class="event-form-page" ng-controller="EventFormController as vm">
-    <!-- 页面标题 -->
+    <!-- Page title -->
     <div class="page-header">
-        <h1>{{vm.isEdit ? '编辑活动' : '创建新活动'}}</h1>
-        <p>{{vm.isEdit ? '修改活动信息' : '添加新的慈善活动'}}</p>
+        <h1>{{vm.isEdit ? 'Edit Event' : 'Create New Event'}}</h1>
+        <p>{{vm.isEdit ? 'Modify event information' : 'Add new charity event'}}</p>
     </div>
 
-    <!-- 加载状态 -->
+    <!-- Loading state -->
     <div ng-if="vm.isLoading" class="loading-state">
         <div class="spinner"></div>
-        <p>加载活动数据中...</p>
+        <p>Loading event data...</p>
     </div>
 
-    <!-- 表单内容 -->
+    <!-- Form content -->
     <div ng-if="!vm.isLoading" class="content-section">
         <div class="card">
             <div class="card-body">
-                <!-- 验证错误 -->
+                <!-- Validation errors -->
                 <div ng-if="vm.validationErrors.length > 0" class="alert alert-error">
-                    <h4>请修正以下错误：</h4>
+                    <h4>Please correct the following errors:</h4>
                     <ul>
                         <li ng-repeat="error in vm.validationErrors">{{error}}</li>
                     </ul>
                 </div>
 
                 <form name="eventForm" ng-submit="vm.submitForm()" novalidate>
-                    <!-- 基础信息 -->
+                    <!-- Basic Information -->
                     <div class="form-section">
-                        <h3>基础信息</h3>
+                        <h3>Basic Information</h3>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">活动标题 *</label>
+                                    <label class="form-label">Event Title *</label>
                                     <input type="text" 
                                            class="form-control"
                                            ng-model="vm.event.title"
-                                           placeholder="输入活动标题"
+                                           placeholder="Enter event title"
                                            required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">活动类别</label>
+                                    <label class="form-label">Event Category</label>
                                     <select class="form-control" ng-model="vm.event.category_id">
-                                        <option value="">请选择类别</option>
+                                        <option value="">Please select category</option>
                                         <option ng-repeat="category in vm.categories" 
                                                 value="{{category.id}}">
                                             {{category.name}}
@@ -53,30 +53,30 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">活动描述 *</label>
+                            <label class="form-label">Event Description *</label>
                             <textarea class="form-control"
                                       ng-model="vm.event.description"
-                                      placeholder="输入活动简短描述"
+                                      placeholder="Enter brief event description"
                                       rows="3"
                                       required></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">完整描述</label>
+                            <label class="form-label">Full Description</label>
                             <textarea class="form-control"
                                       ng-model="vm.event.full_description"
-                                      placeholder="输入活动的完整详细介绍"
+                                      placeholder="Enter detailed event description"
                                       rows="5"></textarea>
                         </div>
                     </div>
 
-                    <!-- 时间地点 -->
+                    <!-- Time and Location -->
                     <div class="form-section">
-                        <h3>时间地点</h3>
+                        <h3>Time and Location</h3>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">活动日期 *</label>
+                                    <label class="form-label">Event Date *</label>
                                     <input type="datetime-local"
                                            class="form-control"
                                            ng-model="vm.event.event_date"
@@ -85,59 +85,59 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">活动地点 *</label>
+                                    <label class="form-label">Event Location *</label>
                                     <input type="text"
                                            class="form-control"
                                            ng-model="vm.event.location"
-                                           placeholder="输入活动地点"
+                                           placeholder="Enter event location"
                                            required>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">场地详情</label>
+                            <label class="form-label">Venue Details</label>
                             <input type="text"
                                    class="form-control"
                                    ng-model="vm.event.venue_details"
-                                   placeholder="输入具体的场地信息（如房间号、楼层等）">
+                                   placeholder="Enter specific venue information (room number, floor, etc.)">
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">纬度</label>
+                                    <label class="form-label">Latitude</label>
                                     <input type="number"
                                            class="form-control"
                                            ng-model="vm.event.latitude"
-                                           placeholder="例如：-33.87"
+                                           placeholder="e.g., -33.87"
                                            step="any">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">经度</label>
+                                    <label class="form-label">Longitude</label>
                                     <input type="number"
                                            class="form-control"
                                            ng-model="vm.event.longitude"
-                                           placeholder="例如：151.21"
+                                           placeholder="e.g., 151.21"
                                            step="any">
                                 </div>
                             </div>
                         </div>
                         <button type="button" class="btn btn-outline btn-sm" ng-click="vm.setCurrentLocation()">
                             <i class="fas fa-map-marker-alt"></i>
-                            使用示例坐标
+                            Use Example Coordinates
                         </button>
                     </div>
 
-                    <!-- 票务和筹款 -->
+                    <!-- Ticketing and Fundraising -->
                     <div class="form-section">
-                        <h3>票务和筹款</h3>
+                        <h3>Ticketing and Fundraising</h3>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="form-label">最大参与人数 *</label>
+                                    <label class="form-label">Maximum Attendees *</label>
                                     <input type="number"
                                            class="form-control"
                                            ng-model="vm.event.max_attendees"
@@ -147,7 +147,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="form-label">票价 (¥)</label>
+                                    <label class="form-label">Ticket Price (¥)</label>
                                     <input type="number"
                                            class="form-control"
                                            ng-model="vm.event.ticket_price"
@@ -157,7 +157,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="form-label">筹款目标 (¥)</label>
+                                    <label class="form-label">Fundraising Goal (¥)</label>
                                     <input type="number"
                                            class="form-control"
                                            ng-model="vm.event.goal_amount"
@@ -168,9 +168,9 @@
                         </div>
                     </div>
 
-                    <!-- 状态设置 -->
+                    <!-- Status Settings -->
                     <div class="form-section">
-                        <h3>状态设置</h3>
+                        <h3>Status Settings</h3>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-check">
@@ -179,7 +179,7 @@
                                            ng-model="vm.event.is_active"
                                            id="isActive">
                                     <label class="form-check-label" for="isActive">
-                                        活动激活
+                                        Event Active
                                     </label>
                                 </div>
                             </div>
@@ -190,31 +190,31 @@
                                            ng-model="vm.event.is_suspended"
                                            id="isSuspended">
                                     <label class="form-check-label" for="isSuspended">
-                                        暂停活动
+                                        Event Suspended
                                     </label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 表单操作 -->
+                    <!-- Form Actions -->
                     <div class="form-actions">
                         <button type="submit"
                                 class="btn btn-primary btn-lg"
                                 ng-disabled="vm.isSubmitting">
                             <span ng-if="!vm.isSubmitting">
                                 <i class="fas fa-check"></i>
-                                {{vm.isEdit ? '更新活动' : '创建活动'}}
+                                {{vm.isEdit ? 'Update Event' : 'Create Event'}}
                             </span>
                             <span ng-if="vm.isSubmitting">
                                 <div class="spinner-sm"></div>
-                                提交中...
+                                Submitting...
                             </span>
                         </button>
                         <button type="button"
                                 class="btn btn-outline btn-lg"
                                 ng-click="vm.cancel()">
-                            取消
+                            Cancel
                         </button>
                     </div>
                 </form>

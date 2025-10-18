@@ -1,55 +1,55 @@
 <!DOCTYPE html>
-<html lang="zh" ng-app="CharityEventsAdminApp">
+<html lang="en" ng-app="CharityEventsAdminApp">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>慈善活动平台 - 管理后台</title>
+    <title>Charity Events Platform - Admin Panel</title>
     <base href="/admin-side/">
 
-    <!-- AngularJS 核心（改为本地文件，避免 CDN 超时） -->
+    <!-- AngularJS core (changed to local files to avoid CDN timeout) -->
     <script src="../client-side/js/lib/angular.min.js"></script>
     <script src="../client-side/js/lib/angular-route.min.js"></script>
 
-    <!-- 字体图标 -->
+    <!-- Font icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-    <!-- 管理端样式 -->
+    <!-- Admin panel styles -->
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/forms.css">
     <link rel="stylesheet" href="css/registrations.css">
 
-    <!-- AngularJS 应用脚本 -->
+    <!-- AngularJS -->
     <script src="app/app.js"></script>
     
     
-    <!-- 控制器 -->
+    <!-- Controllers -->
     <script src="app/controllers/DashboardController.js?v=20250128"></script>
     <script src="app/controllers/EventsController.js?v=20250128"></script>
     <script src="app/controllers/EventFormController.js?v=20250128"></script>
     <script src="app/controllers/EventDetailController.js?v=20250128"></script>
     <script src="app/controllers/RegistrationsController.js?v=20250129"></script>
     
-    <!-- 服务 -->
+    <!-- Services -->
     <script src="app/services/AdminEventService.js"></script>
     <script src="app/services/AdminRegistrationService.js"></script>
     <script src="app/services/AdminApiService.js"></script>
     <script src="app/services/ModalService.js"></script>
     
-    <!-- 指令 -->
+    <!-- Directives -->
     <script src="app/directives/dataTable.js"></script>
     <script src="app/directives/confirmModal.js"></script>
     <script src="app/directives/statsCard.js"></script>
 </head>
 <body ng-controller="AdminLayoutController as layout">
-    <!-- 管理端布局 -->
+    <!-- Admin panel layout -->
     <div class="admin-layout">
-        <!-- 侧边栏 -->
+        <!-- Sidebar -->
         <aside class="sidebar" ng-class="{ 'collapsed': layout.isSidebarCollapsed }">
             <div class="sidebar-header">
                 <h2>
                     <i class="fas fa-heart"></i>
-                    <span ng-if="!layout.isSidebarCollapsed">管理后台</span>
+                    <span ng-if="!layout.isSidebarCollapsed">Admin Panel</span>
                 </h2>
                 <button class="sidebar-toggle" ng-click="layout.toggleSidebar()">
                     <i class="fas" ng-class="layout.isSidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
@@ -61,28 +61,28 @@
                     <li>
                         <a href="#!/dashboard" ng-class="{ active: layout.isActive('/dashboard') }">
                             <i class="fas fa-tachometer-alt"></i>
-                            <span>仪表板</span>
+                            <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
                         <a href="#!/events" ng-class="{ active: layout.isActive('/events') }">
                             <i class="fas fa-calendar-alt"></i>
-                            <span>活动管理</span>
+                            <span>Event Management</span>
                         </a>
                     </li>
                     <li>
                         <a href="#!/registrations" ng-class="{ active: layout.isActive('/registrations') }">
                             <i class="fas fa-users"></i>
-                            <span>注册记录</span>
+                            <span>Registration Records</span>
                         </a>
                     </li>
                 </ul>
             </nav>
         </aside>
 
-        <!-- 主内容区域 -->
+        <!-- Main content -->
         <main class="main-content">
-            <!-- 顶部导航栏 -->
+            <!-- Top navigation bar -->
             <header class="topbar">
                 <div class="topbar-left">
                     <button class="menu-toggle" ng-click="layout.toggleSidebar()">
@@ -92,20 +92,20 @@
                 </div>
                 <div class="topbar-right">
                     <div class="admin-info">
-                        <span class="admin-name">管理员</span>
+                        <span class="admin-name">Administrator</span>
                         <i class="fas fa-user-circle"></i>
                     </div>
                 </div>
             </header>
 
-            <!-- 页面内容 -->
+            <!-- Content area -->
             <div class="content-wrapper">
                 <div ng-view></div>
             </div>
         </main>
     </div>
 
-    <!-- 确认模态框容器 -->
+    <!-- Global modal component -->
     <confirm-modal></confirm-modal>
 </body>
 </html>

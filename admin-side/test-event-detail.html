@@ -2,7 +2,7 @@
 <html ng-app="CharityEventsAdminApp">
 <head>
     <meta charset="UTF-8">
-    <title>测试活动详情</title>
+    <title>Test Event Details</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
     <script src="app/app.js"></script>
@@ -12,38 +12,37 @@
 </head>
 <body>
     <div ng-controller="EventDetailController as vm">
-        <h1>测试活动详情</h1>
+        <h1>Test Event Details</h1>
         
-        <!-- 调试信息 -->
+        <!-- Debug Information -->
         <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border: 1px solid #ccc;">
-            <h4>调试信息</h4>
+            <h4>Debug Information</h4>
             <p>isLoading: {{vm.isLoading}}</p>
             <p>hasEvent: {{!!vm.event}}</p>
             <p>hasError: {{!!vm.error}}</p>
             <p>eventTitle: {{vm.event ? vm.event.title : 'N/A'}}</p>
         </div>
 
-        <!-- 加载状态 -->
+        <!-- Loading -->
         <div ng-if="vm.isLoading">
-            <p>加载中...</p>
+            <p>Loading...</p>
         </div>
 
-        <!-- 错误状态 -->
+        <!-- Error -->
         <div ng-if="vm.error">
-            <p style="color: red;">错误: {{vm.error}}</p>
+            <p style="color: red;">Error: {{vm.error}}</p>
         </div>
 
-        <!-- 活动信息 -->
+        <!-- Event -->
         <div ng-if="vm.event">
             <h2>{{vm.event.title}}</h2>
             <p>{{vm.event.description}}</p>
-            <p>活动时间: {{vm.event.event_date}}</p>
-            <p>地点: {{vm.event.location}}</p>
+            <p>Event Date: {{vm.event.event_date}}</p>
+            <p>Location: {{vm.event.location}}</p>
         </div>
 
-        <!-- 手动测试按钮 -->
-        <button ng-click="vm.loadEventDetails(1)">加载活动1</button>
-        <button ng-click="vm.loadEventDetails(2)">加载活动2</button>
+        <button ng-click="vm.loadEventDetails(1)">Load Event 1</button>
+        <button ng-click="vm.loadEventDetails(2)">Load Event 2</button>
     </div>
 </body>
 </html>

@@ -17,18 +17,18 @@
   }
 
   window.AdminAPI = {
-    // 活动相关
+    // 活动
     listEvents: function(params){ return http('GET', API_BASE + '/events', null, params); },
     getEventById: function(id){ return http('GET', API_BASE + '/events/' + id); },
     createEvent: function(data){ return http('POST', API_BASE + '/events', data); },
     updateEvent: function(id, data){ return http('PUT', API_BASE + '/events/' + id, data); },
     deleteEvent: function(id){ return http('DELETE', API_BASE + '/events/' + id); },
     
-    // 注册相关
+    // 注册
     listRegistrations: function(params){ return http('GET', API_BASE + '/registrations', null, params); },
     deleteRegistration: function(id){ return http('DELETE', API_BASE + '/registrations/' + id); },
     
-    // 统计相关
+    // 统计
     getEventStats: function(){ return http('GET', API_BASE + '/events/stats'); },
     getRegistrationStats: function(){ return http('GET', API_BASE + '/registrations/stats'); },
     

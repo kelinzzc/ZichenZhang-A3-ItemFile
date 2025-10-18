@@ -1,131 +1,126 @@
 angular.module('CharityEventsAdminApp')
 .factory('AdminEventService', ['AdminApiService', '$q', function(AdminApiService, $q) {
     return {
-        /**
-         * 获取所有活动（管理端）
-         */
+        // Get all events
         getAllEvents: function(params = {}) {
             return AdminApiService.get('/events', params)
                 .then(response => response.data)
                 .catch(error => {
-                    console.error('获取活动列表失败:', error);
+                    console.error('Failed to get event list:', error);
                     return $q.reject(error);
                 });
         },
 
-        /**
-         * 获取单个活动详情
-         */
         getEventById: function(eventId) {
             if (!eventId) {
-                return $q.reject({ message: '活动ID不能为空' });
+                return $q.reject({ message: 'Event ID cannot be empty' });
             }
 
             return AdminApiService.get(`/events/${eventId}`)
                 .then(response => {
-                    console.log('AdminEventService.getEventById 原始响应:', response);
-                    return response.data; // 返回data部分，包含event和registrations
+                    console.log('AdminEventService.getEventById raw response:', response);
+                    return response.data; // Return data part, containing event and registrations
                 })
                 .catch(error => {
-                    console.error('获取活动详情失败:', error);
+                    console.error('Failed to get event details:', error);
                     return $q.reject(error);
                 });
         },
 
         /**
-         * 创建新活动
+         * Create new event
          */
         createEvent: function(eventData) {
-            console.log('AdminEventService.createEvent 调用，数据:', eventData);
+            console.log('AdminEventService.createEvent called, data:', eventData);
             return AdminApiService.post('/events', eventData)
                 .then(response => {
-                    console.log('AdminEventService.createEvent 响应:', response);
+                    console.log('AdminEventService.createEvent response:', response);
                     return response.data;
                 })
                 .catch(error => {
-                    console.error('创建活动失败:', error);
+                    console.error('Failed to create event:', error);
                     return $q.reject(error);
                 });
         },
 
         /**
-         * 更新活动
+         * Update event
          */
         updateEvent: function(eventId, eventData) {
-            console.log('AdminEventService.updateEvent 调用，ID:', eventId, '数据:', eventData);
+            console.log('AdminEventService.updateEvent called, ID:', eventId, 'data:', eventData);
             return AdminApiService.put(`/events/${eventId}`, eventData)
                 .then(response => {
-                    console.log('AdminEventService.updateEvent 响应:', response);
+                    console.log('AdminEventService.updateEvent response:', response);
                     return response.data;
                 })
                 .catch(error => {
-                    console.error('更新活动失败:', error);
+                    console.error('Failed to update event:', error);
                     return $q.reject(error);
                 });
         },
 
         /**
-         * 删除活动（A3要求：有注册记录时阻止删除）
+         * Delete event
          */
         deleteEvent: function(eventId) {
-            console.log('AdminEventService.deleteEvent 调用，ID:', eventId);
+            console.log('AdminEventService.deleteEvent called, ID:', eventId);
             return AdminApiService.delete(`/events/${eventId}`)
                 .then(response => {
-                    console.log('AdminEventService.deleteEvent 响应:', response);
+                    console.log('AdminEventService.deleteEvent response:', response);
                     return response.data;
                 })
                 .catch(error => {
-                    console.error('删除活动失败:', error);
+                    console.error('Failed to delete event:', error);
                     return $q.reject(error);
                 });
         },
 
         /**
-         * 获取活动统计
+         * Get event statistics
          */
         getEventStats: function() {
             return AdminApiService.get('/events/stats')
                 .then(response => response.data)
                 .catch(error => {
-                    console.error('获取活动统计失败:', error);
+                    console.error('Failed to get event statistics:', error);
                     return $q.reject(error);
                 });
         },
 
         /**
-         * 验证活动数据
+         * Validate event data
          */
         validateEvent: function(eventData) {
             const errors = [];
 
             if (!eventData.title || eventData.title.trim().length === 0) {
-                errors.push('活动标题是必需的');
+                errors.push('Event title is required');
             }
 
             if (!eventData.description || eventData.description.trim().length === 0) {
-                errors.push('活动描述是必需的');
+                errors.push('Event description is required');
             }
 
             if (!eventData.event_date) {
-                errors.push('活动日期是必需的');
+                errors.push('Event date is required');
             } else if (new Date(eventData.event_date) <= new Date()) {
-                errors.push('活动日期必须是将来的时间');
+                errors.push('Event date must be in the future');
             }
 
             if (!eventData.location || eventData.location.trim().length === 0) {
-                errors.push('活动地点是必需的');
+                errors.push('Event location is required');
             }
 
             if (!eventData.max_attendees || eventData.max_attendees <= 0) {
-                errors.push('最大参与人数必须大于0');
+                errors.push('Maximum attendees must be greater than 0');
             }
 
             if (!eventData.goal_amount || eventData.goal_amount < 0) {
-                errors.push('筹款目标不能为负数');
+                errors.push('Fundraising goal cannot be negative');
             }
 
             if (!eventData.ticket_price || eventData.ticket_price < 0) {
-                errors.push('票价不能为负数');
+                errors.push('Ticket price cannot be negative');
             }
 
             return {

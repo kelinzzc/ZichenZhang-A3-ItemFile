@@ -1,12 +1,10 @@
-// 管理端 AngularJS 应用
 angular.module('CharityEventsAdminApp', [
     'ngRoute'
 ])
 .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-    // 使用 hashbang 模式
     $locationProvider.hashPrefix('!');
     
-    // 路由配置
+    // Routes
     $routeProvider
         .when('/dashboard', {
             templateUrl: 'views/dashboard.html',
@@ -43,7 +41,6 @@ angular.module('CharityEventsAdminApp', [
         });
 }])
 .run(['$rootScope', '$templateCache', function($rootScope, $templateCache) {
-    // 防止浏览器缓存视图模板，确保你看到的始终是最新的 dashboard.html 等
     $rootScope.$on('$routeChangeStart', function() {
         try { $templateCache.removeAll(); } catch(e) {}
     });
@@ -51,39 +48,39 @@ angular.module('CharityEventsAdminApp', [
 .controller('AdminLayoutController', ['$location', function($location) {
     var vm = this;
     
-    // 侧边栏状态
+    // Sidebar state
     vm.isSidebarCollapsed = false;
     
-    // 切换侧边栏
+    // Toggle sidebar
     vm.toggleSidebar = function() {
         vm.isSidebarCollapsed = !vm.isSidebarCollapsed;
     };
     
-    // 检查当前路由是否激活
+    // Check if current route is active
     vm.isActive = function(path) {
         return $location.path().indexOf(path) === 0;
     };
     
-    // 获取页面标题
+    // Get page title
     vm.getPageTitle = function() {
         var path = $location.path();
         var titles = {
-            '/dashboard': '仪表板',
-            '/events': '活动管理',
-            '/events/new': '创建活动',
-            '/registrations': '注册记录管理'
+            '/dashboard': 'Dashboard',
+            '/events': 'Event Management',
+            '/events/new': 'Create Event',
+            '/registrations': 'Registration Records Management'
         };
         
-        // 处理编辑页面
+        // Handle edit page
         if (path.startsWith('/events/edit/')) {
-            return '编辑活动';
+            return 'Edit Event';
         }
         
-        // 处理活动详情页面
+        // Handle event details page
         if (path.startsWith('/events/') && !path.startsWith('/events/new')) {
-            return '活动详情';
+            return 'Event Details';
         }
         
-        return titles[path] || '管理后台';
+        return titles[path] || 'Admin Panel';
     };
 }]);

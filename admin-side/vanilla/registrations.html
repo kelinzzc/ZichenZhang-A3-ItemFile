@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理后台 - 注册记录（原生版）</title>
+    <title>Admin Panel - Registration Records</title>
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/forms.css">
     <style>
@@ -26,34 +26,34 @@
 <body>
     <div class="container">
         <div class="nav">
-            <a href="dashboard.html">仪表板</a>
-            <a href="events.html">活动管理</a>
-            <a href="registrations.html" class="active">注册记录</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="events.html">Event Management</a>
+            <a href="registrations.html" class="active">Registration Records</a>
         </div>
         
-        <h1>注册记录</h1>
+        <h1>Registration Records</h1>
         <div id="error" class="muted" style="color: #c0392b; display: none;"></div>
         <div id="success" class="muted" style="color: #28a745; display: none;"></div>
         
         <div class="toolbar">
-            <input id="searchInput" placeholder="搜索姓名或邮箱">
+            <input id="searchInput" placeholder="Search by name or email">
             <select id="eventFilter">
-                <option value="">全部活动</option>
+                <option value="">All Events</option>
             </select>
-            <button id="searchBtn" class="btn btn-primary">搜索</button>
-            <button id="reloadBtn" class="btn btn-secondary">刷新</button>
+            <button id="searchBtn" class="btn btn-primary">Search</button>
+            <button id="reloadBtn" class="btn btn-secondary">Refresh</button>
         </div>
         
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>姓名</th>
-                    <th>邮箱</th>
-                    <th>活动</th>
-                    <th>票数</th>
-                    <th>注册时间</th>
-                    <th>操作</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Event</th>
+                    <th>Tickets</th>
+                    <th>Registration Date</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="registrationsTable"></tbody>

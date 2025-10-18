@@ -29,7 +29,7 @@
     function formatDate(dateStr) {
         if (!dateStr) return '';
         try {
-            return new Date(dateStr).toLocaleString('zh-CN');
+            return new Date(dateStr).toLocaleString('en-US');
         } catch(e) {
             return dateStr;
         }
@@ -37,7 +37,7 @@
 
     function getEventTitle(eventId) {
         var event = events.find(function(e) { return e.id == eventId; });
-        return event ? event.title : '未知活动';
+        return event ? event.title : 'Unknown Event';
     }
 
     function renderRegistrations(registrations) {
@@ -46,13 +46,13 @@
             var tr = document.createElement('tr');
             tr.innerHTML = 
                 '<td>' + reg.id + '</td>' +
-                '<td>' + (reg.full_name || '匿名') + '</td>' +
+                '<td>' + (reg.full_name || 'Anonymous') + '</td>' +
                 '<td>' + (reg.email || '') + '</td>' +
                 '<td>' + getEventTitle(reg.event_id) + '</td>' +
                 '<td>' + (reg.ticket_count || 1) + '</td>' +
                 '<td>' + formatDate(reg.registration_date) + '</td>' +
                 '<td>' +
-                    '<button class="btn btn-danger" onclick="deleteRegistration(' + reg.id + ')">删除</button>' +
+                    '<button class="btn btn-danger" onclick="deleteRegistration(' + reg.id + ')">Delete</button>' +
                 '</td>';
             registrationsTable.appendChild(tr);
         });
@@ -67,14 +67,14 @@
         AdminAPI.listRegistrations(params).then(function(res) {
             renderRegistrations(res.data || res);
         }).catch(function(err) {
-            showError('加载注册记录失败: ' + (err.message || '未知错误'));
+            showError('Failed to load registration records: ' + (err.message || 'Unknown error'));
         });
     }
 
     function loadEvents() {
         AdminAPI.listEvents({ limit: 100 }).then(function(res) {
             events = res.data || res || [];
-            eventFilter.innerHTML = '<option value="">全部活动</option>';
+            eventFilter.innerHTML = '<option value="">All Events</option>';
             events.forEach(function(event) {
                 var option = document.createElement('option');
                 option.value = event.id;
@@ -82,23 +82,23 @@
                 eventFilter.appendChild(option);
             });
         }).catch(function(err) {
-            console.error('加载活动列表失败:', err);
+            console.error('Failed to load event list:', err);
         });
     }
 
-    // 全局函数，供HTML调用
+    // Global function, called from HTML
     window.deleteRegistration = function(id) {
-        if (!confirm('确定删除这个注册记录吗？')) return;
+        if (!confirm('Are you sure you want to delete this registration record?')) return;
         clearMessages();
         AdminAPI.deleteRegistration(id).then(function() {
-            showSuccess('注册记录删除成功');
+            showSuccess('Registration record deleted successfully');
             loadRegistrations();
         }).catch(function(err) {
-            showError('删除失败: ' + (err.message || '未知错误'));
+            showError('Deletion failed: ' + (err.message || 'Unknown error'));
         });
     };
 
-    // 事件监听
+    // Event listeners
     searchBtn.addEventListener('click', loadRegistrations);
     reloadBtn.addEventListener('click', loadRegistrations);
     
@@ -108,7 +108,7 @@
         }
     });
 
-    // 初始化
+    // Initialization
     loadEvents();
     loadRegistrations();
 })();

@@ -1,25 +1,25 @@
 <div class="registrations-page" ng-controller="RegistrationsController as vm">
-    <!-- 页面标题和统计信息 -->
+    <!-- Page title and statistics -->
     <div class="page-header">
         <div class="header-left">
-            <h1><i class="fas fa-users"></i> 注册记录管理</h1>
-            <p>查看和管理所有用户注册记录</p>
+            <h1><i class="fas fa-users"></i> Registration Records Management</h1>
+            <p>View and manage all user registration records</p>
         </div>
         <div class="header-right">
             <div class="stats-summary">
                 <span class="stat-item">
                     <i class="fas fa-user-plus"></i>
-                    总注册: {{vm.pagination.totalItems}}
+                    Total Registrations: {{vm.pagination.totalItems}}
                 </span>
                 <span class="stat-item">
                     <i class="fas fa-ticket-alt"></i>
-                    总票数: {{vm.totalTickets}}
+                    Total Tickets: {{vm.totalTickets}}
                 </span>
             </div>
         </div>
     </div>
 
-    <!-- 搜索和筛选工具栏 -->
+    <!-- Search and filter toolbar -->
     <div class="search-toolbar">
         <div class="search-group">
             <div class="search-input-group">
@@ -27,51 +27,51 @@
                 <input type="text" 
                        ng-model="vm.searchQuery" 
                        ng-change="vm.searchRegistrations()"
-                       placeholder="搜索姓名、邮箱或电话...">
+                       placeholder="Search by name, email, or phone...">
             </div>
             <div class="filter-group">
                 <select ng-model="vm.selectedEvent" ng-change="vm.filterByEvent()" class="filter-select">
-                    <option value="">全部活动</option>
+                    <option value="">All Events</option>
                     <option ng-repeat="event in vm.events" value="{{event.id}}">{{event.title}}</option>
                 </select>
                 <select ng-model="vm.dateFilter" ng-change="vm.filterByDate()" class="filter-select">
-                    <option value="">全部时间</option>
-                    <option value="today">今天</option>
-                    <option value="week">本周</option>
-                    <option value="month">本月</option>
+                    <option value="">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
                 </select>
             </div>
         </div>
         <div class="action-group">
             <button class="btn btn-outline" ng-click="vm.exportRegistrations()">
-                <i class="fas fa-download"></i> 导出
+                <i class="fas fa-download"></i> Export
             </button>
             <button class="btn btn-primary" ng-click="vm.refreshData()">
-                <i class="fas fa-sync"></i> 刷新
+                <i class="fas fa-sync"></i> Refresh
             </button>
         </div>
     </div>
 
-    <!-- 加载状态 -->
+    <!-- Loading state -->
     <div ng-if="vm.isLoading" class="loading-container">
         <div class="loading-spinner">
             <i class="fas fa-spinner fa-spin"></i>
-            <p>加载注册记录中...</p>
+            <p>Loading registration records...</p>
         </div>
     </div>
 
-    <!-- 错误状态 -->
+    <!-- Error state -->
     <div ng-if="vm.error && !vm.isLoading" class="error-container">
         <div class="error-message">
             <i class="fas fa-exclamation-triangle"></i>
             <p>{{vm.error}}</p>
-            <button class="btn btn-outline" ng-click="vm.loadRegistrations()">重试</button>
+            <button class="btn btn-outline" ng-click="vm.loadRegistrations()">Retry</button>
         </div>
     </div>
 
-    <!-- 注册记录列表 -->
+    <!-- Registration records list -->
     <div ng-if="!vm.isLoading && !vm.error" class="registrations-container">
-        <!-- 卡片式布局 -->
+        <!-- Card layout -->
         <div class="registrations-grid" ng-if="vm.viewMode === 'cards'">
             <div class="registration-card" ng-repeat="registration in vm.filteredRegistrations | 
                           limitTo: vm.pagination.itemsPerPage : 
@@ -90,13 +90,13 @@
                 </div>
                 <div class="card-body">
                     <div class="event-info">
-                        <h5><i class="fas fa-calendar"></i> {{registration.event_title || '未知活动'}}</h5>
+                        <h5><i class="fas fa-calendar"></i> {{registration.event_title || 'Unknown Event'}}</h5>
                         <p class="event-date">{{vm.formatDate(registration.registration_date)}}</p>
                     </div>
                     <div class="ticket-info">
                         <span class="ticket-count">
                             <i class="fas fa-ticket-alt"></i>
-                            {{registration.ticket_count}} 张票
+                            {{registration.ticket_count}} tickets
                         </span>
                         <span class="phone-info" ng-if="registration.phone">
                             <i class="fas fa-phone"></i>
@@ -107,25 +107,25 @@
                 <div class="card-actions">
                     <button class="btn btn-sm btn-danger" 
                             ng-click="vm.deleteRegistration(registration)"
-                            title="删除注册记录">
-                        <i class="fas fa-trash"></i> 删除
+                            title="Delete registration record">
+                        <i class="fas fa-trash"></i> Delete
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- 表格布局 -->
+        <!-- Table layout -->
         <div class="registrations-table" ng-if="vm.viewMode === 'table'">
             <div class="table-container">
                 <table class="data-table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>用户信息</th>
-                            <th>活动信息</th>
-                            <th>票数</th>
-                            <th>注册时间</th>
-                            <th>操作</th>
+                            <th>User Information</th>
+                            <th>Event Information</th>
+                            <th>Tickets</th>
+                            <th>Registration Date</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -139,7 +139,7 @@
                                 <div class="user-phone" ng-if="registration.phone">{{registration.phone}}</div>
                             </td>
                             <td class="event-info-cell">
-                                <div class="event-title">{{registration.event_title || '未知活动'}}</div>
+                                <div class="event-title">{{registration.event_title || 'Unknown Event'}}</div>
                             </td>
                             <td class="ticket-count">
                                 <span class="ticket-badge">{{registration.ticket_count}}</span>
@@ -148,7 +148,7 @@
                             <td class="actions-cell">
                                 <button class="btn btn-sm btn-danger" 
                                         ng-click="vm.deleteRegistration(registration)"
-                                        title="删除注册记录">
+                                        title="Delete registration record">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
@@ -158,55 +158,54 @@
             </div>
         </div>
 
-        <!-- 视图切换按钮 -->
+        <!-- View toggle buttons -->
         <div class="view-controls">
             <div class="view-toggle">
                 <button class="btn btn-sm" 
                         ng-class="{'btn-primary': vm.viewMode === 'table'}"
                         ng-click="vm.setViewMode('table')">
-                    <i class="fas fa-table"></i> 表格
+                    <i class="fas fa-table"></i> Table
                 </button>
                 <button class="btn btn-sm" 
                         ng-class="{'btn-primary': vm.viewMode === 'cards'}"
                         ng-click="vm.setViewMode('cards')">
-                    <i class="fas fa-th"></i> 卡片
+                    <i class="fas fa-th"></i> Cards
                 </button>
             </div>
         </div>
 
-
-        <!-- 空状态 -->
+        <!-- Empty state -->
         <div ng-if="vm.filteredRegistrations.length === 0 && !vm.isLoading && !vm.error" class="empty-state">
             <div class="empty-icon">
                 <i class="fas fa-users"></i>
             </div>
-            <h3>暂无注册记录</h3>
-            <p>还没有任何用户注册记录</p>
+            <h3>No Registration Records</h3>
+            <p>No user registration records yet</p>
             <button class="btn btn-primary" ng-click="vm.refreshData()">
-                <i class="fas fa-sync"></i> 刷新数据
+                <i class="fas fa-sync"></i> Refresh Data
             </button>
         </div>
 
-        <!-- 分页 -->
+        <!-- Pagination -->
         <div ng-if="vm.filteredRegistrations.length > 0" class="pagination-container">
             <div class="pagination-info">
-                显示第 {{(vm.pagination.currentPage - 1) * vm.pagination.itemsPerPage + 1}} 
-                到 {{Math.min(vm.pagination.currentPage * vm.pagination.itemsPerPage, vm.pagination.totalItems)}} 条，
-                共 {{vm.pagination.totalItems}} 条记录
+                Showing {{(vm.pagination.currentPage - 1) * vm.pagination.itemsPerPage + 1}} 
+                to {{Math.min(vm.pagination.currentPage * vm.pagination.itemsPerPage, vm.pagination.totalItems)}} 
+                of {{vm.pagination.totalItems}} records
             </div>
             <div class="pagination-controls">
                 <button class="btn btn-sm" 
                         ng-disabled="vm.pagination.currentPage === 1"
                         ng-click="vm.pagination.currentPage = vm.pagination.currentPage - 1">
-                    <i class="fas fa-chevron-left"></i> 上一页
+                    <i class="fas fa-chevron-left"></i> Previous
                 </button>
                 <span class="page-info">
-                    第 {{vm.pagination.currentPage}} 页
+                    Page {{vm.pagination.currentPage}}
                 </span>
                 <button class="btn btn-sm"
                         ng-disabled="vm.pagination.currentPage * vm.pagination.itemsPerPage >= vm.pagination.totalItems"
                         ng-click="vm.pagination.currentPage = vm.pagination.currentPage + 1">
-                    下一页 <i class="fas fa-chevron-right"></i>
+                    Next <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
         </div>

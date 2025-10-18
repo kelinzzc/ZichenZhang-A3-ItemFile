@@ -2,17 +2,17 @@
 <html ng-app="testApp">
 <head>
     <meta charset="UTF-8">
-    <title>简单测试</title>
+    <title>Simple Test</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
 <body>
     <div ng-controller="TestController as vm">
-        <h1>简单测试</h1>
-        <p>当前时间: {{vm.currentTime}}</p>
-        <p>测试数据: {{vm.testData}}</p>
-        <button ng-click="vm.loadData()">加载数据</button>
+        <h1>Simple Test</h1>
+        <p>Current time: {{vm.currentTime}}</p>
+        <p>Test data: {{vm.testData}}</p>
+        <button ng-click="vm.loadData()">Load Data</button>
         <div ng-if="vm.loaded">
-            <p>数据已加载: {{vm.data}}</p>
+            <p>Data loaded: {{vm.data}}</p>
         </div>
     </div>
 

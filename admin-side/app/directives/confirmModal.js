@@ -16,7 +16,7 @@ angular.module('CharityEventsAdminApp')
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" ng-click="closeModal()">
-                            取消
+                            cancel
                         </button>
                         <button class="btn" 
                                 ng-class="{
@@ -25,7 +25,7 @@ angular.module('CharityEventsAdminApp')
                                     'btn-danger': modalState.type === 'danger'
                                 }"
                                 ng-click="confirmAction()">
-                            确认
+                            notarize
                         </button>
                     </div>
                 </div>

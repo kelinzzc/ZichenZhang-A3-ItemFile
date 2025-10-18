@@ -30,7 +30,7 @@
     function formatDate(dateStr) {
         if (!dateStr) return '';
         try {
-            return new Date(dateStr).toLocaleDateString('zh-CN');
+            return new Date(dateStr).toLocaleDateString('en-US');
         } catch(e) {
             return dateStr;
         }
@@ -39,22 +39,22 @@
     function loadStats() {
         clearError();
         
-        // 加载活动统计
+        // Load event statistics
         AdminAPI.getEventStats().then(function(res) {
             var data = res.data || res;
             totalEvents.textContent = formatNumber(data.total_events || 0);
             totalRaised.textContent = formatCurrency(data.total_raised || 0);
         }).catch(function(err) {
-            console.error('加载活动统计失败:', err);
+            console.error('Failed to load event statistics:', err);
         });
 
-        // 加载注册统计
+        // Load registration statistics
         AdminAPI.getRegistrationStats().then(function(res) {
             var data = res.data || res;
             totalRegistrations.textContent = formatNumber(data.total_registrations || 0);
             totalTickets.textContent = formatNumber(data.total_tickets || 0);
         }).catch(function(err) {
-            console.error('加载注册统计失败:', err);
+            console.error('Failed to load registration statistics:', err);
         });
     }
 
@@ -72,7 +72,7 @@
                 recentEvents.appendChild(tr);
             });
         }).catch(function(err) {
-            console.error('加载最近活动失败:', err);
+            console.error('Failed to load recent events:', err);
         });
     }
 
@@ -83,14 +83,14 @@
             registrations.forEach(function(reg) {
                 var tr = document.createElement('tr');
                 tr.innerHTML = 
-                    '<td>' + (reg.full_name || '匿名') + '</td>' +
-                    '<td>' + (reg.event_title || '未知活动') + '</td>' +
+                    '<td>' + (reg.full_name || 'Anonymous') + '</td>' +
+                    '<td>' + (reg.event_title || 'Unknown Event') + '</td>' +
                     '<td>' + (reg.ticket_count || 1) + '</td>' +
                     '<td>' + formatDate(reg.registration_date) + '</td>';
                 recentRegistrations.appendChild(tr);
             });
         }).catch(function(err) {
-            console.error('加载最近注册失败:', err);
+            console.error('Failed to load recent registrations:', err);
         });
     }
 
@@ -100,7 +100,7 @@
         loadRecentRegistrations();
     }
 
-    // 页面加载完成后初始化
+    // Initialize after page loads
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

@@ -1,13 +1,13 @@
 <div class="dashboard-page" ng-controller="DashboardController as vm">
-    <!-- 加载状态 -->
+    <!-- Loading state -->
     <div ng-if="vm.isLoading" class="loading-state">
         <div class="spinner"></div>
-        <p>加载数据中...</p>
+        <p>Loading data...</p>
     </div>
 
-    <!-- 仪表板内容 -->
+    <!-- Dashboard content -->
     <div ng-if="!vm.isLoading">
-        <!-- 统计卡片 -->
+        <!-- Statistics cards -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon primary">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="stat-content">
                     <h3>{{vm.formatNumber(((vm.stats.events && vm.stats.events.data && vm.stats.events.data.total_events) || 0))}}</h3>
-                    <p>总活动数</p>
+                    <p>Total Events</p>
                 </div>
             </div>
             
@@ -25,7 +25,7 @@
                 </div>
                 <div class="stat-content">
                     <h3>{{vm.formatNumber(((vm.stats.registrations && vm.stats.registrations.data && vm.stats.registrations.data.total_registrations) || 0))}}</h3>
-                    <p>总注册人数</p>
+                    <p>Total Registrations</p>
                 </div>
             </div>
             
@@ -35,7 +35,7 @@
                 </div>
                 <div class="stat-content">
                     <h3>{{vm.formatCurrency(((vm.stats.events && vm.stats.events.data && vm.stats.events.data.total_raised) || 0))}}</h3>
-                    <p>总筹款金额</p>
+                    <p>Total Funds Raised</p>
                 </div>
             </div>
             
@@ -45,20 +45,20 @@
                 </div>
                 <div class="stat-content">
                     <h3>{{vm.formatNumber(((vm.stats.registrations && vm.stats.registrations.data && vm.stats.registrations.data.total_tickets) || 0))}}</h3>
-                    <p>总票数</p>
+                    <p>Total Tickets</p>
                 </div>
             </div>
         </div>
 
-        <!-- 最近活动和注册记录 -->
+        <!-- Recent events and registration records -->
         <div class="dashboard-content">
             <div class="row">
-                <!-- 最近活动 -->
+                <!-- Recent events -->
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h3>最近活动</h3>
-                            <a href="#/events" class="btn-link">查看全部</a>
+                            <h3>Recent Events</h3>
+                            <a href="#/events" class="btn-link">View All</a>
                         </div>
                         <div class="card-body">
                             <div class="list-group">
@@ -74,24 +74,24 @@
                                             'badge-success': event.is_active && !event.is_suspended,
                                             'badge-secondary': !event.is_active || event.is_suspended
                                         }">
-                                            {{event.is_active && !event.is_suspended ? '进行中' : '已结束'}}
+                                            {{event.is_active && !event.is_suspended ? 'Active' : 'Ended'}}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div ng-if="vm.recentEvents.length === 0" class="empty-state">
-                                <p>暂无活动</p>
+                                <p>No events</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 最近注册记录 -->
+                <!-- Recent registration records -->
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h3>最近注册记录</h3>
-                            <a href="#/registrations" class="btn-link">查看全部</a>
+                            <h3>Recent Registration Records</h3>
+                            <a href="#/registrations" class="btn-link">View All</a>
                         </div>
                         <div class="card-body">
                             <div class="list-group">
@@ -99,7 +99,7 @@
                                     <div class="item-content">
                                         <h4>{{registration.full_name}}</h4>
                                         <p class="text-muted">
-                                            {{registration.email}} · {{registration.ticket_count}}张票
+                                            {{registration.email}} · {{registration.ticket_count}} tickets
                                         </p>
                                         <small class="text-muted">
                                             {{vm.formatDate(registration.registration_date)}}
@@ -111,7 +111,7 @@
                                 </div>
                             </div>
                             <div ng-if="vm.recentRegistrations.length === 0" class="empty-state">
-                                <p>暂无注册记录</p>
+                                <p>No registration records</p>
                             </div>
                         </div>
                     </div>

@@ -3,7 +3,7 @@ angular.module('CharityEventsAdminApp')
 function($scope, $routeParams, $location, AdminEventService, AdminApiService) {
     var vm = this;
 
-    // 初始化数据
+    // Initialize data
     vm.event = {
         title: '',
         description: '',
@@ -28,12 +28,12 @@ function($scope, $routeParams, $location, AdminEventService, AdminApiService) {
     vm.categories = [];
 
     /**
-     * 初始化控制器
+     * Initialize controller
      */
     vm.init = function() {
         var eventId = $routeParams.id;
         
-        // 加载类别列表
+        // Load categories list
         vm.loadCategories();
         
         if (eventId) {
@@ -43,39 +43,39 @@ function($scope, $routeParams, $location, AdminEventService, AdminApiService) {
     };
 
     /**
-     * 加载类别列表
+     * Load categories list
      */
     vm.loadCategories = function() {
         AdminApiService.get('/categories')
             .then(function(response) {
-                console.log('EventFormController.loadCategories 响应:', response);
+                console.log('EventFormController.loadCategories response:', response);
                 vm.categories = response.data || response;
             })
             .catch(function(error) {
-                console.error('加载类别失败:', error);
-                // 使用默认类别作为后备
+                console.error('Failed to load categories:', error);
+                // Use default categories as fallback
                 vm.categories = [
-                    { id: 1, name: '慈善晚宴' },
-                    { id: 2, name: '趣味跑' },
-                    { id: 3, name: '艺术展览' },
-                    { id: 4, name: '线上募捐' },
-                    { id: 5, name: '社区服务' },
-                    { id: 6, name: '教育讲座' }
+                    { id: 1, name: 'Charity Gala' },
+                    { id: 2, name: 'Fun Run' },
+                    { id: 3, name: 'Art Exhibition' },
+                    { id: 4, name: 'Online Fundraising' },
+                    { id: 5, name: 'Community Service' },
+                    { id: 6, name: 'Educational Lecture' }
                 ];
             });
     };
 
     /**
-     * 加载活动数据（编辑模式）
+     * Load event data (edit mode)
      */
     vm.loadEvent = function(eventId) {
         vm.isLoading = true;
 
         AdminEventService.getEventById(eventId)
             .then(function(response) {
-                console.log('EventFormController.loadEvent 响应:', response);
+                console.log('EventFormController.loadEvent response:', response);
                 
-                // 处理不同的响应格式
+                // Handle different response formats
                 if (response.event) {
                     vm.event = response.event;
                 } else if (response.data && response.data.event) {
@@ -84,9 +84,9 @@ function($scope, $routeParams, $location, AdminEventService, AdminApiService) {
                     vm.event = response;
                 }
                 
-                console.log('EventFormController.loadEvent 处理后的活动数据:', vm.event);
+                console.log('EventFormController.loadEvent processed event data:', vm.event);
                 
-                // 格式化日期为HTML datetime-local输入格式
+                // Format date for HTML datetime-local input
                 if (vm.event.event_date) {
                     var eventDate = new Date(vm.event.event_date);
                     vm.event.event_date = eventDate.toISOString().slice(0, 16);
@@ -95,37 +95,37 @@ function($scope, $routeParams, $location, AdminEventService, AdminApiService) {
                 vm.isLoading = false;
             })
             .catch(function(error) {
-                console.error('加载活动数据失败:', error);
-                alert('加载活动数据失败');
+                console.error('Failed to load event data:', error);
+                alert('Failed to load event data');
                 $location.path('/events');
             });
     };
 
     /**
-     * 提交表单
+     * Submit form
      */
     vm.submitForm = function() {
-        // 验证数据
+        // Validate data
         vm.validationErrors = [];
         
         if (!vm.event.title || vm.event.title.trim() === '') {
-            vm.validationErrors.push('活动标题不能为空');
+            vm.validationErrors.push('Event title cannot be empty');
         }
         
         if (!vm.event.description || vm.event.description.trim() === '') {
-            vm.validationErrors.push('活动描述不能为空');
+            vm.validationErrors.push('Event description cannot be empty');
         }
         
         if (!vm.event.event_date) {
-            vm.validationErrors.push('活动日期不能为空');
+            vm.validationErrors.push('Event date cannot be empty');
         }
         
         if (!vm.event.location || vm.event.location.trim() === '') {
-            vm.validationErrors.push('活动地点不能为空');
+            vm.validationErrors.push('Event location cannot be empty');
         }
         
         if (!vm.event.max_attendees || vm.event.max_attendees < 1) {
-            vm.validationErrors.push('最大参与人数必须大于0');
+            vm.validationErrors.push('Maximum attendees must be greater than 0');
         }
         
         if (vm.validationErrors.length > 0) {
@@ -137,29 +137,29 @@ function($scope, $routeParams, $location, AdminEventService, AdminApiService) {
 
         var submitPromise;
         if (vm.isEdit) {
-            console.log('更新活动 - 活动ID:', vm.event.id);
-            console.log('更新活动 - 完整数据:', vm.event);
+            console.log('Updating event - Event ID:', vm.event.id);
+            console.log('Updating event - Complete data:', vm.event);
             
             if (!vm.event.id) {
-                alert('错误：活动ID不存在，无法更新活动');
+                alert('Error: Event ID does not exist, cannot update event');
                 return;
             }
             
             submitPromise = AdminEventService.updateEvent(vm.event.id, vm.event);
         } else {
-            console.log('创建活动:', vm.event);
+            console.log('Creating event:', vm.event);
             submitPromise = AdminEventService.createEvent(vm.event);
         }
 
         submitPromise
             .then(function(response) {
-                console.log('表单提交成功:', response);
-                alert(vm.isEdit ? '活动更新成功' : '活动创建成功');
+                console.log('Form submission successful:', response);
+                alert(vm.isEdit ? 'Event updated successfully' : 'Event created successfully');
                 $location.path('/events');
             })
             .catch(function(error) {
-                console.error('提交失败:', error);
-                alert('提交失败：' + (error.message || '未知错误'));
+                console.error('Submission failed:', error);
+                alert('Submission failed: ' + (error.message || 'Unknown error'));
             })
             .finally(function() {
                 vm.isSubmitting = false;
@@ -167,22 +167,22 @@ function($scope, $routeParams, $location, AdminEventService, AdminApiService) {
     };
 
     /**
-     * 取消编辑
+     * Cancel editing
      */
     vm.cancel = function() {
         $location.path('/events');
     };
 
     /**
-     * 设置当前坐标（示例）
+     * Set current coordinates (example)
      */
     vm.setCurrentLocation = function() {
-        // 这里可以集成地图API获取精确坐标
-        // 目前使用示例坐标
+        // Here you can integrate map API to get precise coordinates
+        // Currently using example coordinates
         vm.event.latitude = -33.87;
         vm.event.longitude = 151.21;
     };
 
-    // 初始化控制器
+    // Initialize controller
     vm.init();
 }]);

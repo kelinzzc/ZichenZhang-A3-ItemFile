@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理后台 - 仪表板（原生版）</title>
+    <title>Admin Panel - Dashboard</title>
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <style>
@@ -26,48 +26,48 @@
 <body>
     <div class="container">
         <div class="nav">
-            <a href="dashboard.html" class="active">仪表板</a>
-            <a href="events.html">活动管理</a>
-            <a href="registrations.html">注册记录</a>
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="events.html">Event Management</a>
+            <a href="registrations.html">Registration Records</a>
         </div>
         
-        <h1>仪表板</h1>
+        <h1>Dashboard</h1>
         <div id="error" class="muted" style="color: #c0392b; display: none;"></div>
         
         <div class="stats-grid">
             <div class="stat-card">
                 <h3 id="totalEvents">-</h3>
-                <p>总活动数</p>
+                <p>Total Events</p>
             </div>
             <div class="stat-card">
                 <h3 id="totalRegistrations">-</h3>
-                <p>总注册人数</p>
+                <p>Total Registrations</p>
             </div>
             <div class="stat-card">
                 <h3 id="totalRaised">-</h3>
-                <p>总筹款金额</p>
+                <p>Total Funds Raised</p>
             </div>
             <div class="stat-card">
                 <h3 id="totalTickets">-</h3>
-                <p>总票数</p>
+                <p>Total Tickets</p>
             </div>
         </div>
         
         <div class="recent-section">
-            <h3>最近活动</h3>
+            <h3>Recent Events</h3>
             <table>
                 <thead>
-                    <tr><th>标题</th><th>日期</th><th>地点</th><th>目标金额</th></tr>
+                    <tr><th>Title</th><th>Date</th><th>Location</th><th>Goal Amount</th></tr>
                 </thead>
                 <tbody id="recentEvents"></tbody>
             </table>
         </div>
         
         <div class="recent-section">
-            <h3>最近注册</h3>
+            <h3>Recent Registrations</h3>
             <table>
                 <thead>
-                    <tr><th>姓名</th><th>活动</th><th>票数</th><th>注册时间</th></tr>
+                    <tr><th>Name</th><th>Event</th><th>Tickets</th><th>Registration Date</th></tr>
                 </thead>
                 <tbody id="recentRegistrations"></tbody>
             </table>

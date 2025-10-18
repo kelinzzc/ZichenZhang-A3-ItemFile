@@ -3,7 +3,7 @@ angular.module('CharityEventsAdminApp')
 function($scope, $routeParams, AdminEventService, AdminRegistrationService) {
     var vm = this;
 
-    // 初始化数据
+    // Initialize data
     vm.event = null;
     vm.registrations = [];
     vm.isLoading = true;
@@ -11,12 +11,12 @@ function($scope, $routeParams, AdminEventService, AdminRegistrationService) {
     vm.error = '';
 
     /**
-     * 初始化控制器
+     * Initialize controller
      */
     vm.init = function() {
         var eventId = $routeParams.id;
         if (!eventId) {
-            alert('无效的活动ID');
+            alert('Invalid event ID');
             return;
         }
 
@@ -24,14 +24,14 @@ function($scope, $routeParams, AdminEventService, AdminRegistrationService) {
     };
 
     /**
-     * 返回上一页
+     * Go back to previous page
      */
     vm.goBack = function() {
         window.history.back();
     };
 
     /**
-     * 编辑活动
+     * Edit event
      */
     vm.editEvent = function() {
         if (vm.event) {
@@ -40,17 +40,17 @@ function($scope, $routeParams, AdminEventService, AdminRegistrationService) {
     };
 
     /**
-     * 加载活动详情
+     * Load event details
      */
     vm.loadEventDetails = function(eventId) {
-        console.log('开始加载活动详情，ID:', eventId);
+        console.log('Starting to load event details, ID:', eventId);
         vm.isLoading = true;
         vm.error = '';
 
         AdminEventService.getEventById(eventId)
             .then(function(response) {
-                console.log('活动详情API响应:', response);
-                console.log('响应数据结构:', {
+                console.log('Event details API response:', response);
+                console.log('Response data structure:', {
                     hasData: !!response.data,
                     hasEvent: !!response.data.event,
                     hasRegistrations: !!response.data.registrations,
@@ -62,28 +62,28 @@ function($scope, $routeParams, AdminEventService, AdminRegistrationService) {
                 vm.registrations = response.data.registrations;
                 vm.isLoading = false;
                 
-                console.log('数据设置完成:', {
+                console.log('Data setup completed:', {
                     event: vm.event,
                     registrations: vm.registrations,
                     isLoading: vm.isLoading
                 });
             })
             .catch(function(error) {
-                console.error('加载活动详情失败:', error);
-                vm.error = error.message || '无法加载活动详情，请稍后重试';
+                console.error('Failed to load event details:', error);
+                vm.error = error.message || 'Unable to load event details, please try again later';
                 vm.isLoading = false;
             });
     };
 
     /**
-     * 切换标签页
+     * Switch tabs
      */
     vm.setActiveTab = function(tabName) {
         vm.activeTab = tabName;
     };
 
     /**
-     * 获取注册统计
+     * Get registration statistics
      */
     vm.getRegistrationStats = function() {
         if (!vm.registrations || vm.registrations.length === 0) {
@@ -108,11 +108,11 @@ function($scope, $routeParams, AdminEventService, AdminRegistrationService) {
     };
 
     /**
-     * 格式化日期
+     * Format date
      */
     vm.formatDate = function(dateString) {
         if (!dateString) return '';
-        return new Date(dateString).toLocaleDateString('zh-CN', {
+        return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -122,24 +122,24 @@ function($scope, $routeParams, AdminEventService, AdminRegistrationService) {
     };
 
     /**
-     * 格式化金额
+     * Format currency
      */
     vm.formatCurrency = function(amount) {
         if (!amount && amount !== 0) return '';
-        return '¥' + parseFloat(amount).toLocaleString('zh-CN', {
+        return '$' + parseFloat(amount).toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
     };
 
     /**
-     * 计算筹款进度
+     * Calculate fundraising progress
      */
     vm.calculateProgress = function(current, goal) {
         if (!goal || goal === 0) return 0;
         return Math.min(Math.round((current / goal) * 100), 100);
     };
 
-    // 初始化控制器
+    // Initialize controller
     vm.init();
 }]);

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理端测试页面</title>
+    <title>Admin Panel Test Page</title>
     <script src="app/js/lib/angular.min.js"></script>
     <script src="app/js/lib/angular-route.min.js"></script>
     <style>
@@ -19,25 +19,25 @@
     </style>
 </head>
 <body ng-app="testAdminApp" ng-controller="TestController as vm">
-    <h1>管理端功能测试页面</h1>
+    <h1>Admin Panel Function Test Page</h1>
     
     <div class="current-path">
-        <strong>当前路径:</strong> {{vm.currentPath}}
+        <strong>Current Path:</strong> {{vm.currentPath}}
     </div>
     
     <div class="test-section">
-        <h2>测试活动管理功能</h2>
-        <button class="btn" ng-click="vm.testLoadEvents()">测试加载活动列表</button>
-        <button class="btn" ng-click="vm.testLoadCategories()">测试加载类别列表</button>
-        <button class="btn" ng-click="vm.testCreateEvent()">测试创建活动</button>
-        <button class="btn" ng-click="vm.testUpdateEvent()">测试更新活动</button>
-        <button class="btn" ng-click="vm.testDeleteEvent()">测试删除活动</button>
+        <h2>Test Event Management Functions</h2>
+        <button class="btn" ng-click="vm.testLoadEvents()">Test Load Events List</button>
+        <button class="btn" ng-click="vm.testLoadCategories()">Test Load Categories List</button>
+        <button class="btn" ng-click="vm.testCreateEvent()">Test Create Event</button>
+        <button class="btn" ng-click="vm.testUpdateEvent()">Test Update Event</button>
+        <button class="btn" ng-click="vm.testDeleteEvent()">Test Delete Event</button>
     </div>
     
     <div class="test-section">
-        <h2>测试结果</h2>
+        <h2>Test Results</h2>
         <div id="test-results">
-            <p>点击上面的按钮测试各个功能，结果将显示在控制台中</p>
+            <p>Click the buttons above to test various functions, results will be displayed in the console</p>
         </div>
     </div>
 
@@ -58,40 +58,40 @@
             vm.currentPath = $location.path();
             
             vm.testLoadEvents = function() {
-                console.log('=== 测试加载活动列表 ===');
+                console.log('=== Test Loading Events List ===');
                 AdminEventService.getAllEvents()
                     .then(function(response) {
-                        console.log('✅ 加载活动列表成功:', response);
-                        document.getElementById('test-results').innerHTML = '<p style="color: green;">✅ 加载活动列表成功，共 ' + (response.length || 0) + ' 个活动</p>';
+                        console.log(' Load events list successful:', response);
+                        document.getElementById('test-results').innerHTML = '<p style="color: green;"> Load events list successful, total ' + (response.length || 0) + ' events</p>';
                     })
                     .catch(function(error) {
-                        console.error('❌ 加载活动列表失败:', error);
-                        document.getElementById('test-results').innerHTML = '<p style="color: red;">❌ 加载活动列表失败: ' + error.message + '</p>';
+                        console.error(' Load events list failed:', error);
+                        document.getElementById('test-results').innerHTML = '<p style="color: red;"> Load events list failed: ' + error.message + '</p>';
                     });
             };
             
             vm.testLoadCategories = function() {
-                console.log('=== 测试加载类别列表 ===');
+                console.log('=== Test Loading Categories List ===');
                 AdminApiService.get('/categories')
                     .then(function(response) {
-                        console.log('✅ 加载类别列表成功:', response);
-                        document.getElementById('test-results').innerHTML = '<p style="color: green;">✅ 加载类别列表成功，共 ' + (response.data?.length || response.length || 0) + ' 个类别</p>';
+                        console.log(' Load categories list successful:', response);
+                        document.getElementById('test-results').innerHTML = '<p style="color: green;"> Load categories list successful, total ' + (response.data?.length || response.length || 0) + ' categories</p>';
                     })
                     .catch(function(error) {
-                        console.error('❌ 加载类别列表失败:', error);
-                        document.getElementById('test-results').innerHTML = '<p style="color: red;">❌ 加载类别列表失败: ' + error.message + '</p>';
+                        console.error(' Load categories list failed:', error);
+                        document.getElementById('test-results').innerHTML = '<p style="color: red;"> Load categories list failed: ' + error.message + '</p>';
                     });
             };
             
             vm.testCreateEvent = function() {
-                console.log('=== 测试创建活动 ===');
+                console.log('=== Test Creating Event ===');
                 var testEvent = {
-                    title: '测试活动 ' + new Date().getTime(),
-                    description: '这是一个测试活动',
+                    title: 'Test Event ' + new Date().getTime(),
+                    description: 'This is a test event',
                     category_id: 1,
                     organization_id: 1,
                     event_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-                    location: '测试地点',
+                    location: 'Test Location',
                     max_attendees: 50,
                     ticket_price: 10.00,
                     goal_amount: 1000.00,
@@ -101,58 +101,58 @@
                 
                 AdminEventService.createEvent(testEvent)
                     .then(function(response) {
-                        console.log('✅ 创建活动成功:', response);
-                        document.getElementById('test-results').innerHTML = '<p style="color: green;">✅ 创建活动成功</p>';
+                        console.log(' Create event successful:', response);
+                        document.getElementById('test-results').innerHTML = '<p style="color: green;"> Create event successful</p>';
                     })
                     .catch(function(error) {
-                        console.error('❌ 创建活动失败:', error);
-                        document.getElementById('test-results').innerHTML = '<p style="color: red;">❌ 创建活动失败: ' + error.message + '</p>';
+                        console.error(' Create event failed:', error);
+                        document.getElementById('test-results').innerHTML = '<p style="color: red;"> Create event failed: ' + error.message + '</p>';
                     });
             };
             
             vm.testUpdateEvent = function() {
-                console.log('=== 测试更新活动 ===');
-                // 先获取一个活动，然后更新它
+                console.log('=== Test Updating Event ===');
+                // First get an event, then update it
                 AdminEventService.getAllEvents()
                     .then(function(events) {
                         if (events.length > 0) {
                             var eventToUpdate = events[0];
-                            eventToUpdate.title = '更新的活动标题 ' + new Date().getTime();
+                            eventToUpdate.title = 'Updated Event Title ' + new Date().getTime();
                             
                             return AdminEventService.updateEvent(eventToUpdate.id, eventToUpdate);
                         } else {
-                            throw new Error('没有活动可以更新');
+                            throw new Error('No events available to update');
                         }
                     })
                     .then(function(response) {
-                        console.log('✅ 更新活动成功:', response);
-                        document.getElementById('test-results').innerHTML = '<p style="color: green;">✅ 更新活动成功</p>';
+                        console.log(' Update event successful:', response);
+                        document.getElementById('test-results').innerHTML = '<p style="color: green;"> Update event successful</p>';
                     })
                     .catch(function(error) {
-                        console.error('❌ 更新活动失败:', error);
-                        document.getElementById('test-results').innerHTML = '<p style="color: red;">❌ 更新活动失败: ' + error.message + '</p>';
+                        console.error('Update event failed:', error);
+                        document.getElementById('test-results').innerHTML = '<p style="color: red;"> Update event failed: ' + error.message + '</p>';
                     });
             };
             
             vm.testDeleteEvent = function() {
-                console.log('=== 测试删除活动 ===');
-                // 先获取一个活动，然后删除它
+                console.log('=== Test Deleting Event ===');
+                // First get an event, then delete it
                 AdminEventService.getAllEvents()
                     .then(function(events) {
                         if (events.length > 0) {
                             var eventToDelete = events[0];
                             return AdminEventService.deleteEvent(eventToDelete.id);
                         } else {
-                            throw new Error('没有活动可以删除');
+                            throw new Error('No events available to delete');
                         }
                     })
                     .then(function(response) {
-                        console.log('✅ 删除活动成功:', response);
-                        document.getElementById('test-results').innerHTML = '<p style="color: green;">✅ 删除活动成功</p>';
+                        console.log(' Delete event successful:', response);
+                        document.getElementById('test-results').innerHTML = '<p style="color: green;"> Delete event successful</p>';
                     })
                     .catch(function(error) {
-                        console.error('❌ 删除活动失败:', error);
-                        document.getElementById('test-results').innerHTML = '<p style="color: red;">❌ 删除活动失败: ' + error.message + '</p>';
+                        console.error(' Delete event failed:', error);
+                        document.getElementById('test-results').innerHTML = '<p style="color: red;"> Delete event failed: ' + error.message + '</p>';
                     });
             };
         }]);

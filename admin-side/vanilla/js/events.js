@@ -35,7 +35,7 @@
     function formatDate(dateStr) {
         if (!dateStr) return '';
         try {
-            return new Date(dateStr).toLocaleDateString('zh-CN');
+            return new Date(dateStr).toLocaleDateString('en-US');
         } catch(e) {
             return dateStr;
         }
@@ -62,8 +62,8 @@
                 '<td>' + formatCurrency(ev.goal_amount) + ' / ' + formatCurrency(ev.current_amount) + '</td>' +
                 '<td>' + progress + '%</td>' +
                 '<td>' +
-                    '<button class="btn btn-primary" onclick="editEvent(' + ev.id + ')">编辑</button> ' +
-                    '<button class="btn btn-danger" onclick="deleteEvent(' + ev.id + ')">删除</button>' +
+                    '<button class="btn btn-primary" onclick="editEvent(' + ev.id + ')">Edit</button> ' +
+                    '<button class="btn btn-danger" onclick="deleteEvent(' + ev.id + ')">Delete</button>' +
                 '</td>';
             eventsTable.appendChild(tr);
         });
@@ -78,14 +78,14 @@
         AdminAPI.listEvents(params).then(function(res) {
             renderEvents(res.data || res);
         }).catch(function(err) {
-            showError('加载活动失败: ' + (err.message || '未知错误'));
+            showError('Failed to load events: ' + (err.message || 'Unknown error'));
         });
     }
 
     function loadCategories() {
         AdminAPI.getCategories().then(function(res) {
             categories = res.data || res || [];
-            categoryFilter.innerHTML = '<option value="">全部类别</option>';
+            categoryFilter.innerHTML = '<option value="">All Categories</option>';
             categories.forEach(function(cat) {
                 var option = document.createElement('option');
                 option.value = cat.id;
@@ -93,13 +93,13 @@
                 categoryFilter.appendChild(option);
             });
         }).catch(function(err) {
-            console.error('加载类别失败:', err);
+            console.error('Failed to load categories:', err);
         });
     }
 
     function showForm(isEdit, eventData) {
         eventForm.style.display = 'block';
-        formTitle.textContent = isEdit ? '编辑活动' : '新建活动';
+        formTitle.textContent = isEdit ? 'Edit Event' : 'New Event';
         currentEventId = isEdit ? eventData.id : null;
         
         if (isEdit && eventData) {
@@ -131,36 +131,36 @@
             AdminAPI.createEvent(eventData);
             
         promise.then(function() {
-            showSuccess(currentEventId ? '活动更新成功' : '活动创建成功');
+            showSuccess(currentEventId ? 'Event updated successfully' : 'Event created successfully');
             hideForm();
             loadEvents();
         }).catch(function(err) {
-            showError('保存失败: ' + (err.message || '未知错误'));
+            showError('Save failed: ' + (err.message || 'Unknown error'));
         });
     }
 
-    // 全局函数，供HTML调用
+
     window.editEvent = function(id) {
         AdminAPI.getEventById(id).then(function(res) {
             var eventData = res.data || res;
             showForm(true, eventData);
         }).catch(function(err) {
-            showError('加载活动详情失败: ' + (err.message || '未知错误'));
+            showError('Failed to load event details: ' + (err.message || 'Unknown error'));
         });
     };
 
     window.deleteEvent = function(id) {
-        if (!confirm('确定删除这个活动吗？')) return;
+        if (!confirm('Are you sure you want to delete this event?')) return;
         clearMessages();
         AdminAPI.deleteEvent(id).then(function() {
-            showSuccess('活动删除成功');
+            showSuccess('Event deleted successfully');
             loadEvents();
         }).catch(function(err) {
-            showError('删除失败: ' + (err.message || '未知错误'));
+            showError('Deletion failed: ' + (err.message || 'Unknown error'));
         });
     };
 
-    // 事件监听
+    // Event listeners
     searchBtn.addEventListener('click', loadEvents);
     reloadBtn.addEventListener('click', loadEvents);
     addBtn.addEventListener('click', function() { showForm(false); });
@@ -179,21 +179,21 @@
             goal_amount: parseFloat(document.getElementById('goalAmount').value) || 0,
             max_attendees: parseInt(document.getElementById('maxAttendees').value) || 100,
             image_url: document.getElementById('imageUrl').value.trim(),
-            category_id: 1, // 默认类别
-            organization_id: 1, // 默认组织
+            category_id: 1, // Default category
+            organization_id: 1, // Default organization
             latitude: -33.86,
             longitude: 151.21
         };
         
         if (!formData.title) {
-            showError('请填写活动标题');
+            showError('Please fill in the event title');
             return;
         }
         
         saveEvent(formData);
     });
 
-    // 初始化
+    // Initialization
     loadCategories();
     loadEvents();
 })();

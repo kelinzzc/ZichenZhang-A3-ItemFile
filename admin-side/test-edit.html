@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>编辑活动测试页面</title>
+    <title>Edit Event Test Page</title>
     <script src="app/js/lib/angular.min.js"></script>
     <script src="app/js/lib/angular-route.min.js"></script>
     <style>
@@ -17,26 +17,26 @@
     </style>
 </head>
 <body ng-app="testEditApp" ng-controller="TestController as vm">
-    <h1>编辑活动测试页面</h1>
+    <h1>Edit Event Test Page</h1>
     
     <div class="test-section">
-        <h2>测试步骤</h2>
-        <button class="btn" ng-click="vm.step1()">1. 获取活动列表</button>
-        <button class="btn" ng-click="vm.step2()">2. 获取第一个活动详情</button>
-        <button class="btn" ng-click="vm.step3()">3. 更新活动</button>
+        <h2>Test Steps</h2>
+        <button class="btn" ng-click="vm.step1()">1. Get Event List</button>
+        <button class="btn" ng-click="vm.step2()">2. Get First Event Details</button>
+        <button class="btn" ng-click="vm.step3()">3. Update Event</button>
     </div>
     
     <div class="test-section">
-        <h2>当前活动数据</h2>
+        <h2>Current Event Data</h2>
         <div class="event-data">
             <pre>{{vm.currentEvent | json}}</pre>
         </div>
     </div>
     
     <div class="test-section">
-        <h2>测试结果</h2>
+        <h2>Test Results</h2>
         <div id="test-results">
-            <p>点击上面的按钮开始测试</p>
+            <p>Click the buttons above to start testing</p>
         </div>
     </div>
 
@@ -53,68 +53,68 @@
             vm.events = [];
             
             vm.step1 = function() {
-                console.log('=== 步骤1: 获取活动列表 ===');
+                console.log('=== Step 1: Get Event List ===');
                 AdminEventService.getAllEvents()
                     .then(function(response) {
-                        console.log('✅ 获取活动列表成功:', response);
+                        console.log(' Get event list successful:', response);
                         vm.events = response;
-                        document.getElementById('test-results').innerHTML = '<p class="success">✅ 步骤1完成: 获取到 ' + response.length + ' 个活动</p>';
+                        document.getElementById('test-results').innerHTML = '<p class="success"> Step 1 completed: Retrieved ' + response.length + ' events</p>';
                     })
                     .catch(function(error) {
-                        console.error('❌ 获取活动列表失败:', error);
-                        document.getElementById('test-results').innerHTML = '<p class="error">❌ 步骤1失败: ' + error.message + '</p>';
+                        console.error(' Get event list failed:', error);
+                        document.getElementById('test-results').innerHTML = '<p class="error"> Step 1 failed: ' + error.message + '</p>';
                     });
             };
             
             vm.step2 = function() {
                 if (vm.events.length === 0) {
-                    document.getElementById('test-results').innerHTML = '<p class="error">❌ 请先执行步骤1获取活动列表</p>';
+                    document.getElementById('test-results').innerHTML = '<p class="error"> Please execute step 1 first to get event list</p>';
                     return;
                 }
                 
-                console.log('=== 步骤2: 获取第一个活动详情 ===');
+                console.log('=== Step 2: Get First Event Details ===');
                 var firstEvent = vm.events[0];
-                console.log('要获取详情的活动ID:', firstEvent.id);
+                console.log('Event ID to get details:', firstEvent.id);
                 
                 AdminEventService.getEventById(firstEvent.id)
                     .then(function(response) {
-                        console.log('✅ 获取活动详情成功:', response);
+                        console.log(' Get event details successful:', response);
                         vm.currentEvent = response.event || response.data?.event || response;
-                        console.log('处理后的活动数据:', vm.currentEvent);
-                        document.getElementById('test-results').innerHTML = '<p class="success">✅ 步骤2完成: 获取到活动详情，ID=' + vm.currentEvent.id + '</p>';
+                        console.log('Processed event data:', vm.currentEvent);
+                        document.getElementById('test-results').innerHTML = '<p class="success"> Step 2 completed: Retrieved event details, ID=' + vm.currentEvent.id + '</p>';
                     })
                     .catch(function(error) {
-                        console.error('❌ 获取活动详情失败:', error);
-                        document.getElementById('test-results').innerHTML = '<p class="error">❌ 步骤2失败: ' + error.message + '</p>';
+                        console.error(' Get event details failed:', error);
+                        document.getElementById('test-results').innerHTML = '<p class="error"> Step 2 failed: ' + error.message + '</p>';
                     });
             };
             
             vm.step3 = function() {
                 if (!vm.currentEvent) {
-                    document.getElementById('test-results').innerHTML = '<p class="error">❌ 请先执行步骤2获取活动详情</p>';
+                    document.getElementById('test-results').innerHTML = '<p class="error"> Please execute step 2 first to get event details</p>';
                     return;
                 }
                 
-                console.log('=== 步骤3: 更新活动 ===');
-                console.log('要更新的活动ID:', vm.currentEvent.id);
+                console.log('=== Step 3: Update Event ===');
+                console.log('Event ID to update:', vm.currentEvent.id);
                 
-                // 修改活动标题
+                // Modify event title
                 var originalTitle = vm.currentEvent.title;
-                vm.currentEvent.title = '测试更新 ' + new Date().getTime();
+                vm.currentEvent.title = 'Test Update ' + new Date().getTime();
                 
                 AdminEventService.updateEvent(vm.currentEvent.id, vm.currentEvent)
                     .then(function(response) {
-                        console.log('✅ 更新活动成功:', response);
-                        document.getElementById('test-results').innerHTML = '<p class="success">✅ 步骤3完成: 活动更新成功</p>';
+                        console.log(' Update event successful:', response);
+                        document.getElementById('test-results').innerHTML = '<p class="success"> Step 3 completed: Event updated successfully</p>';
                         
-                        // 恢复原标题
+                        // Restore original title
                         vm.currentEvent.title = originalTitle;
                     })
                     .catch(function(error) {
-                        console.error('❌ 更新活动失败:', error);
-                        document.getElementById('test-results').innerHTML = '<p class="error">❌ 步骤3失败: ' + error.message + '</p>';
+                        console.error(' Update event failed:', error);
+                        document.getElementById('test-results').innerHTML = '<p class="error"> Step 3 failed: ' + error.message + '</p>';
                         
-                        // 恢复原标题
+                        // Restore original title
                         vm.currentEvent.title = originalTitle;
                     });
             };

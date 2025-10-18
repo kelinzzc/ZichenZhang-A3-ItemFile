@@ -3,7 +3,7 @@ angular.module('CharityEventsAdminApp')
 function($scope, $location, AdminEventService, ModalService) {
     var vm = this;
 
-    // 初始化数据
+    // Initialize data
     vm.events = [];
     vm.filteredEvents = [];
     vm.pagination = {
@@ -15,21 +15,21 @@ function($scope, $location, AdminEventService, ModalService) {
     vm.isLoading = false;
 
     /**
-     * 初始化控制器
+     * Initialize controller
      */
     vm.init = function() {
         vm.loadEvents();
     };
 
     /**
-     * 加载活动列表
+     * Load events list
      */
     vm.loadEvents = function() {
         vm.isLoading = true;
 
         AdminEventService.getAllEvents()
             .then(function(response) {
-                console.log('EventsController.loadEvents 响应:', response);
+                console.log('EventsController.loadEvents response:', response);
                 var events = response.data || response;
                 vm.events = events;
                 vm.filteredEvents = events;
@@ -37,13 +37,13 @@ function($scope, $location, AdminEventService, ModalService) {
                 vm.isLoading = false;
             })
             .catch(function(error) {
-                console.error('加载活动列表失败:', error);
+                console.error('Failed to load events list:', error);
                 vm.isLoading = false;
             });
     };
 
     /**
-     * 搜索活动
+     * Search events
      */
     vm.searchEvents = function() {
         if (!vm.searchQuery.trim()) {
@@ -61,22 +61,22 @@ function($scope, $location, AdminEventService, ModalService) {
     };
 
     /**
-     * 删除活动
+     * Delete event
      */
     vm.deleteEvent = function(event) {
         ModalService.openDanger(
-            '确认删除',
-            `确定要删除活动 "${event.title}" 吗？此操作不可撤销。`,
+            'Confirm Deletion',
+            `Are you sure you want to delete event "${event.title}"? This action cannot be undone.`,
             function() {
                 AdminEventService.deleteEvent(event.id)
                     .then(function() {
-                        vm.loadEvents(); // 重新加载列表
+                        vm.loadEvents(); // Reload list
                     })
                     .catch(function(error) {
                         if (error.code === 'HAS_REGISTRATIONS') {
-                            alert(`无法删除活动：该活动有 ${error.registrationsCount} 个注册记录`);
+                            alert(`Cannot delete event: This event has ${error.registrationsCount} registration records`);
                         } else {
-                            alert('删除失败：' + (error.message || '未知错误'));
+                            alert('Deletion failed: ' + (error.message || 'Unknown error'));
                         }
                     });
             }
@@ -84,62 +84,62 @@ function($scope, $location, AdminEventService, ModalService) {
     };
 
     /**
-     * 编辑活动
+     * Edit event
      */
     vm.editEvent = function(event) {
         $location.path('/events/edit/' + event.id);
     };
 
     /**
-     * 查看活动详情
+     * View event details
      */
     vm.viewEvent = function(event) {
         $location.path('/events/' + event.id);
     };
 
     /**
-     * 创建新活动
+     * Create new event
      */
     vm.createEvent = function() {
         $location.path('/events/new');
     };
 
     /**
-     * 获取活动状态标签
+     * Get event status label
      */
     vm.getEventStatus = function(event) {
         if (!event.is_active || event.is_suspended) {
-            return { text: '已结束', class: 'status-inactive' };
+            return { text: 'Ended', class: 'status-inactive' };
         }
 
         var eventDate = new Date(event.event_date);
         var now = new Date();
 
         if (eventDate < now) {
-            return { text: '已结束', class: 'status-inactive' };
+            return { text: 'Ended', class: 'status-inactive' };
         }
 
-        // 检查票数
+        // Check ticket availability
         var availableTickets = event.max_attendees - (event.total_tickets_sold || 0);
         if (availableTickets <= 0) {
-            return { text: '已售完', class: 'status-sold-out' };
+            return { text: 'Sold Out', class: 'status-sold-out' };
         }
 
-        return { text: '进行中', class: 'status-active' };
+        return { text: 'Active', class: 'status-active' };
     };
 
     /**
-     * 格式化日期
+     * Format date
      */
     vm.formatDate = function(value) {
         if (!value) return '';
         try { 
-            return new Date(value).toLocaleDateString('zh-CN'); 
+            return new Date(value).toLocaleDateString('en-US'); 
         } catch(e) { 
             return value; 
         }
     };
 
-    // 初始化控制器
+    // Initialize controller
     vm.init();
 }]);

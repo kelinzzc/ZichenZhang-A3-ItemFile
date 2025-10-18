@@ -3,26 +3,26 @@ angular.module('CharityEventsAdminApp')
 function($scope, AdminEventService, AdminRegistrationService) {
     var vm = this;
 
-    // 初始化数据
+    // Initialize data
     vm.stats = {};
     vm.recentEvents = [];
     vm.recentRegistrations = [];
     vm.isLoading = true;
 
     /**
-     * 初始化控制器
+     * Initialize controller
      */
     vm.init = function() {
         vm.loadDashboardData();
     };
 
     /**
-     * 加载仪表板数据
+     * Load dashboard data
      */
     vm.loadDashboardData = function() {
         vm.isLoading = true;
 
-        // 并行加载所有数据
+        // Load all data in parallel
         Promise.all([
             vm.loadEventStats(),
             vm.loadRegistrationStats(),
@@ -30,12 +30,12 @@ function($scope, AdminEventService, AdminRegistrationService) {
             vm.loadRecentRegistrations()
         ]).finally(function() {
             vm.isLoading = false;
-            $scope.$apply(); // 手动触发 AngularJS 更新
+            $scope.$apply(); // Manually trigger AngularJS update
         });
     };
 
     /**
-     * 加载活动统计
+     * Load event statistics
      */
     vm.loadEventStats = function() {
         return AdminEventService.getEventStats()
@@ -43,12 +43,12 @@ function($scope, AdminEventService, AdminRegistrationService) {
                 vm.stats.events = stats;
             })
             .catch(function(error) {
-                console.error('加载活动统计失败:', error);
+                console.error('Failed to load event statistics:', error);
             });
     };
 
     /**
-     * 加载注册统计
+     * Load registration statistics
      */
     vm.loadRegistrationStats = function() {
         return AdminRegistrationService.getRegistrationStats()
@@ -56,12 +56,12 @@ function($scope, AdminEventService, AdminRegistrationService) {
                 vm.stats.registrations = stats;
             })
             .catch(function(error) {
-                console.error('加载注册统计失败:', error);
+                console.error('Failed to load registration statistics:', error);
             });
     };
 
     /**
-     * 加载最近活动
+     * Load recent events
      */
     vm.loadRecentEvents = function() {
         return AdminEventService.getAllEvents({ limit: 5 })
@@ -69,12 +69,12 @@ function($scope, AdminEventService, AdminRegistrationService) {
                 vm.recentEvents = events;
             })
             .catch(function(error) {
-                console.error('加载最近活动失败:', error);
+                console.error('Failed to load recent events:', error);
             });
     };
 
     /**
-     * 加载最近注册记录
+     * Load recent registration records
      */
     vm.loadRecentRegistrations = function() {
         return AdminRegistrationService.getAllRegistrations({ limit: 10 })
@@ -82,36 +82,36 @@ function($scope, AdminEventService, AdminRegistrationService) {
                 vm.recentRegistrations = registrations;
             })
             .catch(function(error) {
-                console.error('加载最近注册记录失败:', error);
+                console.error('Failed to load recent registration records:', error);
             });
     };
 
     /**
-     * 格式化数字
+     * Format numbers
      */
     vm.formatNumber = function(number) {
         if (!number) return '0';
-        return number.toLocaleString('zh-CN');
+        return number.toLocaleString('en-US');
     };
 
     /**
-     * 格式化金额
+     * Format currency
      */
     vm.formatCurrency = function(amount) {
         if (!amount && amount !== 0) return '';
-        return '¥' + parseFloat(amount).toLocaleString('zh-CN', {
+        return '$' + parseFloat(amount).toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
     };
 
     /**
-     * 格式化日期
+     * Format date
      */
     vm.formatDate = function(dateString) {
         if (!dateString) return '';
         const date = new Date(dateString);
-        return date.toLocaleDateString('zh-CN', {
+        return date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
@@ -120,6 +120,6 @@ function($scope, AdminEventService, AdminRegistrationService) {
         });
     };
 
-    // 初始化控制器
+    // Initialize controller
     vm.init();
 }]);
